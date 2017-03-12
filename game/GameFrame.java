@@ -128,6 +128,8 @@ public class GameFrame extends JFrame{
 	
 		this.setVisible(true);
 		this.setResizable(false);
+
+		panel.Timer();
 		
 	}
 

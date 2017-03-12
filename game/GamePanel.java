@@ -69,12 +69,13 @@ public class GamePanel extends JPanel {
     //计时器
     public void Timer() {
         Timer timer = new Timer();
-        int index = 1000;//定义时间间隔，一秒
+        int index = 500;//定义时间间隔，一秒
         timer.schedule(new TimerTask() {
             public void run() {//定时做的事
                 tim++;
-
+                moveStep();
                 repaint();
+                System.out.println("定时器");
             }
 
 
@@ -82,6 +83,9 @@ public class GamePanel extends JPanel {
 
     }
 
+    public void moveStep(){
+        snake1.move();
+    }
 
     public void paintDq(Graphics g) {
         for (int i = 0; i < row; i++) {
@@ -94,6 +98,7 @@ public class GamePanel extends JPanel {
         }
 
     }
+
 
 
     public void paintSnake(Graphics g){
@@ -113,11 +118,4 @@ public class GamePanel extends JPanel {
         g.drawString("分数:" + fs, 10, 50);//画分数
         paintSnake(g);
     }
-
-    public static void main(String[] args) {
-
-
-    }
-
-
 }

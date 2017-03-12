@@ -3,7 +3,7 @@ package game;
 import java.awt.image.BufferedImage;
 
 
-public class Joint {
+public abstract class Joint {
 	protected int x,y,width,height;
     protected BufferedImage image;
 
@@ -20,21 +20,23 @@ public class Joint {
         this. height = image.getHeight();
     }
 
-    public void moveRight(){
-        x++;
-    }
+    public abstract void move();
 
-    public void moveLeft(){
-        x--;
-    }
-
-    public void moveUp(){
-        y--;
-    }
-
-    public void moveDown(){
-        y++;
-    }
+//    public void moveRight(){
+//        x++;
+//    }
+//
+//    public void moveLeft(){
+//        x--;
+//    }
+//
+//    public void moveUp(){
+//        y--;
+//    }
+//
+//    public void moveDown(){
+//        y++;
+//    }
 
 
     @Override

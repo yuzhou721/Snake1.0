@@ -31,39 +31,26 @@ public class Snake {
      */
     public void move(){
     	System.out.println("move");
-//    	switch(SnakeDir){
-//    	case LIFT:
-//    		x--;
-//    		break;
-//    	case RIGHT:
-//    		x++;
-//    		break;
-//    	case UP:
-//    		y--;
-//    		break;
-//    	case DOWN:
-//    		y++;
-//    		
-//    	}
-		Head h = (Head) length.get(0);
+//		Head h = (Head) length.get(0);
 		for (int i = 0; i < length.size(); i++) {
-				switch (length.get(i).SnakeDir) {
+				/*switch (length.get(i).SnakeDir) {
 					case RIGHT:
-                        length.get(i).x++;// 右移
+                        length.get(i).move();// 右移
 						break;
 					case LIFT:
-                        length.get(i).x--;// 左移
+                        length.get(i).move();// 左移
 						break;
 					case UP:
-                        length.get(i).y--;// 上移
+                        length.get(i).move();// 上移
 						break;
 					case DOWN:
-                        length.get(i).y++;// 下移
-				}
-				Direction temp = length.get(0).SnakeDir;//记录第一个蛇身的方向
-                length.get(i+1).SnakeDir = length.get(i).SnakeDir;//把蛇身的方向赋值下一个蛇身
+                        length.get(i).move();// 下移
+				}*/
+				length.get(i).move();
+//				Direction temp = length.get(0).SnakeDir;//记录第一个蛇身的方向
+//                length.get(i+1).SnakeDir = length.get(i).SnakeDir;//把蛇身的方向赋值下一个蛇身
 //				setDir(this.SnakeDir);//改变蛇身方向
-				length.get(i).SnakeDir = temp;//把每一个蛇身当作蛇头
+//				length.get(i).SnakeDir = temp;//把每一个蛇身当作蛇头
 			}
 		}
 
