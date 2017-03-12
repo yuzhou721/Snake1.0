@@ -6,8 +6,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -72,19 +70,6 @@ public class GamePanel extends JPanel {
     }
     //计时器
     public void Timer() {
-//        Timer timer = new Timer();
-//        int index = 500;//定义时间间隔，一秒
-//        timer.schedule(new TimerTask() {
-//            public void run() {//定时做的事
-//                tim++;
-//                moveStep();//测试蛇移动
-//                repaint();
-//                System.out.println("定时器");
-//            }
-//
-//
-//        }, index, index);
-
         Thread t1 = new Thread(){
             public void run(){
                 while(true){
@@ -92,7 +77,6 @@ public class GamePanel extends JPanel {
                     moveStep();//测试蛇移动
                     action();
                     repaint();
-                    System.out.println("线程计时器");
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -102,18 +86,18 @@ public class GamePanel extends JPanel {
             }
         };
 
-        Thread t2 = new Thread(){
-            public void run(){
-                while(true){
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-        };
+//        Thread t2 = new Thread(){
+//            public void run(){
+//                while(true){
+//                    try {
+//                        Thread.sleep(10);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//            }
+//        };
         t1.start();
 //        t2.start();
 
