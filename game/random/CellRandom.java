@@ -1,4 +1,4 @@
-package com.tarena.snake;
+package game.random;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 
 /**
  * 
- * 实现格子随即生成在界面的方法
+ * ???????漴?????????????
  */
 public class CellRandom extends JPanel {
 	private int  x,y;
@@ -28,7 +28,7 @@ public class CellRandom extends JPanel {
 	Food food = new Food();
 	static{
 		try{
-			T = ImageIO.read(CellRandom.class.getResource("T.png"));
+			T = ImageIO.read(CellRandom.class.getResource("/images/T.png"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -40,7 +40,7 @@ public class CellRandom extends JPanel {
 	}
 	
 	/**
-	 * 定时器
+	 * ?????
 	 */
 	public void nxetOne(){
 		long now=System.currentTimeMillis();
@@ -64,7 +64,7 @@ public class CellRandom extends JPanel {
 		
 	}
 	/**
-	 * 随机物开始
+	 * ??????
 	 */
 	public void action(){
 		Timer timer = new Timer();

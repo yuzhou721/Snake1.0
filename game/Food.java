@@ -1,4 +1,4 @@
-package vip;
+package game;
 
 import java.awt.image.BufferedImage;
 import java.util.Random;

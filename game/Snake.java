@@ -1,7 +1,6 @@
-package cn;
+package game;
 
 import java.util.ArrayList;
-
 
 
 /**
@@ -10,15 +9,18 @@ import java.util.ArrayList;
  * @author soft01
  *
  */
-public class Snake extends Joint {
-    ArrayList<Snake> length;
+public class Snake {
+    ArrayList<Joint> length;
 
-    public Snake(){}
+    public Snake(){
+        this(10,0);
+    }
     public Snake(int x , int y){
         length = new ArrayList<>();
         length.add(new Head(x,y));
         length.add(new Body(x-1,y));
         length.add(new Body(x-2,y));
+        length.add(new Body(x-3,y));
     }
     
 
@@ -43,20 +45,30 @@ public class Snake extends Joint {
 //    		y++;
 //    		
 //    	}
-    	
-    	if(SnakeDir==Direction.LIFT){
-    		x--;//左移
-    	}
-    	if(SnakeDir==Direction.RIGHT){
-    		x++;//右移
-    		System.out.println("向右");
-    	}
-    	if(SnakeDir==Direction.UP){
-    		y--;//上移
-    	}
-    	if(SnakeDir==Direction.DOWN){
-    		y++;//下移
-    	}
+		Head h = (Head) length.get(0);
+		for (int i = 0; i < length.size(); i++) {
+				switch (length.get(i).SnakeDir) {
+					case RIGHT:
+                        length.get(i).x++;// 右移
+						break;
+					case LIFT:
+                        length.get(i).x--;// 左移
+						break;
+					case UP:
+                        length.get(i).y--;// 上移
+						break;
+					case DOWN:
+                        length.get(i).y++;// 下移
+				}
+				Direction temp = length.get(0).SnakeDir;//记录第一个蛇身的方向
+                length.get(i+1).SnakeDir = length.get(i).SnakeDir;//把蛇身的方向赋值下一个蛇身
+//				setDir(this.SnakeDir);//改变蛇身方向
+				length.get(i).SnakeDir = temp;//把每一个蛇身当作蛇头
+			}
+		}
+
+
+
     }
 
 //    public ArrayList<Joint> getLength() {
@@ -72,4 +84,4 @@ public class Snake extends Joint {
 //	public dir getDir(){
 //		return SnakeDir;
 //	}
-}
+

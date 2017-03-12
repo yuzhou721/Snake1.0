@@ -1,4 +1,4 @@
-package vip;
+package game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,15 +8,16 @@ import java.util.List;
  * Created by yuzhou721 on 2017/3/9.
  */
 public class CrashObjects {
-private List<Snake> all = new ArrayList<>();
+//private List<Snake> all = new ArrayList<>();
 public static boolean crashBy(Head head,Food food){//撞食物
 	if(head.x==food.x && head.y==food.y){
 		return true;
 	}
 	return false;
 }
-public void State(){//撞身体
-	 Snake head = all.get(0);
+public static void State(Snake snake){//撞身体
+	ArrayList<Joint> all = snake.length;
+	 Joint head = snake.length.get(0);
 	  for(int i=1;i<all.size();i++){
 		  if(head.x==all.get(i).x && head.y==all.get(i).y){
 			  //调用死的方法

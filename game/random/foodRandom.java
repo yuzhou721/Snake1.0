@@ -1,4 +1,4 @@
-package com.tarena.snake;
+package game.random;
 
 public interface foodRandom {
 	

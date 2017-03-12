@@ -48,15 +48,24 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public int backgroundwidth = background.getWidth();
-    public int backgroundhight = background.getHeight();
-    private static final int BACK_CD = (background.getWidth() / 30);//代表每一个格子的长度
-    private static final int row = 30;//行
-    private static final int col = 30;//列
+    public static final int backgroundwidth = background.getWidth();
+    public static final int backgroundhight = background.getHeight();
+    public static final int CELL_SIZE = (background.getWidth() / 30);//代表每一个格子的长度
+    public static final int row = 30;//行
+    public static final int col = 30;//列
     int fs;//分数
     int tim;//计时
 
+    public Snake snake1;//蛇1
 
+
+
+    /**
+     * 画布构造方法 初始化数据
+     */
+    public GamePanel(){
+        snake1 = new Snake();
+    }
     //计时器
     public void Timer() {
         Timer timer = new Timer();
@@ -77,9 +86,9 @@ public class GamePanel extends JPanel {
     public void paintDq(Graphics g) {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
-                int x = i * BACK_CD;
-                int y = j * BACK_CD;
-                g.drawRect(x, y, BACK_CD, BACK_CD);
+                int x = i * CELL_SIZE;
+                int y = j * CELL_SIZE;
+                g.drawRect(x, y, CELL_SIZE, CELL_SIZE);
             }
             System.out.println();
         }
@@ -87,15 +96,22 @@ public class GamePanel extends JPanel {
     }
 
 
+    public void paintSnake(Graphics g){
+        for (Joint j:
+                snake1.length){
+            g.drawImage(j.image,j.x*CELL_SIZE,j.y*CELL_SIZE,null);
+        }
+    }
+
     //画背景图,时间按,分数
     public void paint(Graphics g) {
         g.drawImage(background, 0, 0, null);//画背景图
-        //paintDq(g);
+//        paintDq(g);
         g.setColor(new Color(0xFFFFFF));
         g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
         g.drawString("时间:" + tim, 10, 20);//画时间
         g.drawString("分数:" + fs, 10, 50);//画分数
-
+        paintSnake(g);
     }
 
     public static void main(String[] args) {

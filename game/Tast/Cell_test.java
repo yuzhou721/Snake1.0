@@ -1,12 +1,10 @@
-package com.tarena.Tast;
+package game.Tast;
 
-import java.awt.Paint;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import game.random.*;
 
-import com.tarena.snake.CellRandom;
-import com.tarena.snake.Food;
 
 public class Cell_test extends JPanel{
 	public static void main(String[] args) {

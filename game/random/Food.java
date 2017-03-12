@@ -1,4 +1,4 @@
-package com.tarena.snake;
+package game.random;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -13,7 +13,7 @@ public class Food extends JPanel{
 	public static BufferedImage O;
 	static{
 		try{
-			O=ImageIO.read(Food.class.getResource("O.png"));
+			O=ImageIO.read(Food.class.getResource("/images/O.png"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}

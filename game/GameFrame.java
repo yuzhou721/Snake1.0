@@ -13,42 +13,39 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-import chuangk.Tp;
-
 /**
  * 界面 
  * @author soft01
  *
  */
-public class chuangkou extends JFrame{
+public class GameFrame extends JFrame{
 	private static  int number = 0;
 	private static int head= 0;
 	private static  int lase = 0;
+
+
+	public void run(){
+//        GameFrame ck=new GameFrame();
+//        GamePanel p =new GamePanel();
+//        ck.add(p);
+//        ck.setVisible(true);
+//
+//        ck.setResizable(false);
+    }
 	
-	
-	
-	
-	
-	public static void main(String[] args) {
-		chuangkou ck=new chuangkou();
-		Tp p =new Tp();
-		ck.add(p);
-		ck.setVisible(true);
-		
-		ck.setResizable(false);
-	}
-	
-	public chuangkou(){
+	public GameFrame(){
 		super("贪吃蛇");
-		Tp p =new Tp();
-		String path = "snake_logo_看图王.png";
+//		GameFrame frame = new GameFrame();
+		GamePanel panel =new GamePanel();
+		this.add(panel);
+		String path = "/images/snake_logo_看图王.png";
 		try{
 			Image img = ImageIO.read(this.getClass().getResource(path));
-			this.setIconImage(img);;		
+			this.setIconImage(img);
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		setBounds(300,150,p.backgroundwidth-10,p.backgroundhight+35);
+		setBounds(300,150,panel.backgroundwidth-10,panel.backgroundhight+35);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JMenuBar menyber = new JMenuBar();//创建菜单栏
 		setJMenuBar(menyber);//将创建的菜单栏添加到窗口菜单栏
@@ -129,7 +126,8 @@ public class chuangkou extends JFrame{
 		menultem2.add(suzMenyItem1);
 		menultem2.add(suzMenyItem2);
 	
-		
+		this.setVisible(true);
+		this.setResizable(false);
 		
 	}
 
