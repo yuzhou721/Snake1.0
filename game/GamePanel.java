@@ -3,12 +3,16 @@ package game;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+
+import static java.awt.event.KeyEvent.*;
 
 /**
  * 实现加载图片
@@ -54,7 +58,7 @@ public class GamePanel extends JPanel {
     public static final int row = 30;//行
     public static final int col = 30;//列
     int fs;//分数
-    int tim;//计时
+    public static int tim;//计时
 
     public Snake snake1;//蛇1
 
@@ -68,23 +72,90 @@ public class GamePanel extends JPanel {
     }
     //计时器
     public void Timer() {
-        Timer timer = new Timer();
-        int index = 500;//定义时间间隔，一秒
-        timer.schedule(new TimerTask() {
-            public void run() {//定时做的事
-                tim++;
-                moveStep();
-                repaint();
-                System.out.println("定时器");
+//        Timer timer = new Timer();
+//        int index = 500;//定义时间间隔，一秒
+//        timer.schedule(new TimerTask() {
+//            public void run() {//定时做的事
+//                tim++;
+//                moveStep();//测试蛇移动
+//                repaint();
+//                System.out.println("定时器");
+//            }
+//
+//
+//        }, index, index);
+
+        Thread t1 = new Thread(){
+            public void run(){
+                while(true){
+                    tim++;
+                    moveStep();//测试蛇移动
+                    action();
+                    repaint();
+                    System.out.println("线程计时器");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+        };
 
+        Thread t2 = new Thread(){
+            public void run(){
+                while(true){
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-        }, index, index);
+            }
+        };
+        t1.start();
+//        t2.start();
 
     }
 
+    /**
+     *  蛇的移动
+     */
     public void moveStep(){
         snake1.move();
+    }
+
+
+    /**
+     * 统一调度的动作
+     */
+    public void action(){
+        Listen();
+    }
+
+    /**
+     * 监听器
+     */
+    public void Listen(){
+
+        KeyAdapter k = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int a = e.getKeyCode();
+                switch (a){
+                    case VK_W:snake1.moveUp();break;
+                    case VK_S:snake1.moveDown();
+                        System.out.println("向下");
+                        break;
+                    case VK_A:snake1.moveLeft();break;
+                    case VK_D:snake1.moveRight();
+                }
+            }
+        };
+        this.requestFocus();
+        this.addKeyListener(k);
+
     }
 
     public void paintDq(Graphics g) {

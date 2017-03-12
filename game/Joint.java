@@ -7,7 +7,7 @@ public abstract class Joint {
 	protected int x,y,width,height;
     protected BufferedImage image;
 
-    protected Direction SnakeDir = Direction.RIGHT;//蛇运动方向
+    protected Direction snakeDir = Direction.RIGHT;//蛇运动方向
 
 
     public Joint(){}
@@ -22,22 +22,16 @@ public abstract class Joint {
 
     public abstract void move();
 
-//    public void moveRight(){
-//        x++;
-//    }
-//
-//    public void moveLeft(){
-//        x--;
-//    }
-//
-//    public void moveUp(){
-//        y--;
-//    }
-//
-//    public void moveDown(){
-//        y++;
-//    }
+    public abstract void moveRight();
+    public abstract void moveLeft();
+    public abstract void moveUp();
+    public abstract void moveDown();
 
+
+
+    public void setSnakeDir(Direction snakeDir) {
+        this.snakeDir = snakeDir;
+    }
 
     @Override
     public String toString() {

@@ -130,7 +130,7 @@ public class GameFrame extends JFrame{
 		this.setResizable(false);
 
 		panel.Timer();
-		
+
 	}
 
 	private  class ItemListenter implements ActionListener{

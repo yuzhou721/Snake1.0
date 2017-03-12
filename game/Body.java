@@ -13,24 +13,43 @@ public class Body extends Joint {
 		this.width = this.image.getWidth();
 		this.x = x;
 		this.y = y;
-		this.SnakeDir = Direction.RIGHT;
+		this.snakeDir = Direction.RIGHT;
 	}
 
 	public void move() {
-		if (SnakeDir == Direction.LIFT) {
+		if (snakeDir == Direction.LIFT) {
 			x--;//◊Û“∆
 		}
-		if (SnakeDir == Direction.RIGHT) {
+		if (snakeDir == Direction.RIGHT) {
 			x++;//”““∆
-			System.out.println("œÚ”“");
 		}
-		if (SnakeDir == Direction.UP) {
+		if (snakeDir == Direction.UP) {
 			y--;//…œ“∆
 		}
-		if (SnakeDir == Direction.DOWN) {
+		if (snakeDir == Direction.DOWN) {
 			y++;//œ¬“∆
 		}
 
+	}
+
+	@Override
+	public void moveRight() {
+
+	}
+
+	@Override
+	public void moveLeft() {
+
+	}
+
+	@Override
+	public void moveUp() {
+
+	}
+
+	@Override
+	public void moveDown() {
+		snakeDir = Direction.DOWN;
 	}
 
 

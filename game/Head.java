@@ -24,24 +24,47 @@ public class Head extends Joint {
         this.width = this.image.getWidth();
         this.x = x;
         this.y = y;
-        SnakeDir = Direction.RIGHT;
+        snakeDir = Direction.RIGHT;
     }
     
     public void move(){
 
-        if(SnakeDir==Direction.LIFT){
+        if(snakeDir ==Direction.LIFT){
             x--;//◊Û“∆
         }
-        if(SnakeDir==Direction.RIGHT){
+        if(snakeDir ==Direction.RIGHT){
             x++;//”““∆
             System.out.println("œÚ”“");
         }
-        if(SnakeDir==Direction.UP){
+        if(snakeDir ==Direction.UP){
             y--;//…œ“∆
         }
-        if(SnakeDir==Direction.DOWN){
+        if(snakeDir ==Direction.DOWN){
             y++;//œ¬“∆
         }
+
+    }
+
+    public void moveRight(){
+        snakeDir = Direction.RIGHT;
+        image = GamePanel.r_right;
+    }
+
+    public void moveLeft(){
+        snakeDir = Direction.LIFT;
+        image = GamePanel.r_left;
+
+    }
+
+    public void moveUp(){
+        snakeDir = Direction.UP;
+        image = GamePanel.r_up;
+
+    }
+
+    public void moveDown(){
+        snakeDir = Direction.DOWN;
+        image = GamePanel.r_down;
 
     }
     

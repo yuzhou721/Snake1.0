@@ -16,7 +16,7 @@ public static boolean crashBy(Head head,Food food){//撞食物
 	return false;
 }
 public static void State(Snake snake){//撞身体
-	ArrayList<Joint> all = snake.length;
+	List<Joint> all = snake.length;
 	 Joint head = snake.length.get(0);
 	  for(int i=1;i<all.size();i++){
 		  if(head.x==all.get(i).x && head.y==all.get(i).y){
