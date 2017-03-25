@@ -13,25 +13,16 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.sql.Date;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.sun.glass.ui.CommonDialogs.Type;
-
-import sun.security.util.ManifestEntryVerifier;
 import static java.awt.event.KeyEvent.*;
 
 /**
@@ -102,7 +93,6 @@ public class GamePanel extends JPanel {
 	private ArrayList<Food> foods;// 食物
 	private ArrayList<Money> moneys;// 钱币
 	private ArrayList<FoodObject> foodObjects;
-	// private ArrayList<Ball>balls = new ArrayList<Ball>();
 	private Ball_JP Balla;
 	private Money money;// 钱
 	public static boolean doMove = true;
@@ -115,15 +105,10 @@ public class GamePanel extends JPanel {
 	public static final int ACTIVE = 0;
 	public static final int DEAD = 1;
 	public static final int REMOVE = 2;
-	boolean flag = false;
-	public static boolean timerRunning;
+	private boolean flag = false;
 	public static int status;//游戏运行状态
 
-	/*
-	 * private BufferedImage r_right0; private BufferedImage r_up0; private
-	 * BufferedImage body0; private BufferedImage r_down0; private BufferedImage
-	 * r_left0;
-	 */
+
 	/**
 	 * 画布构造方法 初始化数据
 	 */
@@ -139,8 +124,11 @@ public class GamePanel extends JPanel {
 		System.out.println(Balla);
 	}
 
+	/**
+	 * 生成食物方法
+	 */
 	public void nextOne() {
-		int num = 0;
+		int num;
 		num = random.nextInt(10);
 		if (num < 2) {
 			foodObjects.add(new Food());
@@ -196,11 +184,9 @@ public class GamePanel extends JPanel {
 
 		r4 = ()->{
 			do {
-
 				System.out.println("监听线程状态");
 			}while(status == PAUSE);
 			if (status == RUNNING) {
-				System.out.println("重新开始线程");
 				Restart();
 				threadPool.execute(r1);
 				threadPool.execute(r2);
@@ -233,7 +219,7 @@ public class GamePanel extends JPanel {
 	 * 统一调度的动作
 	 */
 	public void action() {
-		Listen();// 方向移动
+		KeyListen();// 方向移动
 		addFood();
 		Fuck();
 		
@@ -242,7 +228,7 @@ public class GamePanel extends JPanel {
 	/**
 	 * 监听器
 	 */
-	public void Listen() {
+	public void KeyListen() {
 		KeyAdapter k = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -266,13 +252,15 @@ public class GamePanel extends JPanel {
 		this.addKeyListener(k);
 	}
 
-	public void Fuck() {// 碰撞方法
+	public void Fuck() {// 碰撞监听
 		Head head = (Head)snake1.length.get(0);
 		for (int i = 0; i < foodObjects.size(); i++) {
 			FoodObject foodObject = foodObjects.get(i);
 			if (CrashObjects.crashBy(head, foodObject)) {
 				foodObjects.remove(i);
 				score += 10;
+				addFood();
+				addBody();
 				if (foodObject instanceof Money) {
 					Award award = (Award) foodObject;
 					int type = award.getAward();
@@ -322,7 +310,6 @@ public class GamePanel extends JPanel {
 	public void addFood() {
 		if (flag) {
 			nextOne();
-			addBody();
 			flag = false;
 		}
 	}
@@ -414,14 +401,6 @@ public class GamePanel extends JPanel {
 			Ball b = Balla.balls.get(i);
 			b.Draw(g);
 		}
-		// Ball_JP a = new Ball_JP();
-
-		// /a.paint(g);
-		// super.paint(g);
-		// for(int i=0;i<balls.size();i++){
-		// Ball b = balls.get(i);
-		// b.Draw(g);
-		// }
 	}
 
 	// 画背景图,时间按,分数
