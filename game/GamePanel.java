@@ -105,8 +105,8 @@ public class GamePanel extends JPanel {
 	public static final int ACTIVE = 0;
 	public static final int DEAD = 1;
 	public static final int REMOVE = 2;
-	private boolean flag = false;
-	public static int status;//游戏运行状态
+	public static int status;//游戏
+    // 运行状态
 
 
 	/**
@@ -308,10 +308,7 @@ public class GamePanel extends JPanel {
 	}
 
 	public void addFood() {
-		if (flag) {
 			nextOne();
-			flag = false;
-		}
 	}
 
 	public void addBody() {// 身体吃食物++
