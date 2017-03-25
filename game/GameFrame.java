@@ -1,5 +1,7 @@
 package game;
 
+import game.random.Ball_JP;
+
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.*;
@@ -11,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -19,9 +22,9 @@ import javax.swing.JPanel;
  *
  */
 public class GameFrame extends JFrame{
-	private static  int number = 0;
-	private static int head= 0;
-	private static  int lase = 0;
+	 static  int number = 0;
+	 static int head= 0;
+	 static  int lase = 0;
 
 
 	public void run(){
@@ -35,9 +38,16 @@ public class GameFrame extends JFrame{
 	
 	public GameFrame(){
 		super("贪吃蛇");
+		  /*Ball_JP jp=new Ball_JP();  
+	        jp.run_run();       //开始运行多线程  
+	        this.add(jp); */
 //		GameFrame frame = new GameFrame();
 		GamePanel panel =new GamePanel();
 		this.add(panel);
+//		GamePanel  jp1 = new GamePanel ();
+//		jp.setOpaque(false);
+//		this.add(jp1);
+		
 		String path = "/images/snake_logo_看图王.png";
 		try{
 			Image img = ImageIO.read(this.getClass().getResource(path));
@@ -45,7 +55,7 @@ public class GameFrame extends JFrame{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-		setBounds(300,150,panel.backgroundwidth-10,panel.backgroundhight+35);
+		setBounds(300,0,panel.backgroundwidth-10,panel.backgroundhight+35);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JMenuBar menyber = new JMenuBar();//创建菜单栏
 		setJMenuBar(menyber);//将创建的菜单栏添加到窗口菜单栏
@@ -61,7 +71,9 @@ public class GameFrame extends JFrame{
 			@Override//重新开始
 			public void actionPerformed(ActionEvent e) {
 				JMenuItem menuItem = (JMenuItem)e.getSource();
-				number = 1;
+				
+				panel.Restart();
+				
 			}
 			
 		});
@@ -78,8 +90,8 @@ public class GameFrame extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 				JMenuItem menuItem = (JMenuItem)e.getSource();
-				
-						lase = 1;
+				 	System.exit(1);
+						
 			}
 		});
 		menu.add(menultem1);//孙子菜单添加
@@ -120,17 +132,24 @@ public class GameFrame extends JFrame{
 				head = 2;				
 			}
 		});
+		if(GamePanel.status == GamePanel.RUNNING){
+			super.toBack();
+		}
+		
 		//难度调整添加到子菜单
 		
 		menultem2.add(suzMenyItem);
 		menultem2.add(suzMenyItem1);
 		menultem2.add(suzMenyItem2);
-	
+            //画布添加到窗体  
+          
+        this.setVisible(true);
 		this.setVisible(true);
 		this.setResizable(false);
 
-		panel.Timer();
+		
 
+		
 	}
 
 	private  class ItemListenter implements ActionListener{
@@ -140,20 +159,35 @@ public class GameFrame extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			//鼠标捕捉
-			JMenuItem menuItem = (JMenuItem)e.getSource();
-			JFrame a= new JFrame();
-			JPanel b =new JPanel();
-			b.setBackground(Color.pink);
-			a.add(b);
-			I_code=new JLabel("制作人：vip组全员");
-			a.setVisible(true);
-			a.setBounds(300,200,200,60);
-			I_code.setBounds(0, 0, 30, 30);
-			b.add(I_code);
-			a.setResizable(false);
+//			JMenuItem menuItem = (JMenuItem)e.getSource();
+//			JFrame a= new JFrame();
+//			JPanel b =new JPanel();
+//			
+//			b.setBackground(Color.pink);
+//			a.add(b);
+//			I_code=new JLabel("制作人：vip组全员");
+//			a.setBounds(300,200,200,60);
+//			
+//			I_code.setBounds(0, 0, 30, 30);
+//			a.setVisible(true);
+//			b.add(I_code);
+//			a.setResizable(false);		
+			
+			JOptionPane guanyu =new JOptionPane();
+		
+			int a =guanyu.showOptionDialog(null, "是否退出", "退出？", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, null, null);
+			switch (a) {
+			case 0:
+				System.exit(1);	
+				return;
+			case 1:
+					
+				break;
+				
+				
+			}
 			
 		}
-		
 	}
 }
 
