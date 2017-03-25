@@ -117,17 +117,14 @@ public class GamePanel extends JPanel {
 		Balla = new Ball_JP();// 一些随机
 		foodObjects = new ArrayList<FoodObject>();
 		status = RUNNING;
-		nextOne();
+		addFood();
 		Timer();
-
-
-		System.out.println(Balla);
 	}
 
 	/**
 	 * 生成食物方法
 	 */
-	public void nextOne() {
+	public void addFood() {
 		int num;
 		num = random.nextInt(10);
 		if (num < 2) {
@@ -220,7 +217,6 @@ public class GamePanel extends JPanel {
 	 */
 	public void action() {
 		KeyListen();// 方向移动
-		addFood();
 		Fuck();
 		
 	}
@@ -302,14 +298,11 @@ public class GamePanel extends JPanel {
 		snake1.length.clear();
 		foodObjects.clear();
 		snake1 = new Snake();
-		nextOne();
+		addFood();
 		score = 0;
 		tim = 0;
 	}
 
-	public void addFood() {
-			nextOne();
-	}
 
 	public void addBody() {// 身体吃食物++
 		// 尾部坐标
@@ -337,7 +330,7 @@ public class GamePanel extends JPanel {
 		snake1.length.clear();
 		foodObjects.clear();
 		snake1 = new Snake();
-		nextOne();
+		addFood();
 		score = 0;
 		tim = 0;
 		life = 3;
@@ -367,7 +360,6 @@ public class GamePanel extends JPanel {
 			System.exit(i);
 			return;
 		}
-		// System.exit(0);
 	}
 
 	public void paintDq(Graphics g) {
