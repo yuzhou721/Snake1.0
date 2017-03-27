@@ -1,8 +1,10 @@
 package game.mina;
 
 import game.Snake;
+import game.random.FoodObject;
 import org.apache.mina.core.session.IoSession;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +25,7 @@ public class ServerMessageHandler {
     public static final short EXCEPTION = 5;
 
     private Map<Long, IoSession> sessionMap = SnakeManager.getSessionMap();
-    private Map<Long, Snake> snakeMap =SnakeManager.getSnakeMap();
+    private Map<Long, Snake> snakeMap = SnakeManager.getSnakeMap();
     private Map<Long,String> nameIdMap = Server.getNameIdMap();
 
 
@@ -95,6 +97,15 @@ public class ServerMessageHandler {
 //            System.out.println("蛇存入成功");
             sendSnakes(session);
         }
+        if(message instanceof SnakeData){
+            SnakeData data = (SnakeData)message;
+            receivedSnakeData(data.getId(),data.getSnake(),data.getOperation());
+        }
+        if (message instanceof FoodObjectData){
+            FoodObjectData data = (FoodObjectData) message;
+            receivedFoodData(data.getObject(),data.getIndex(),data.getOperation());
+
+        }
     }
 
 
@@ -150,5 +161,45 @@ public class ServerMessageHandler {
         nameIdMap = Server.getNameIdMap();
         nameIdMap.put(session.getId(),name);
         Server.setNameIdMap(nameIdMap);
+    }
+
+    private void receivedSnakeData(Long id,Object message,short operation){
+        Snake snake = (Snake)message;
+        Map<Long,Snake> snakes = SnakeManager.getSnakeMap();
+        if (operation == SnakeData.OPERATION_ADD_SNAKE){
+            snakes.put(id, snake);
+        }
+
+        if (operation == SnakeData.OPERATION_DEL_SNAKE){
+            snakes.remove(id);
+            int foodNum = SnakeManager.getFoodNum();
+            foodNum--;
+            SnakeManager.setFoodNum(foodNum);
+//            System.out.println("删除"+id+"号蛇成功");
+        }
+
+//        if (operation == SnakeData.OPERATION_REL_SNAKE){
+//            System.out.println("用于替换的id"+id);
+//            System.out.println("用于替换的snake:"+snake);
+//            snakes.replace(id,snake);
+//            if (id == GamePanel.id) {
+//                GamePanel.snake = snake;
+//            }else{
+//                System.out.println("ID不一样"+id+","+GamePanel.id);
+//            }
+//
+//        }
+    }
+
+    private void receivedFoodData(FoodObject food, int index, short operation){
+        ArrayList<FoodObject> foods = SnakeManager.getFoods();
+//        if (operation == FoodObjectData.OPERATION_ADD_FOOD){
+//            foods.add(food);
+//
+//        }
+        if (operation == FoodObjectData.OPERATION_DEL_FOOD){
+            foods.remove(index);
+            System.out.println("吃到了食物");
+        }
     }
 }

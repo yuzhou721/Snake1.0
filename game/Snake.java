@@ -20,14 +20,13 @@ import com.sun.rowset.internal.Row;
  *
  */
 public class Snake {
-	private static int x;
-	private static int y;
+	private  int x;
+	private  int y;
 	public int state;// ״̬
 	public static final int ACTIVE = 0;
 	public static final int DEAD = 1;
 	public static final int REMOVE = 2;
 
-	static Random random = new Random();
 	public List<Joint> length;
 
 	public Snake() {

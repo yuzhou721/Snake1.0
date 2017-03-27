@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -91,14 +90,13 @@ public class GamePanel extends JPanel {
 	public static int life = 3;
 	private Ball_JP Balla;
 	public static boolean doMove = true;
-	Random random = new Random();
-	public static final int READY = 0;//准备状态
+//	public static final int READY = 0;//准备状态
 	public static final int RUNNING = 1;//运行状态
-	public static final int PAUSE = 2;//暂停状态
+//	public static final int PAUSE = 2;//暂停状态
 	public static final int GAME_OVER = 3;
-	public static final int ACTIVE = 0;
+//	public static final int ACTIVE = 0;
 	public static final int DEAD = 1;//死亡状态
-	public static final int REMOVE = 2;
+//	public static final int REMOVE = 2;
 	public static int status;// 客户端运行状态
 	public static long id;//从服务器上分配的ID
 	/**
@@ -156,7 +154,6 @@ public class GamePanel extends JPanel {
 		foodObjects = new ArrayList<FoodObject>();
 		snakes = new HashMap<>();
 		status = RUNNING;
-		Timer();
 
         name = "1";
         snakes = new HashMap<>();
@@ -165,7 +162,8 @@ public class GamePanel extends JPanel {
 //        food1 = new Food();
 //        foods = new ArrayList<>();
         client.start();
-	}
+        Timer();
+    }
 
 
 
@@ -173,13 +171,12 @@ public class GamePanel extends JPanel {
 	private Runnable r2 ;//计时线程
 	private Runnable r3 ;//背景和重画线程
 	private Runnable r4 ;//触发器线程
-	private ExecutorService threadPool ;
+	private ExecutorService threadPool ;//线程池
 	// 计时器
 	public void Timer() {
 
 		r1 = ()-> {
 			while (status == RUNNING) {
-				moveStep();// 测试蛇移动
 				action();
 				try {
 					Thread.sleep(100);
@@ -188,11 +185,12 @@ public class GamePanel extends JPanel {
 				}
 
 			}
+			threadPool.execute(r4);
 			System.out.println("停止线程1");
 		};
 
 		r2 = ()->{
-			while(status == RUNNING){
+			while(true){
 				tim++;
 				try {
 					Thread.sleep(1000);
@@ -200,11 +198,10 @@ public class GamePanel extends JPanel {
 				}
 
 			}
-			System.out.println("停止线程2");
 		};
 
 		r3 = ()->{
-			while (status == RUNNING){
+			while (true){
 				repaint();
 				ballaMove();
 				try {
@@ -213,15 +210,21 @@ public class GamePanel extends JPanel {
 					e.printStackTrace();
 				}
 			}
-			System.out.println("停止线程3");
 		};
 
 		r4 = ()->{
+		    while(status == DEAD || status == GAME_OVER){
 
+                System.out.println("线程监听");
+            }
+            if (status == RUNNING){
+		        Restart();
+            }
+            threadPool.execute(r1);
 		};
 		threadPool = Executors.newFixedThreadPool(3);
-//		threadPool.execute(r1);
-//		threadPool.execute(r2);
+		threadPool.execute(r1);
+		threadPool.execute(r2);
 		threadPool.execute(r3);
 	}
 
@@ -246,7 +249,9 @@ public class GamePanel extends JPanel {
 	 */
 	public void action() {
 		KeyListen();// 方向移动
-//		Fuck();
+		crash();//启动碰撞监听
+        moveStep();//蛇的移动
+        sendSnake();//移动状态发送给服务器
 		
 	}
 
@@ -278,11 +283,15 @@ public class GamePanel extends JPanel {
 	}
 
 
-	public void Fuck() {// 碰撞监听
+    /**
+     * 碰撞监听
+     */
+	public void crash() {
 		Head head = (Head) snake.length.get(0);
+		/*
 		for (int i = 0; i < foodObjects.size(); i++) {
 			FoodObject foodObject = foodObjects.get(i);
-			if (CrashObjects.crashBy(head, foodObject)) {
+			if (CrashObjects.SnakeBang(head, foodObject)) {
 				foodObjects.remove(i);
 				score += 10;
 				addBody();
@@ -306,35 +315,73 @@ public class GamePanel extends JPanel {
 			}
 			
 		}
-		
-		if (CrashObjects.qiang(head)) {
-			life--;
-			if(life > 0)
-			Dead("哈哈，小垃圾");
-		}
-		
-		if (CrashObjects.State(snake)) {
-			life--;
-			if(life > 0)
-			Dead("撞到自己了");
-		}
-		if(life ==0)
-		GameOverFrame();
-		
+		*/
+
+		snakeCrashByOther(head);
+        snakeCrashWall(head);
+        snakeEat(head);
+	}
+
+    /**
+     * 头和其他蛇的头和身体的碰撞判定
+     * @param head 本机蛇头
+     */
+	private void snakeCrashByOther(Head head){
+	    for (long pid
+                :snakes.keySet()){
+	        Snake allSnake = snakes.get(pid);
+	        for (Joint joint
+                    :allSnake.length) {
+                if (CrashObjects.SnakeBang(head,joint) && pid != id){
+                    decLife("撞到了");
+                }
+            }
+        }
+    }
+
+    private void snakeEat(Head head){
+	    for (FoodObject food:
+                foodObjects){
+	        if (CrashObjects.SnakeBang(head,food)){
+	            addBody();
+            }
+        }
+    }
+
+    /**
+     * 蛇撞到墙
+     * @param head 本机蛇头
+     */
+    private void snakeCrashWall(Head head){
+        if (CrashObjects.qiang(head)) {
+            decLife("哈哈，小垃圾");
+        }
+    }
+
+    /**
+     * 游戏结束
+     */
+	public void gameOver() {
+		status = GAME_OVER;
+        gameOverFrame();
 	}
 
 
+    /**
+     * 显示游戏结束窗口
+     */
+    public void gameOverFrame(){
+        if (life == 0) {
+            threadPool.execute(r4);
+//            status = GAME_OVER;
+            new GameFrameson().GameOver(life);
+        }
+    }
 
-	public void Gameover() {
-		snake.length.clear();
-		foodObjects.clear();
-		snake = new Snake();
-		score = 0;
-		tim = 0;
-	}
 
-
-
+    /**
+     * 增加身体长度方法
+     */
 	public void addBody() {// 身体吃食物++
 		// 尾部坐标
 		int tailX = snake.length.get(snake.length.size() - 1).getX;
@@ -357,45 +404,61 @@ public class GamePanel extends JPanel {
 		}
 	}
 
-
-
-
+    /**
+     * 重新开始方法
+     */
 	public void Restart(){
-		snake.length.clear();
-		foodObjects.clear();
 		snake = new Snake();
 		score = 0;
 		tim = 0;
 		life = 3;
+		status = RUNNING;
 	}
 
-	
-	public void GameOverFrame(){
-		if (life == 0) {
-			threadPool.execute(r4);
-			status = PAUSE;
-			new GameFrameson().GameOver(life);
-		}
+    /**
+     * 减血+弹窗方法
+     *
+     */
+	public void decLife(String s) {// 撞墙提示
+        life--;
+        if (life > 0) {
+            notice(s);
+        }
+        if (life == 0 ){
+            gameOver();
+        }
 	}
 
+    /**
+     * 减命后弹窗
+     * @param s 给玩家说的话
+     */
+	private void notice(String s){
+	    status = DEAD;
+        Date date = new Date(0);
+        SimpleDateFormat sb = new SimpleDateFormat();
+        String Str2 = sb.format(date);
+        String str = s + "\n" + "游戏继续？" + life + "命";
+        int i = JOptionPane.showConfirmDialog(null, Str2 + "\n" + str, "游戏提示",
+                JOptionPane.YES_NO_OPTION);
+        if (i == 0) {
+            rebirth();
 
-	public void Dead(String s) {// 撞墙提示
-		
-		Date date = new Date(0);
-		SimpleDateFormat sb = new SimpleDateFormat();
-		String Str2 = sb.format(date);
-		String str = s + "\n" + "游戏继续？" + life + "命";
-		int i = JOptionPane.showConfirmDialog(null, Str2 + "\n" + str, "游戏提示",
-				JOptionPane.YES_NO_OPTION);
-		if (i == 0) {
-//			Gameover();
-		} else {
-			JOptionPane.showMessageDialog(null, "退出游戏", "标题",
-					JOptionPane.WARNING_MESSAGE);
-			System.exit(i);
-			return;
-		}
-	}
+        } else {
+            JOptionPane.showMessageDialog(null, "退出游戏", "标题",
+                    JOptionPane.WARNING_MESSAGE);
+            System.exit(i);
+            return;
+        }
+    }
+
+    /**
+     * 撞死后重生方法
+     */
+    public void rebirth(){
+	    snake = new Snake();
+        status = RUNNING;
+    }
 
     /**
      * 发送蛇给服务器
@@ -419,9 +482,12 @@ public class GamePanel extends JPanel {
 	}
 
 	public void paintSnake(Graphics g) {
-		for (Joint j : snake.length) {
-			g.drawImage(j.image, j.getX * CELL_SIZE, j.y * CELL_SIZE, null);
-		}
+        for (Snake snake :
+                snakes.values()) {
+            for (Joint j : snake.length) {
+                g.drawImage(j.image, j.getX * CELL_SIZE, j.y * CELL_SIZE, null);
+            }
+        }
 	}
 
 	public void paintFoodObject(Graphics g) {

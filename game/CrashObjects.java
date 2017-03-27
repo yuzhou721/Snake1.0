@@ -5,13 +5,16 @@ import game.random.Money;
 
 import java.util.List;
 
+import static game.GamePanel.COL;
+import static game.GamePanel.ROW;
+
 /**
  * 鍔ㄤ綔鎺у埗绫�
  * Created by yuzhou721 on 2017/3/9.
  */
 public class CrashObjects {
-private static final int ROW =30;
-private static final int COL =30;
+
+    /*
 public static boolean crashBy(Head head,FoodObject food){//食物碰撞方法
 	if(head.getX ==food.x && head.y==food.y){
 		return true;
@@ -34,11 +37,44 @@ public static boolean State(Snake snake1){//蛇身碰撞方法
 	  }
 	return false;
 }
+*/
  public static boolean qiang(Head head){
 	if(head.getX <0||head.getX >ROW-1||head.y<0||head.y>COL-1){
 		return true;
 	}
 	return false;
  }
+
+
+	/**
+	 * 头和物品碰撞
+	 * @return 撞到为真，没撞到为假
+	 */
+	public static boolean SnakeBang(Head head, Object o){
+		if (o instanceof Body){
+			Joint b = (Joint) o;
+			Joint head2 = (Joint)head;
+			if (head2.getX() == b.getX()&&head2.getY() == b.getY()){
+				return true;
+			}
+		}
+
+		if (o instanceof Head){
+			Joint b = (Head) o ;
+			Joint head2 = (Joint)head;
+			if (head2.getX() == b.getX() && head2.getY() == b.getY()){
+				return true;
+			}
+		}
+
+		if (o instanceof FoodObject){
+			Joint head2 = (Joint) head;
+			FoodObject food = (FoodObject) o;
+			if (head2.getX() == food.getX() && head2.getY() == food.getY()){
+				return true;
+			}
+		}
+		return false;
+	}
 
 }
