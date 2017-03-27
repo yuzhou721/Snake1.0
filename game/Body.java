@@ -9,25 +9,36 @@ public class Body extends Joint {
 
 	public Body(int x, int y) {
 		this.image = GamePanel.body;
-		this.height = this.image.getHeight();
-		this.width = this.image.getWidth();
-		this.x = x;
+		this.getX = x;
 		this.y = y;
 		this.snakeDir = Direction.RIGHT;
 	}
 	public Body(int x,int y,Direction snakeDir){
-		this.x = x;
+		this.getX = x;
 		this.y = y;
 		this.snakeDir = snakeDir;
 		this.image = GamePanel.body;
 	}
 
+	public Body(int x,int y,int snakeDir){
+		this(x,y);
+		if (snakeDir ==1){
+			this.snakeDir = Direction.UP;
+		}else if(snakeDir == 2){
+			this.snakeDir = Direction.DOWN;
+		}else if(snakeDir == 3){
+			this.snakeDir = Direction.LIFT;
+		}else if(snakeDir == 4){
+			this.snakeDir = Direction.RIGHT;
+		}
+	}
+
 	public void move() {
 		if (snakeDir == Direction.LIFT) {
-			x--;//◊Û“∆
+			getX--;//◊Û“∆
 		}
 		if (snakeDir == Direction.RIGHT) {
-			x++;//”““∆
+			getX++;//”““∆
 		}
 		if (snakeDir == Direction.UP) {
 			y--;//…œ“∆

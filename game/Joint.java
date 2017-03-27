@@ -5,11 +5,11 @@ import java.awt.image.BufferedImage;
 
 public abstract class Joint {
 	public int getX() {
-		return x;
+		return getX;
 	}
 
 	public void setX(int x) {
-		this.x = x;
+		this.getX = x;
 	}
 
 	public int getY() {
@@ -20,10 +20,10 @@ public abstract class Joint {
 		this.y = y;
 	}
 
-	public int x;
-	public int y;
-	public int width;
-	public int height;
+	protected int getX;
+	protected int y;
+//	public int width;
+//	public int height;
 	public BufferedImage image;
 
     protected Direction snakeDir = Direction.RIGHT;//蛇运动方向
@@ -32,11 +32,11 @@ public abstract class Joint {
     public Joint(){}
 
     public Joint(int x, int y, BufferedImage image) {
-        this.x = x;
+        this.getX = x;
         this.y = y;
         this.image = image;
-        this. width = image.getWidth();
-        this. height = image.getHeight();
+//        this. width = image.getWidth();
+//        this. height = image.getHeight();
     }
 
     public abstract void move();
@@ -52,8 +52,14 @@ public abstract class Joint {
     @Override
     public String toString() {
         return "Joint{" +
-                "x=" + x +
+                "getX=" + getX +
                 ", y=" + y +
                 '}';
     }
+
+    public Direction getSnakeDir() {
+        return snakeDir;
+    }
+
+
 }

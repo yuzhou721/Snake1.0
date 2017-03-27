@@ -28,7 +28,7 @@ public class Snake {
 	public static final int REMOVE = 2;
 
 	static Random random = new Random();
-	List<Joint> length;
+	public List<Joint> length;
 
 	public Snake() {
 		this((int) (Math.random() * 26 + 4), (int) (Math.random() * 26 + 4));
