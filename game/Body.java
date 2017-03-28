@@ -1,7 +1,7 @@
 package game;
 
 /**
- * ÉßÉíÀà£º
+ * è›‡èº«ç±»ï¼š
  *
  * @author soft01
  */
@@ -35,16 +35,16 @@ public class Body extends Joint {
 
 	public void move() {
 		if (snakeDir == Direction.LIFT) {
-			getX--;//×óÒÆ
+			getX--;//å·¦ç§»
 		}
 		if (snakeDir == Direction.RIGHT) {
-			getX++;//ÓÒÒÆ
+			getX++;//å³ç§»
 		}
 		if (snakeDir == Direction.UP) {
-			y--;//ÉÏÒÆ
+			y--;//ä¸Šç§»
 		}
 		if (snakeDir == Direction.DOWN) {
-			y++;//ÏÂÒÆ
+			y++;//ä¸‹ç§»
 		}
 
 	}

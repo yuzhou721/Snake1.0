@@ -4,29 +4,29 @@ import java.awt.image.BufferedImage;
 
 
 public abstract class Joint {
-	public int getX() {
-		return getX;
-	}
+    public int getX() {
+        return getX;
+    }
 
-	public void setX(int x) {
-		this.getX = x;
-	}
+    public void setX(int x) {
+        this.getX = x;
+    }
 
-	public int getY() {
-		return y;
-	}
+    public int getY() {
+        return y;
+    }
 
-	public void setY(int y) {
-		this.y = y;
-	}
+    public void setY(int y) {
+        this.y = y;
+    }
 
-	protected int getX;
-	protected int y;
-//	public int width;
+    protected int getX;
+    protected int y;
+    //	public int width;
 //	public int height;
-	public BufferedImage image;
+    public BufferedImage image;
 
-    protected Direction snakeDir = Direction.RIGHT;//ÉßÔË¶¯·½Ïò
+    protected Direction snakeDir = Direction.RIGHT;//è›‡è¿åŠ¨æ–¹å‘
 
 
     public Joint(){}
@@ -48,7 +48,7 @@ public abstract class Joint {
     public void setSnakeDir(Direction snakeDir) {
         this.snakeDir = snakeDir;
     }
-    
+
     @Override
     public String toString() {
         return "Joint{" +

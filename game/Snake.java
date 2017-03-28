@@ -14,15 +14,15 @@ import com.sun.corba.se.spi.orbutil.fsm.Action;
 import com.sun.rowset.internal.Row;
 
 /**
- * ÉßÀà£º
- * 
+ * è›‡ç±»ï¼š
+ *
  * @author soft01
  *
  */
 public class Snake {
-//	private  int x;
+	//	private  int x;
 //	private  int y;
-	public int state;// ×´Ì¬
+	public int state;// çŠ¶æ€
 	public static final int ACTIVE = 0;
 	public static final int DEAD = 1;
 	public static final int REMOVE = 2;
@@ -41,7 +41,7 @@ public class Snake {
 	}
 
 	/**
-	 * ¸ù¾İ·½Ïò×Ô¶¯ÏòÇ°ÒÆ¶¯Î»ÖÃ LIFT,RIGHT,UP,DOWN
+	 * æ ¹æ®æ–¹å‘è‡ªåŠ¨å‘å‰ç§»åŠ¨ä½ç½® LIFT,RIGHT,UP,DOWN
 	 */
 	public void move() {
 		Direction temp = null;
@@ -49,11 +49,11 @@ public class Snake {
 		for (int i = length.size() - 1; i > 0; i--) {
 			Joint j = length.get(i);
 			j.move();
-			temp = length.get(0).snakeDir;// ¼ÇÂ¼µÚÒ»¸öÉßÉíµÄ·½Ïò
+			temp = length.get(0).snakeDir;// è®°å½•ç¬¬ä¸€ä¸ªè›‡èº«çš„æ–¹å‘
 			if (i == 1) {
 				length.get(1).snakeDir = temp;
 			}
-			length.get(i).snakeDir = length.get(i - 1).snakeDir;// °ÑÇ°Ò»¸öÉßÉíµÄ·½Ïò¸³ÖµºóÒ»¸öÉßÉí
+			length.get(i).snakeDir = length.get(i - 1).snakeDir;// æŠŠå‰ä¸€ä¸ªè›‡èº«çš„æ–¹å‘èµ‹å€¼åä¸€ä¸ªè›‡èº«
 		}
 		GamePanel.doMove = true;
 	}
@@ -95,18 +95,18 @@ public class Snake {
 	}
 
 	/*
-	 * public void subractLife(){//¼õÃü life--; } public void addLife(){//Ôö¼ÓÃü
-	 * life++; } public int getLife(){//Ãü return life; }
+	 * public void subractLife(){//å‡å‘½ life--; } public void addLife(){//å¢åŠ å‘½
+	 * life++; } public int getLife(){//å‘½ return life; }
 	 */
-	/** ÔöÃü */
+	/** å¢å‘½ */
 	/*
-	 * public void addLife(){ //ÔöÃü life++; }
-	 *//** ¼õÃü */
+	 * public void addLife(){ //å¢å‘½ life++; }
+	 *//** å‡å‘½ */
 	/*
-	 * public void subtractLife(){ //¼õÃü life--; }
-	 *//** »ñÈ¡Ãü */
+	 * public void subtractLife(){ //å‡å‘½ life--; }
+	 *//** è·å–å‘½ */
 	/*
-	 * public int getLife(){ return life; } public boolean isActive(){//ÉßÊÇ·ñÊÇ»î¶¯µÄ
+	 * public int getLife(){ return life; } public boolean isActive(){//è›‡æ˜¯å¦æ˜¯æ´»åŠ¨çš„
 	 * return state==ACTIVE; }
 	 */
 

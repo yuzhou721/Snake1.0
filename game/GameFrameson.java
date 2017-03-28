@@ -13,196 +13,196 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 
 public class GameFrameson {
-	
-	
-	boolean yesno;//ÅĞ¶ÏÌõ¼ş
 
-	
-	JLabel overed;//gameoverÎÄ±¾
-	JLabel Time;//Ê±¼äÎÄ±¾
-	JLabel Scouce;//µÃ·ÖÎÄ±¾
-	JLabel snakelong ;//ÉßÉí³¤ÎÄ±¾
-	JButton newGame;//ÖØĞÂ¿ªÊ¼°´Å¥
-	JButton Gameout;//½áÊøÓÎÏ·°´Å¥
-	JButton InterGame;//ÁªÍøÓÎÏ·°´Å¥
-	JButton Lase;//Ôö¼ÓÄÑ¶È°´Å¥
-	public void GameOver (int life/*,int Time,int Scouce, int Long/* Ãü ·ÖÊı ³¤¶È Ê±¼ä*/){
-			JFrame over = new JFrame();
-			JPanel b =new JPanel();
-			b.setBackground(Color.GRAY);
-			
-			Time = new JLabel("ÓÎÏ·Ê±¼ä:");//ºóÃæ¼ÓÉÏint Time
-			Scouce = new JLabel("µÃ·Ö£º");//ºóÃæ¼ÓÉÏint Scouse
-			overed = new JLabel("GAMEOVER");
-			snakelong = new JLabel("ÄãµÄ³¤¶ÈÊÇ"+""+"cm");//ÖĞ¼ä¼ÓÉÏint Long
-			newGame = new JButton("ÖØĞÂ¿ªÊ¼");
-			InterGame = new JButton("Áª»ú¶ÔÕ½");
-			Gameout = new JButton("ÓÎÏ·½áÊø");
-			Lase = new JButton("ĞŞ¸ÄÄÑ¶È");
 
-			b.setLayout(null);
-			over.add(b);
-			
-			
-			//ÓÎÏ·½áÊø
-			Gameout.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-				  System.exit(1);
-				}
-			});
-			
-			//Ö®ºó¸ÄÎªÖØĞÂ¿ªÊ¼·½·¨
-			newGame.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					GamePanel.status = GamePanel.RUNNING;
-					over.toBack();
-					//new GameFrame();
-				}
-			});
-			
-			InterGame.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					System.out.println("Áª»ú¶ÔÕ½");
-				}
-			});
-			Lase.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					laseson();
-					
-				}
-			});
-			
-			
-			
-			//ÉèÖÃ×ÖÌå´óĞ¡
-			Time.setBounds(150,80,200,50);
-			Time.setFont(new Font("Î¢ÈíÑÅºÚ",5,20));
-			Scouce.setBounds(150,110,200,50);
-			Scouce.setFont(new Font("Î¢ÈíÑÅºÚ",5,20));
-			snakelong.setBounds(150,140,200,50);
-			snakelong.setFont(new Font("Î¢ÈíÑÅºÚ",5,20));
-			overed.setBounds(150,30,200,80);
-			overed.setFont(new Font("Î¢ÈíÑÅºÚ",10,30));
-			
-			//ÉèÖÃÎ»ÖÃ
-			
-			Gameout.setBounds(370,250,90,30);
-			newGame.setBounds(30,250,90,30);
-			InterGame.setBounds(150,250,90,30);
-			Lase.setBounds(260,250,90,30);
-			//ÉèÖÃ´°¿ÚÊôĞÔ
-			over.setVisible(true);
-			over.setTitle("ÓÎÏ·½áÊø");
-			over.setAlwaysOnTop(true);
-			over.setResizable(false);
-			over.setBounds(460, 250, 500, 330);
-			//Ìí¼Ó¶«Î÷µ½½çÃæ
-			b.add(overed);
-			b.add(newGame);
-			b.add(Time);
-			b.add(Scouce);
-			b.add(snakelong);
-			b.add(Gameout);
-			b.add(InterGame);
-			b.add(Lase);
+	boolean yesno;//åˆ¤æ–­æ¡ä»¶
 
-		
+
+	JLabel overed;//gameoveræ–‡æœ¬
+	JLabel Time;//æ—¶é—´æ–‡æœ¬
+	JLabel Scouce;//å¾—åˆ†æ–‡æœ¬
+	JLabel snakelong ;//è›‡èº«é•¿æ–‡æœ¬
+	JButton newGame;//é‡æ–°å¼€å§‹æŒ‰é’®
+	JButton Gameout;//ç»“æŸæ¸¸æˆæŒ‰é’®
+	JButton InterGame;//è”ç½‘æ¸¸æˆæŒ‰é’®
+	JButton Lase;//å¢åŠ éš¾åº¦æŒ‰é’®
+	public void GameOver (int life/*,int Time,int Scouce, int Long/* å‘½ åˆ†æ•° é•¿åº¦ æ—¶é—´*/){
+		JFrame over = new JFrame();
+		JPanel b =new JPanel();
+		b.setBackground(Color.GRAY);
+
+		Time = new JLabel("æ¸¸æˆæ—¶é—´:");//åé¢åŠ ä¸Šint Time
+		Scouce = new JLabel("å¾—åˆ†ï¼š");//åé¢åŠ ä¸Šint Scouse
+		overed = new JLabel("GAMEOVER");
+		snakelong = new JLabel("ä½ çš„é•¿åº¦æ˜¯"+""+"cm");//ä¸­é—´åŠ ä¸Šint Long
+		newGame = new JButton("é‡æ–°å¼€å§‹");
+		InterGame = new JButton("è”æœºå¯¹æˆ˜");
+		Gameout = new JButton("æ¸¸æˆç»“æŸ");
+		Lase = new JButton("ä¿®æ”¹éš¾åº¦");
+
+		b.setLayout(null);
+		over.add(b);
+
+
+		//æ¸¸æˆç»“æŸ
+		Gameout.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.exit(1);
+			}
+		});
+
+		//ä¹‹åæ”¹ä¸ºé‡æ–°å¼€å§‹æ–¹æ³•
+		newGame.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				GamePanel.status = GamePanel.RUNNING;
+				over.toBack();
+				//new GameFrame();
+			}
+		});
+
+		InterGame.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				System.out.println("è”æœºå¯¹æˆ˜");
+			}
+		});
+		Lase.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				laseson();
+
+			}
+		});
+
+
+
+		//è®¾ç½®å­—ä½“å¤§å°
+		Time.setBounds(150,80,200,50);
+		Time.setFont(new Font("å¾®è½¯é›…é»‘",5,20));
+		Scouce.setBounds(150,110,200,50);
+		Scouce.setFont(new Font("å¾®è½¯é›…é»‘",5,20));
+		snakelong.setBounds(150,140,200,50);
+		snakelong.setFont(new Font("å¾®è½¯é›…é»‘",5,20));
+		overed.setBounds(150,30,200,80);
+		overed.setFont(new Font("å¾®è½¯é›…é»‘",10,30));
+
+		//è®¾ç½®ä½ç½®
+
+		Gameout.setBounds(370,250,90,30);
+		newGame.setBounds(30,250,90,30);
+		InterGame.setBounds(150,250,90,30);
+		Lase.setBounds(260,250,90,30);
+		//è®¾ç½®çª—å£å±æ€§
+		over.setVisible(true);
+		over.setTitle("æ¸¸æˆç»“æŸ");
+		over.setAlwaysOnTop(true);
+		over.setResizable(false);
+		over.setBounds(460, 250, 500, 330);
+		//æ·»åŠ ä¸œè¥¿åˆ°ç•Œé¢
+		b.add(overed);
+		b.add(newGame);
+		b.add(Time);
+		b.add(Scouce);
+		b.add(snakelong);
+		b.add(Gameout);
+		b.add(InterGame);
+		b.add(Lase);
+
+
 	}
-	JButton yes;//È·¶¨°´Å¥
-	JButton no;//È¡Ïû°´Å¥
-	JRadioButtonMenuItem lase1;//µ¥Ñ¡°´Å¥
+	JButton yes;//ç¡®å®šæŒ‰é’®
+	JButton no;//å–æ¶ˆæŒ‰é’®
+	JRadioButtonMenuItem lase1;//å•é€‰æŒ‰é’®
 	JRadioButtonMenuItem lase2;
 	JRadioButtonMenuItem lase3;
-	
+
 	public int laseson(){
-		
+
 		JFrame Gamelaseson = new JFrame();
 		JPanel Laseson = new JPanel();
-		ButtonGroup Lase = new ButtonGroup();//µ¥Ñ¡×éºÏ
-		yes = new JButton("È·¶¨");
-		no = new JButton("È¡Ïû");
-		
-		lase1 = new JRadioButtonMenuItem("ÄÑ¶È1",false);
-		lase2 = new JRadioButtonMenuItem("ÄÑ¶È2",false);
-		lase3 = new JRadioButtonMenuItem("ÄÑ¶È3",false);
-		
-		
+		ButtonGroup Lase = new ButtonGroup();//å•é€‰ç»„åˆ
+		yes = new JButton("ç¡®å®š");
+		no = new JButton("å–æ¶ˆ");
+
+		lase1 = new JRadioButtonMenuItem("éš¾åº¦1",false);
+		lase2 = new JRadioButtonMenuItem("éš¾åº¦2",false);
+		lase3 = new JRadioButtonMenuItem("éš¾åº¦3",false);
+
+
 		Lase.add(lase1);
 		Lase.add(lase2);
 		Lase.add(lase3);
-		
+
 		Laseson.setBackground(Color.GRAY);
 		Laseson.setLayout(null);
-		
+
 		Gamelaseson.add(Laseson);
-		
-		
+
+
 		lase1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				GameFrame.head =0;
 				System.out.println(GameFrame.head );
-				
+
 			}
 		});
-		
+
 		lase2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				GameFrame.head  = 1;//ËÙ¶Èµ÷Õû×´Ì¬Öµ
+				GameFrame.head  = 1;//é€Ÿåº¦è°ƒæ•´çŠ¶æ€å€¼
 				System.out.println(GameFrame.head );
-			
+
 
 			}
 		});
 		lase3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				GameFrame.head=2;//ËÙ¶Èµ÷Õû×´Ì¬Öµ
+				GameFrame.head=2;//é€Ÿåº¦è°ƒæ•´çŠ¶æ€å€¼
 				System.out.println(GameFrame.head);
 
 			}
 		});
-		
-		
-		
-		
+
+
+
+
 		/*Lase.setBounds(200,100,300,90)*/;
 		lase1.setBounds(100,10,90,30);
 		lase2.setBounds(100,50,90,30);
 		lase3.setBounds(100,90,90,30);
 		yes.setBounds(40,130,90,30);
 		no.setBounds(180,130,90,30);
-		
+
 		Gamelaseson.setVisible(true);
-		Gamelaseson.setTitle("ÄÑ¶ÈÉèÖÃ");
+		Gamelaseson.setTitle("éš¾åº¦è®¾ç½®");
 		Gamelaseson.setAlwaysOnTop(true);
 		Gamelaseson.setResizable(false);
 		Gamelaseson.setBounds(550, 300, 300, 200);
-		
-		
+
+
 		Laseson.add(lase1);
 		Laseson.add(lase2);
 		Laseson.add(lase3);
 		Laseson.add(yes);
 		Laseson.add(no);
-	//	yes.setFocusPainted(false);//½¹µãÉèÖÃÊ§°Ü
-		
-		//yes.setContentAreaFilled(false);//Í¸Ã÷
+		//	yes.setFocusPainted(false);//ç„¦ç‚¹è®¾ç½®å¤±è´¥
+
+		//yes.setContentAreaFilled(false);//é€æ˜
 		yes.setOpaque(false);
 		yes.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				yesno = true;
 				if(yesno){
-					System.out.println("È·¶¨");
+					System.out.println("ç¡®å®š");
 					Gamelaseson.toBack();
-					
-					
+
+
 				}
 			}
 		});
@@ -211,16 +211,16 @@ public class GameFrameson {
 			public void mouseClicked(MouseEvent e) {
 				yesno = false;
 				if(!yesno){
-					System.out.println("È¡Ïû");
+					System.out.println("å–æ¶ˆ");
 					Gamelaseson.toBack();
-					
+
 				}
-				
+
 			}
 		});
 		return GameFrame.head ;
 	}
-	
-	
-	
+
+
+
 }

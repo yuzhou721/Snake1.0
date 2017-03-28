@@ -11,9 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,21 +22,21 @@ import javax.swing.JPanel;
 import static java.awt.event.KeyEvent.*;
 
 /**
- * ÊµÏÖ¼ÓÔØÍ¼Æ¬
+ * å®ç°åŠ è½½å›¾ç‰‡
  */
 public class GamePanel extends JPanel {
-	public static BufferedImage background; // ±³¾°Í¼
-	public static BufferedImage body; // ÂÌÉ«ÉßÉí
-	public static BufferedImage down; // ÂÌÉ«ÉßÍ·(ÏÂ)
-	public static BufferedImage up; // ÂÌÉ«ÉßÍ·(ÉÏ)
-	public static BufferedImage left; // ÂÌÉ«ÉßÍ·(×ó)
-	public static BufferedImage right; // ÂÌÉ«ÉßÍ·(ÓÒ)
-	public static BufferedImage r_body; // ºìÉ«ÉßÉí
-	public static BufferedImage r_down; // ºìÉ«ÉßÍ·(ÏÂ)
-	public static BufferedImage r_up; // ºìÉ«ÉßÍ·(ÉÏ)
-	public static BufferedImage r_left; // ºìÉ«ÉßÍ·(×ó)
-	public static BufferedImage r_right; // ºìÉ«ÉßÍ·(ÓÒ)
-	public static BufferedImage snake_food;// Ê³Îï
+	public static BufferedImage background; // èƒŒæ™¯å›¾
+	public static BufferedImage body; // ç»¿è‰²è›‡èº«
+	public static BufferedImage down; // ç»¿è‰²è›‡å¤´(ä¸‹)
+	public static BufferedImage up; // ç»¿è‰²è›‡å¤´(ä¸Š)
+	public static BufferedImage left; // ç»¿è‰²è›‡å¤´(å·¦)
+	public static BufferedImage right; // ç»¿è‰²è›‡å¤´(å³)
+	public static BufferedImage r_body; // çº¢è‰²è›‡èº«
+	public static BufferedImage r_down; // çº¢è‰²è›‡å¤´(ä¸‹)
+	public static BufferedImage r_up; // çº¢è‰²è›‡å¤´(ä¸Š)
+	public static BufferedImage r_left; // çº¢è‰²è›‡å¤´(å·¦)
+	public static BufferedImage r_right; // çº¢è‰²è›‡å¤´(å³)
+	public static BufferedImage snake_food;// é£Ÿç‰©
 	public static BufferedImage T;
 	public static BufferedImage seatebackground;
 	public static BufferedImage xuanzebiejing;
@@ -46,83 +44,90 @@ public class GamePanel extends JPanel {
 	static {
 		try {
 			background = ImageIO.read(GamePanel.class
-					.getResource("/images/background1.png"));// ±³¾°Í¼
+					.getResource("/images/background1.png"));// èƒŒæ™¯å›¾
 			body = ImageIO
-					.read(GamePanel.class.getResource("/images/body.png"));// ÂÌÉ«ÉßÉí
+					.read(GamePanel.class.getResource("/images/body.png"));// ç»¿è‰²è›‡èº«
 			down = ImageIO
-					.read(GamePanel.class.getResource("/images/down.png"));// ÂÌÉ«ÉßÍ·(ÏÂ)
-			up = ImageIO.read(GamePanel.class.getResource("/images/up.png"));// ÂÌÉ«ÉßÍ·(ÉÏ)
+					.read(GamePanel.class.getResource("/images/down.png"));// ç»¿è‰²è›‡å¤´(ä¸‹)
+			up = ImageIO.read(GamePanel.class.getResource("/images/up.png"));// ç»¿è‰²è›‡å¤´(ä¸Š)
 			left = ImageIO
-					.read(GamePanel.class.getResource("/images/left.png"));// ÂÌÉ«ÉßÍ·(×ó)
+					.read(GamePanel.class.getResource("/images/left.png"));// ç»¿è‰²è›‡å¤´(å·¦)
 			right = ImageIO.read(GamePanel.class
-					.getResource("/images/right.png"));// ÂÌÉ«ÉßÍ·(ÓÒ)
+					.getResource("/images/right.png"));// ç»¿è‰²è›‡å¤´(å³)
 			r_body = ImageIO.read(GamePanel.class
-					.getResource("/images/r_body.png")); // ºìÉ«ÉßÉí
+					.getResource("/images/r_body.png")); // çº¢è‰²è›‡èº«
 			r_down = ImageIO.read(GamePanel.class
-					.getResource("/images/r_down.png"));// ºìÉ«ÉßÍ·(ÏÂ)
+					.getResource("/images/r_down.png"));// çº¢è‰²è›‡å¤´(ä¸‹)
 			r_up = ImageIO
-					.read(GamePanel.class.getResource("/images/r_up.png"));// ºìÉ«ÉßÍ·(ÉÏ)
+					.read(GamePanel.class.getResource("/images/r_up.png"));// çº¢è‰²è›‡å¤´(ä¸Š)
 			r_left = ImageIO.read(GamePanel.class
-					.getResource("/images/r_left.png"));// ºìÉ«ÉßÍ·(×ó)
+					.getResource("/images/r_left.png"));// çº¢è‰²è›‡å¤´(å·¦)
 			r_right = ImageIO.read(GamePanel.class
-					.getResource("/images/r_right.png"));// ºìÉ«ÉßÍ·(ÓÒ)
+					.getResource("/images/r_right.png"));// çº¢è‰²è›‡å¤´(å³)
 			snake_food = ImageIO.read(GamePanel.class
-					.getResource("/images/snake_food.png"));// Ê³Îï
-			T = ImageIO.read(GamePanel.class.getResource("/images/T.png"));// ½ğ±Ò
+					.getResource("/images/snake_food.png"));// é£Ÿç‰©
+			T = ImageIO.read(GamePanel.class.getResource("/images/T.png"));// é‡‘å¸
 			seatebackground = ImageIO.read(GamePanel.class
 					.getResource("/images/seatebackground.png"));
 			xuanzebiejing = ImageIO.read(GamePanel.class
-					.getResource("/images/½ÇÉ«1.png"));
+					.getResource("/images/juese.png"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	public static final int backgroundwidth = background.getWidth();
 	public static final int backgroundhight = background.getHeight();
-	public static final int CELL_SIZE = (background.getWidth() / 30);// ´ú±íÃ¿Ò»¸ö¸ñ×ÓµÄ³¤¶È
-	public static final int ROW = 30;// ĞĞ
-	public static final int COL = 30;// ÁĞ
-	public static int score;// ·ÖÊı
-	public static int tim;// ¼ÆÊ±
+	public static final int CELL_SIZE = (background.getWidth() / 30);// ä»£è¡¨æ¯ä¸€ä¸ªæ ¼å­çš„é•¿åº¦
+	public static final int ROW = 30;// è¡Œ
+	public static final int COL = 30;// åˆ—
+	public static int score;// åˆ†æ•°
+	public static int tim;// è®¡æ—¶
 	public static int life = 3;
 	private Ball_JP Balla;
 	public static boolean doMove = true;
-//	public static final int READY = 0;//×¼±¸×´Ì¬
-	public static final int RUNNING = 1;//ÔËĞĞ×´Ì¬
-//	public static final int PAUSE = 2;//ÔİÍ£×´Ì¬
+	//	public static final int READY = 0;//å‡†å¤‡çŠ¶æ€
+	public static final int RUNNING = 1;//è¿è¡ŒçŠ¶æ€
+	//	public static final int PAUSE = 2;//æš‚åœçŠ¶æ€
 	public static final int GAME_OVER = 3;
-//	public static final int ACTIVE = 0;
-	public static final int DEAD = 2;//ËÀÍö×´Ì¬
-//	public static final int REMOVE = 2;
-	public static int status;// ¿Í»§¶ËÔËĞĞ×´Ì¬
-	public static long id;//´Ó·şÎñÆ÷ÉÏ·ÖÅäµÄID
+	//	public static final int ACTIVE = 0;
+	public static final int DEAD = 2;//æ­»äº¡çŠ¶æ€
+	//	public static final int REMOVE = 2;
+	public static int status;// å®¢æˆ·ç«¯è¿è¡ŒçŠ¶æ€
+	public static long id;//ä»æœåŠ¡å™¨ä¸Šåˆ†é…çš„ID
+	public static boolean isServer;
+	private Server server;
 	/**
-	 * ´æ´¢ËùÓĞµÄÉß
+	 * å­˜å‚¨æ‰€æœ‰çš„è›‡
 	 */
 	public static Map<Long,Snake> snakes = null;
 
 	/**
-	 * ´æ´¢ËùÓĞÊ³Îï
+	 * å­˜å‚¨æ‰€æœ‰é£Ÿç‰©
 	 */
-	public static ArrayList<FoodObject> foodObjects;
+	public static Set<FoodObject> foodObjects;
 
-    /**
-     * ÓÃÀ´Í¨ĞÅµÄ¿Í»§¶Ë
-     */
-    private Client client;
+	/**
+	 * ç”¨æ¥é€šä¿¡çš„å®¢æˆ·ç«¯
+	 */
+	private Client client;
 
-    /**
-     * Ãû×Ö
-     */
-    private static String name;
+	/**
+	 * åå­—
+	 */
+	private static String name;
 
-    /**
-     * ×Ô¼ºµÄÉß
-     */
-    public static Snake snake;// Éß1
+	/**
+	 * è‡ªå·±çš„è›‡
+	 */
+	public static Snake snake;// è›‡1
+
+	/**
+	 * æœåŠ¡å™¨IPåœ°å€
+	 */
+	public static String serverHost;
 
 
-    //get set·½·¨ ---------------
+	//get setæ–¹æ³• ---------------
 	public static Map<Long, Snake> getSnakes() {
 		return snakes;
 	}
@@ -131,57 +136,52 @@ public class GamePanel extends JPanel {
 		GamePanel.snakes = snakes;
 	}
 
-	public static ArrayList<FoodObject> getFoodObjects() {
-		return foodObjects;
-	}
-
-	public static void setFoodObjects(ArrayList<FoodObject> foodObjects) {
-		GamePanel.foodObjects = foodObjects;
-	}
-
 
 //-----------------------------
 
 	/**
-	 * »­²¼¹¹Ôì·½·¨ ³õÊ¼»¯Êı¾İ
+	 * ç”»å¸ƒæ„é€ æ–¹æ³• åˆå§‹åŒ–æ•°æ®
 	 */
 	public GamePanel() {
-		snake = new Snake(snakeCreateRange(),snakeCreateRange());// Ò»ÌõÉß
-		Balla = new Ball_JP();// Ò»Ğ©Ëæ»ú
-		foodObjects = new ArrayList<FoodObject>();
+		snake = new Snake(snakeCreateRange(),snakeCreateRange());// ä¸€æ¡è›‡
+		Balla = new Ball_JP();// ä¸€äº›éšæœº
+		foodObjects = new HashSet<FoodObject>();
 		snakes = new HashMap<>();
 		status = RUNNING;
+		if (isServer){
+			server = Server.getInstance();
+			server.start();
+		}
+		name = "1";
+		snakes = new HashMap<>();
+		client = new Client(name,serverHost,9999);
+		snake = new Snake(snakeCreateRange(),snakeCreateRange());
+		client.start();
+		Timer();
+	}
 
-        name = "1";
-        snakes = new HashMap<>();
-        client = new Client(name,"127.0.0.1",9999);
-        snake = new Snake(snakeCreateRange(),snakeCreateRange());
-        client.start();
-        Timer();
-    }
 
 
-
-	private Runnable r1 ;//¶¯×÷¼ì²âÏß³Ì
-	private Runnable r2 ;//¼ÆÊ±Ïß³Ì
-	private Runnable r3 ;//±³¾°ºÍÖØ»­Ïß³Ì
-	private Runnable r4 ;//´¥·¢Æ÷Ïß³Ì
-	private ExecutorService threadPool ;//Ïß³Ì³Ø
-	// ¼ÆÊ±Æ÷
+	private Runnable r1 ;//åŠ¨ä½œæ£€æµ‹çº¿ç¨‹
+	private Runnable r2 ;//è®¡æ—¶çº¿ç¨‹
+	private Runnable r3 ;//èƒŒæ™¯å’Œé‡ç”»çº¿ç¨‹
+	private Runnable r4 ;//è§¦å‘å™¨çº¿ç¨‹
+	private ExecutorService threadPool ;//çº¿ç¨‹æ± 
+	// è®¡æ—¶å™¨
 	public void Timer() {
 
 		r1 = ()-> {
 			while (status == RUNNING) {
 				action();
 				try {
-					Thread.sleep(300);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 
 			}
 			threadPool.execute(r4);
-			System.out.println("Í£Ö¹Ïß³Ì1");
+			System.out.println("åœæ­¢çº¿ç¨‹1");
 		};
 
 		r2 = ()->{
@@ -208,15 +208,15 @@ public class GamePanel extends JPanel {
 		};
 
 		r4 = ()->{
-		    while(status == DEAD || status == GAME_OVER){
+			while(status == DEAD || status == GAME_OVER){
 
-                System.out.println("Ïß³Ì¼àÌı");
-				System.out.println("ÔËĞĞ×´Ì¬ÊÇ"+status);
+				System.out.println("çº¿ç¨‹ç›‘å¬");
+				System.out.println("è¿è¡ŒçŠ¶æ€æ˜¯"+status);
 			}
-            if (status == RUNNING){
-		        Restart();
-            }
-            threadPool.execute(r1);
+			if (status == RUNNING){
+				Restart();
+			}
+			threadPool.execute(r1);
 		};
 		threadPool = Executors.newFixedThreadPool(3);
 		threadPool.execute(r1);
@@ -225,34 +225,34 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Ğ¡ÇòµÄÔË¶¯
+	 * å°çƒçš„è¿åŠ¨
 	 */
 	public void ballaMove(){
-		for (int i = 1; i < Balla.balls.size(); i++) { // ËùÓĞÇòÔË¶¯Ò»´Î
+		for (int i = 1; i < Balla.balls.size(); i++) { // æ‰€æœ‰çƒè¿åŠ¨ä¸€æ¬¡
 			Ball b = Balla.balls.get(i);
 			b.move();
 		}
 	}
 	/**
-	 * ÉßµÄÒÆ¶¯
+	 * è›‡çš„ç§»åŠ¨
 	 */
 	public void moveStep() {
 		snake.move();
 	}
 
 	/**
-	 * Í³Ò»µ÷¶ÈµÄ¶¯×÷
+	 * ç»Ÿä¸€è°ƒåº¦çš„åŠ¨ä½œ
 	 */
 	public void action() {
-		KeyListen();// ·½ÏòÒÆ¶¯
-		crash();//Æô¶¯Åö×²¼àÌı
-        moveStep();//ÉßµÄÒÆ¶¯
-        sendSnake();//ÒÆ¶¯×´Ì¬·¢ËÍ¸ø·şÎñÆ÷
-		
+		KeyListen();// æ–¹å‘ç§»åŠ¨
+		crash();//å¯åŠ¨ç¢°æ’ç›‘å¬
+		moveStep();//è›‡çš„ç§»åŠ¨
+		sendSnake();//ç§»åŠ¨çŠ¶æ€å‘é€ç»™æœåŠ¡å™¨
+
 	}
 
 	/**
-	 * ¼àÌıÆ÷
+	 * ç›‘å¬å™¨
 	 */
 	public void KeyListen() {
 		KeyAdapter k = new KeyAdapter() {
@@ -260,17 +260,17 @@ public class GamePanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				int a = e.getKeyCode();
 				switch (a) {
-				case VK_W:
-					snake.moveUp();
-					break;
-				case VK_S:
-					snake.moveDown();
-					break;
-				case VK_A:
-					snake.moveLeft();
-					break;
-				case VK_D:
-					snake.moveRight();
+					case VK_W:
+						snake.moveUp();
+						break;
+					case VK_S:
+						snake.moveDown();
+						break;
+					case VK_A:
+						snake.moveLeft();
+						break;
+					case VK_D:
+						snake.moveRight();
 				}
 			}
 		};
@@ -279,9 +279,9 @@ public class GamePanel extends JPanel {
 	}
 
 
-    /**
-     * Åö×²¼àÌı
-     */
+	/**
+	 * ç¢°æ’ç›‘å¬
+	 */
 	public void crash() {
 		Head head = (Head) snake.length.get(0);
 		/*
@@ -309,106 +309,105 @@ public class GamePanel extends JPanel {
 					}
 				}
 			}
-			
+
 		}
 		*/
 
 		snakeCrashByOther(head);
-        snakeCrashWall(head);
-        snakeEat(head);
+		snakeCrashWall(head);
+		snakeEat(head);
 	}
 
-    /**
-     * Í·ºÍÆäËûÉßµÄÍ·ºÍÉíÌåµÄÅö×²ÅĞ¶¨
-     * @param head ±¾»úÉßÍ·
-     */
+	/**
+	 * å¤´å’Œå…¶ä»–è›‡çš„å¤´å’Œèº«ä½“çš„ç¢°æ’åˆ¤å®š
+	 * @param head æœ¬æœºè›‡å¤´
+	 */
 	private void snakeCrashByOther(Head head){
-	    for (long pid
-                :snakes.keySet()){
-	        Snake allSnake = snakes.get(pid);
-	        for (Joint joint
-                    :allSnake.length) {
-                if (CrashObjects.SnakeBang(head,joint) && pid != id){
-                    decLife("×²µ½ÁË");
-                }
-            }
-        }
-    }
+		for (long pid
+				:snakes.keySet()){
+			Snake allSnake = snakes.get(pid);
+			for (Joint joint
+					:allSnake.length) {
+				if (CrashObjects.SnakeBang(head,joint) && pid != id){
+					decLife("æ’åˆ°äº†");
+				}
+			}
+		}
+	}
 
-    private void snakeEat(Head head){
+	private void snakeEat(Head head){
 		int i = 0;
-	    for (FoodObject food:
-                foodObjects){
-	        if (CrashObjects.SnakeBang(head,food)){
+		for (FoodObject food:
+				foodObjects){
+			if (CrashObjects.SnakeBang(head,food)){
 				System.out.println("eat food");
 				addBody();
 				ClientUtil.sendSnakeData(id,snake, SnakeData.OPERATION_REL_SNAKE);
 				ClientUtil.sendFoodObject(i,food, FoodObjectData.OPERATION_DEL_FOOD);
-				i++;
-            }
-        }
-    }
+			}
+		}
+	}
 
-    /**
-     * Éß×²µ½Ç½
-     * @param head ±¾»úÉßÍ·
-     */
-    private void snakeCrashWall(Head head){
-        if (CrashObjects.qiang(head)) {
-            decLife("¹ş¹ş£¬Ğ¡À¬»ø");
+	/**
+	 * è›‡æ’åˆ°å¢™
+	 * @param head æœ¬æœºè›‡å¤´
+	 */
+	private void snakeCrashWall(Head head){
+		if (CrashObjects.qiang(head)) {
+			decLife("å“ˆå“ˆï¼Œå°åƒåœ¾");
 //            status = DEAD;
-        }
-    }
+		}
+	}
 
-    /**
-     * ÓÎÏ·½áÊø
-     */
+	/**
+	 * æ¸¸æˆç»“æŸ
+	 */
 	public void gameOver() {
 		status = GAME_OVER;
-        gameOverFrame();
+		gameOverFrame();
 	}
 
 
-    /**
-     * ÏÔÊ¾ÓÎÏ·½áÊø´°¿Ú
-     */
-    public void gameOverFrame(){
-        if (life == 0) {
+	/**
+	 * æ˜¾ç¤ºæ¸¸æˆç»“æŸçª—å£
+	 */
+	public void gameOverFrame(){
+		if (life == 0) {
 //            threadPool.execute(r4);
 //            status = GAME_OVER;
-            new GameFrameson().GameOver(life);
-        }
-    }
+			new GameFrameson().GameOver(life);
+		}
+	}
 
 
-    /**
-     * Ôö¼ÓÉíÌå³¤¶È·½·¨
-     */
-	public void addBody() {// ÉíÌå³ÔÊ³Îï++
-		// Î²²¿×ø±ê
+	/**
+	 * å¢åŠ èº«ä½“é•¿åº¦æ–¹æ³•
+	 */
+	public void addBody() {// èº«ä½“åƒé£Ÿç‰©++
+		// å°¾éƒ¨åæ ‡
 		int tailX = snake.length.get(snake.length.size() - 1).getX;
 		int tailY = snake.length.get(snake.length.size() - 1).y;
 		Direction tailDir = snake.length.get( snake.length.size() - 1).snakeDir;
 		switch (tailDir) {
-		case LIFT:
-			snake.length.add(new Body(tailX + 1, tailY, tailDir));
-			break;
-		case RIGHT:
-			snake.length.add(new Body(tailX - 1, tailY, tailDir));
-			break;
-		case UP:
-			snake.length.add(new Body(tailX, tailY + 1, tailDir));
-			break;
-		case DOWN:
-			snake.length.add(new Body(tailX, tailY - 1, tailDir));
-			break;
+			case LIFT:
+				snake.length.add(new Body(tailX + 1, tailY, tailDir));
+				break;
+			case RIGHT:
+				snake.length.add(new Body(tailX - 1, tailY, tailDir));
+				break;
+			case UP:
+				snake.length.add(new Body(tailX, tailY + 1, tailDir));
+				break;
+			case DOWN:
+				snake.length.add(new Body(tailX, tailY - 1, tailDir));
+				break;
 		}
 //		System.out.println("add body");
 	}
 
-    /**
-     * ÖØĞÂ¿ªÊ¼·½·¨
-     */
+	/**
+	 * é‡æ–°å¼€å§‹æ–¹æ³•
+	 */
 	public void Restart(){
 		snake = new Snake(snakeCreateRange(),snakeCreateRange());
 		score = 0;
@@ -417,62 +416,68 @@ public class GamePanel extends JPanel {
 		status = RUNNING;
 	}
 
-    /**
-     * ¼õÑª+µ¯´°·½·¨
-     *
-     */
-	public void decLife(String s) {// ×²Ç½ÌáÊ¾
-        life--;
-        if (life > 0) {
-            notice(s);
-        }
-        if (life == 0 ){
-            gameOver();
-        }
+	/**
+	 * å‡è¡€+å¼¹çª—æ–¹æ³•
+	 *
+	 */
+	public void decLife(String s) {// æ’å¢™æç¤º
+		life--;
+		if (life > 0) {
+			notice(s);
+		}
+		if (life == 0 ){
+			gameOver();
+		}
 	}
 
-    /**
-     * ¼õÃüºóµ¯´°
-     * @param s ¸øÍæ¼ÒËµµÄ»°
-     */
+	/**
+	 * å‡å‘½åå¼¹çª—
+	 * @param s ç»™ç©å®¶è¯´çš„è¯
+	 */
 	private void notice(String s){
-	    status = DEAD;
-        Date date = new Date(0);
-        SimpleDateFormat sb = new SimpleDateFormat();
-        String Str2 = sb.format(date);
-        String str = s + "\n" + "ÓÎÏ·¼ÌĞø£¿" + life + "Ãü";
-        int i = JOptionPane.showConfirmDialog(null, Str2 + "\n" + str, "ÓÎÏ·ÌáÊ¾",
-                JOptionPane.YES_NO_OPTION);
-        if (i == 0) {
-            rebirth();
+		status = DEAD;
+		ClientUtil.sendSnakeData(id,snake,SnakeData.OPERATION_DEL_SNAKE);
+		Date date = new Date(0);
+		SimpleDateFormat sb = new SimpleDateFormat();
+		String Str2 = sb.format(date);
+		String str = s + "\n" + "æ¸¸æˆç»§ç»­ï¼Ÿ" + life + "å‘½";
+		int i = JOptionPane.showConfirmDialog(null, Str2 + "\n" + str, "æ¸¸æˆæç¤º",
+				JOptionPane.YES_NO_OPTION);
+		if (i == 0) {
+			rebirth();
 
-        } else {
-            JOptionPane.showMessageDialog(null, "ÍË³öÓÎÏ·", "±êÌâ",
-                    JOptionPane.WARNING_MESSAGE);
-            System.exit(i);
-            return;
-        }
-    }
+		} else {
+			JOptionPane.showMessageDialog(null, "é€€å‡ºæ¸¸æˆ", "æ ‡é¢˜",
+					JOptionPane.WARNING_MESSAGE);
+			System.exit(i);
+			return;
+		}
+	}
 
-    /**
-     * ×²ËÀºóÖØÉú·½·¨
-     */
-    public void rebirth(){
-	    snake = new Snake(snakeCreateRange(),snakeCreateRange());
-        status = RUNNING;
-    }
+	/**
+	 * æ’æ­»åé‡ç”Ÿæ–¹æ³•
+	 */
+	public void rebirth(){
+		snake = new Snake(snakeCreateRange(),snakeCreateRange());
+		status = RUNNING;
+	}
 
-    /**
-     * ·¢ËÍÉß¸ø·şÎñÆ÷
-     */
-    public void sendSnake(){
-        System.out.println("¿Í»§¶Ë·¢ËÍµÄsnake:"+ snake);
-		ClientUtil.sendSnake(snake);
+	/**
+	 * å‘é€è›‡ç»™æœåŠ¡å™¨
+	 */
+	public void sendSnake(){
+		System.out.println("å®¢æˆ·ç«¯å‘é€çš„snake:"+ snake);
+		if (status == RUNNING) {
+			ClientUtil.sendSnake(snake);
 //           Server.sendSnakes();
-    }
+		}
+//		if (status == DEAD){
+//        	ClientUtil.sendSnakeData(id,snake,SnakeData.OPERATION_DEL_SNAKE);
+//		}
+	}
 
-    public int snakeCreateRange(){
-    	return (int)((Math.random()*26)+4);
+	public int snakeCreateRange(){
+		return (int)((Math.random()*26)+4);
 	}
 
 	public void paintDq(Graphics g) {
@@ -487,12 +492,12 @@ public class GamePanel extends JPanel {
 	}
 
 	public void paintSnake(Graphics g) {
-        for (Snake snake :
-                snakes.values()) {
-            for (Joint j : snake.length) {
-                g.drawImage(j.image, j.getX * CELL_SIZE, j.y * CELL_SIZE, null);
-            }
-        }
+		for (Snake snake :
+				snakes.values()) {
+			for (Joint j : snake.length) {
+				g.drawImage(j.image, j.getX * CELL_SIZE, j.y * CELL_SIZE, null);
+			}
+		}
 	}
 
 	public void paintFoodObject(Graphics g) {
@@ -508,15 +513,15 @@ public class GamePanel extends JPanel {
 		}
 	}
 
-	// »­±³¾°Í¼,Ê±¼ä°´,·ÖÊı
+	// ç”»èƒŒæ™¯å›¾,æ—¶é—´æŒ‰,åˆ†æ•°
 	public void paint(Graphics g) {
-		g.drawImage(background, 0, 0, null);// »­±³¾°Í¼
+		g.drawImage(background, 0, 0, null);// ç”»èƒŒæ™¯å›¾
 		g.setColor(new Color(0xFFFFFF));
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-		g.drawString("Ê±¼ä:" + tim, 10, 20);// »­Ê±¼ä
-		g.drawString("·ÖÊı:" + score, 10, 50);// »­·ÖÊı
-		g.drawString("Ãü£º" + life, 10, 80);
-		paintSnake(g);// Éß
+		g.drawString("æ—¶é—´:" + tim, 10, 20);// ç”»æ—¶é—´
+		g.drawString("åˆ†æ•°:" + score, 10, 50);// ç”»åˆ†æ•°
+		g.drawString("å‘½ï¼š" + life, 10, 80);
+		paintSnake(g);// è›‡
 		paintFoodObject(g);
 		paintBall(g);
 	}

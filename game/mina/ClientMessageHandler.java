@@ -7,6 +7,7 @@ import org.apache.mina.core.session.IoSession;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 客户端信息处理
@@ -127,26 +128,13 @@ public class ClientMessageHandler {
      * @param operation 操作码
      */
     private void receiveFood(FoodObject food, int index, short operation){
-        ArrayList<FoodObject> foods = GamePanel.foodObjects;
+        Set<FoodObject> foods = GamePanel.foodObjects;
         if (operation == FoodObjectData.OPERATION_ADD_FOOD){
             System.out.println("收到食物");
-
-            if (foods.size() != 0) {
-                for (FoodObject food1 :
-                        foods) {
-                    if (food1.equals(food)) {
-                        System.out.println("已经有这个食物了");
-                    } else {
-                        foods.add(index, food);
-                        System.out.println("还没有这个食物");
-                    }
-                }
-            }else{
-                foods.add(index, food);
-            }
+           foods.add(food);
         }
         if (operation == FoodObjectData.OPERATION_DEL_FOOD){
-            foods.remove(index);
+            foods.remove(food);
             System.out.println("吃到了食物");
         }
     }

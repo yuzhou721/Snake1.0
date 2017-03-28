@@ -19,12 +19,15 @@ public class Server {
     private int port;//端口
     private static Map<Long,String> nameIdMap = null;
 
-    public Server(int port) {
+    private Server(int port) {
         this.port = port;
         nameIdMap = new HashMap<>();
         SnakeManager menager1 = new SnakeManager();
     }
-
+    private static Server s = new Server(9999);
+    public static Server getInstance(){
+        return s;
+    }
     public void start(){
         IoAcceptor acceptor = new NioSocketAcceptor();
         acceptor.getFilterChain().addLast("log",new LoggingFilter());

@@ -57,4 +57,6 @@ public class FoodObjectData {
         this.object = object;
     }
 
+
+
 }

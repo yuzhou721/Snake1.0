@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class xuanze {
 	static int a =0;
-	static int snak=0;//Ñ¡Ôñ½ÇÉ«
+	static int snak=0;//é€‰æ‹©è§’è‰²
 	JLabel xzbj;
 	JButton snake1;
 	JButton snake2;
@@ -19,13 +19,13 @@ public class xuanze {
 	JButton snake7;
 	JButton snake8;
 	xuanze(){
-		JFrame jf = new JFrame("Ñ¡Ôñ½ÇÉ«");
-		
+		JFrame jf = new JFrame("é€‰æ‹©è§’è‰²");
+
 		JPanel jp = new JPanel();
 		ImageIcon snake1head = new ImageIcon(GamePanel.xuanzebiejing);
 		jf.setBounds(250,50,snake1head.getIconWidth(), snake1head.getIconHeight());
 		jp.setLayout(null);
-		
+
 		xzbj =new JLabel(snake1head);
 		snake1 = new JButton();
 		snake2 = new JButton();
@@ -35,9 +35,9 @@ public class xuanze {
 		snake6 = new JButton();
 		snake7 = new JButton();
 		snake8 = new JButton();
-		
-		
-		
+
+
+
 		xzbj.setBounds(0,0,snake1head.getIconWidth(), snake1head.getIconHeight());
 		snake1.setBounds(57,38,149,265);
 		snake2.setBounds(296,38,149,265);
@@ -47,7 +47,7 @@ public class xuanze {
 		snake6.setBounds(296,389,149,265);
 		snake7.setBounds(543,389,149,265);
 		snake8.setBounds(788,389,149,265);
-		
+
 		snake1.setFocusPainted(false);
 		snake2.setFocusPainted(false);
 		snake3.setFocusPainted(false);
@@ -56,7 +56,7 @@ public class xuanze {
 		snake6.setFocusPainted(false);
 		snake7.setFocusPainted(false);
 		snake8.setFocusPainted(false);
-		
+
 		snake1.setContentAreaFilled(false);
 		snake2.setContentAreaFilled(false);
 		snake3.setContentAreaFilled(false);
@@ -65,87 +65,87 @@ public class xuanze {
 		snake6.setContentAreaFilled(false);
 		snake7.setContentAreaFilled(false);
 		snake8.setContentAreaFilled(false);
-		
-		
-		
 
-		
-		snake1.addMouseListener(new MouseAdapter() {//Ñ¡Ôñ½ÇÉ«1
+
+
+
+
+		snake1.addMouseListener(new MouseAdapter() {//é€‰æ‹©è§’è‰²1
 			public void mouseClicked(MouseEvent e){
 				snak=1;
 				new GameFrame();
 				jf.dispose();
-		}
+			}
 		});
-		snake2.addMouseListener(new MouseAdapter() {//Ñ¡Ôñ½ÇÉ«2
+		snake2.addMouseListener(new MouseAdapter() {//é€‰æ‹©è§’è‰²2
 			public void mouseClicked(MouseEvent e){
 				snak=2;
 				new GameFrame();
 				jf.dispose();
 			}
 		});//252
-		snake3.addMouseListener(new MouseAdapter() {//Ñ¡Ôñ½ÇÉ«3
+		snake3.addMouseListener(new MouseAdapter() {//é€‰æ‹©è§’è‰²3
 			public void mouseClicked(MouseEvent e){
 				snak=3;
 				new GameFrame();
 				jf.dispose();
 			}
 		});
-		snake4.addMouseListener(new MouseAdapter() {//Ñ¡Ôñ½ÇÉ«4
+		snake4.addMouseListener(new MouseAdapter() {//é€‰æ‹©è§’è‰²4
 			public void mouseClicked(MouseEvent e){
 				snak=4;
 				new GameFrame();
 				jf.dispose();
 			}
 		});
-		snake5.addMouseListener(new MouseAdapter() {//Ñ¡Ôñ½ÇÉ«4
+		snake5.addMouseListener(new MouseAdapter() {//é€‰æ‹©è§’è‰²4
 			public void mouseClicked(MouseEvent e){
 				snak=5;
 				new GameFrame();
 				jf.dispose();
 			}
 		});
-		snake6.addMouseListener(new MouseAdapter() {//Ñ¡Ôñ½ÇÉ«4
+		snake6.addMouseListener(new MouseAdapter() {//é€‰æ‹©è§’è‰²4
 			public void mouseClicked(MouseEvent e){
 				snak=6;
 				new GameFrame();
 				jf.dispose();
 			}
 		});
-		snake7.addMouseListener(new MouseAdapter() {//Ñ¡Ôñ½ÇÉ«4
+		snake7.addMouseListener(new MouseAdapter() {//é€‰æ‹©è§’è‰²4
 			public void mouseClicked(MouseEvent e){
 				snak=7;
 				new GameFrame();
 				jf.dispose();
 			}
 		});
-		snake8.addMouseListener(new MouseAdapter() {//Ñ¡Ôñ½ÇÉ«4
+		snake8.addMouseListener(new MouseAdapter() {//é€‰æ‹©è§’è‰²4
 			public void mouseClicked(MouseEvent e){
 				snak=8;
 				new GameFrame();
 				jf.dispose();
 			}
 		});
-		
+
 		jf.add(jp);
-		jf.add(xzbj);//Ìí¼ÓÍ¼Æ¬±ê¼Ç±³¾°
-		xzbj.add(snake1);//Ìí¼Ó°´Å¥
-		xzbj.add(snake2);//Ìí¼Ó°´Å¥
-		xzbj.add(snake3);//Ìí¼Ó°´Å¥
-		xzbj.add(snake4);//Ìí¼Ó°´Å¥
-		xzbj.add(snake5);//Ìí¼Ó°´Å¥
-		xzbj.add(snake6);//Ìí¼Ó°´Å¥
-		xzbj.add(snake7);//Ìí¼Ó°´Å¥
-		xzbj.add(snake8);//Ìí¼Ó°´Å¥
-	
+		jf.add(xzbj);//æ·»åŠ å›¾ç‰‡æ ‡è®°èƒŒæ™¯
+		xzbj.add(snake1);//æ·»åŠ æŒ‰é’®
+		xzbj.add(snake2);//æ·»åŠ æŒ‰é’®
+		xzbj.add(snake3);//æ·»åŠ æŒ‰é’®
+		xzbj.add(snake4);//æ·»åŠ æŒ‰é’®
+		xzbj.add(snake5);//æ·»åŠ æŒ‰é’®
+		xzbj.add(snake6);//æ·»åŠ æŒ‰é’®
+		xzbj.add(snake7);//æ·»åŠ æŒ‰é’®
+		xzbj.add(snake8);//æ·»åŠ æŒ‰é’®
+
 		jf.setVisible(true);
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
 
 
 
-	
+
+
 
 
 }

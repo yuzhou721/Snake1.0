@@ -1,16 +1,16 @@
 package game;
 
 public class Db {
-	private int head; //ÄÑ¶È   
-	private int life ;    //Ãü
-	private int newgame ;   //ÖØĞÂ¿ªÊ¼×´Ì¬Öµ
-	private int snake;//Ñ¡ÔñÉß
-	
+	private int head; //éš¾åº¦
+	private int life ;    //å‘½
+	private int newgame ;   //é‡æ–°å¼€å§‹çŠ¶æ€å€¼
+	private int snake;//é€‰æ‹©è›‡
+
 	Db(){
-		this.head = GameFrame.head;//ÄÑ¶È
-		this.life = GamePanel.life;//Ãü
-		this.newgame = GameFrame.number;//ÖØĞÂ¿ªÊ¼
-		this.snake = xuanze.snak;//Ñ¡Ôñ½ÇÉ«
+		this.head = GameFrame.head;//éš¾åº¦
+		this.life = GamePanel.life;//å‘½
+		this.newgame = GameFrame.number;//é‡æ–°å¼€å§‹
+		this.snake = xuanze.snak;//é€‰æ‹©è§’è‰²
 	}
 
 	public int getHead() {
@@ -46,6 +46,6 @@ public class Db {
 	public void setSnake(int snake) {
 		this.snake = snake;
 	}
-	
+
 
 }

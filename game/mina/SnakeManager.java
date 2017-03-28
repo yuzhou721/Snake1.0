@@ -6,9 +6,7 @@ import game.random.FoodObject;
 import game.random.Money;
 import org.apache.mina.core.session.IoSession;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
 
 /**
@@ -18,7 +16,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class SnakeManager {
     private static Map<Long, Snake> snakeMap = null;
     private static Map<Long,IoSession> sessionMap=null;
-    private static ArrayList<FoodObject> foods = null;
+    private static LinkedHashSet<FoodObject> foods = null;
     public static LinkedBlockingDeque<SnakeData> snakeDatas;
     public static LinkedBlockingDeque<FoodObjectData> foodObjectDatas;
     private static int foodNum = 0 ;//食物出现次数
@@ -28,7 +26,7 @@ public class SnakeManager {
     public SnakeManager(){
         snakeMap = new HashMap<>();
         sessionMap = new HashMap<>();
-        foods = new ArrayList<>();
+        foods = new LinkedHashSet<>();
         snakeDatas = new LinkedBlockingDeque<>();
         foodObjectDatas = new LinkedBlockingDeque<>();
         Timer();
@@ -43,7 +41,7 @@ public class SnakeManager {
                 Strike();
 //                System.out.println(sessionMap);
 //                System.out.println(snakeMap);
-                System.out.println(foods);
+//                System.out.println(foods);
 //                System.out.println(System.currentTimeMillis());
                 try {
                     Thread.sleep(50);
@@ -107,6 +105,8 @@ public class SnakeManager {
 
         if (sessionMap.size() < person){
             person--;
+            decFood();
+
         }
 
         if (!foodObjectDatas.isEmpty()){
@@ -118,12 +118,21 @@ public class SnakeManager {
         }
     }
 
+    public void decFood(){
+        Iterator<FoodObject> iterator = foods.iterator();
+        if (iterator.hasNext()) {
+            FoodObject food = iterator.next();
+            iterator.remove();
+            sendFood(food,1,FoodObjectData.OPERATION_DEL_FOOD);
+        }
+    }
+
     /**
      * 添加食物，并发送给所有客户端
      */
     public void addFood(){
         FoodObject food = nextFood();
-        foods.add(foodNum,food);
+        foods.add(food);
         sendFood(food, foodNum, FoodObjectData.OPERATION_ADD_FOOD);
         foodNum++;
     }
@@ -194,7 +203,7 @@ public class SnakeManager {
             foods.add(food);
         }
         if (operation == FoodObjectData.OPERATION_DEL_FOOD){
-            foods.remove(index);
+            foods.remove(food);
             System.out.println("eat food");
             sendFood(food,index,operation);//删除以后通知所有客户端删除
             foodNum--;
@@ -359,13 +368,11 @@ public class SnakeManager {
         SnakeManager.sessionMap = sessionMap;
     }
 
-    public static ArrayList<FoodObject> getFoods() {
+    public static Set<FoodObject> getFoods() {
         return foods;
     }
 
-    public static void setFoods(ArrayList<FoodObject> foods) {
-        SnakeManager.foods = foods;
-    }
+
 
     public static int getFoodNum() {
         return foodNum;

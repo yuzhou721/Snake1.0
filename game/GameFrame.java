@@ -17,14 +17,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- * ½çÃæ 
+ * ç•Œé¢
  * @author soft01
  *
  */
 public class GameFrame extends JFrame{
-	 static  int number = 0;
-	 static int head= 0;
-	 static  int lase = 0;
+	static  int number = 0;
+	static int head= 0;
+	static  int lase = 0;
 
 
 	public void run(){
@@ -34,12 +34,12 @@ public class GameFrame extends JFrame{
 //        ck.setVisible(true);
 //
 //        ck.setResizable(false);
-    }
-	
+	}
+
 	public GameFrame(){
-		super("Ì°³ÔÉß");
-		  /*Ball_JP jp=new Ball_JP();  
-	        jp.run_run();       //¿ªÊ¼ÔËĞĞ¶àÏß³Ì  
+			super("è´ªåƒè›‡");
+		  /*Ball_JP jp=new Ball_JP();
+	        jp.run_run();       //å¼€å§‹è¿è¡Œå¤šçº¿ç¨‹
 	        this.add(jp); */
 //		GameFrame frame = new GameFrame();
 		GamePanel panel =new GamePanel();
@@ -47,8 +47,8 @@ public class GameFrame extends JFrame{
 //		GamePanel  jp1 = new GamePanel ();
 //		jp.setOpaque(false);
 //		this.add(jp1);
-		
-		String path = "/images/snake_logo_¿´Í¼Íõ.png";
+
+		String path = "/images/snake_logo_çœ‹å›¾ç‹.png";
 		try{
 			Image img = ImageIO.read(this.getClass().getResource(path));
 			this.setIconImage(img);
@@ -57,136 +57,136 @@ public class GameFrame extends JFrame{
 		}
 		setBounds(300,0,panel.backgroundwidth-10,panel.backgroundhight+35);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JMenuBar menyber = new JMenuBar();//´´½¨²Ëµ¥À¸
-		setJMenuBar(menyber);//½«´´½¨µÄ²Ëµ¥À¸Ìí¼Óµ½´°¿Ú²Ëµ¥À¸
-		JMenu menu =new JMenu("ÓÎÏ·ÉèÖÃ");//´´½¨²Ëµ¥¶ÔÏó
-		menyber.add(menu);//Ìí¼Óµ½²Ëµ¥À¸
-		JMenu gu =new JMenu("¹ØÓÚ");//´´½¨²Ëµ¥¶ÔÏó
-		menyber.add(gu);//Ìí¼Óµ½²Ëµ¥À¸
-		
-		JMenuItem menultem =new JMenuItem("ÖØĞÂ¿ªÊ¼");//×Ó²Ëµ¥¶ÔÏó
-		//Ìí¼Ó¼àÌı
+		JMenuBar menyber = new JMenuBar();//åˆ›å»ºèœå•æ 
+		setJMenuBar(menyber);//å°†åˆ›å»ºçš„èœå•æ æ·»åŠ åˆ°çª—å£èœå•æ 
+		JMenu menu =new JMenu("æ¸¸æˆè®¾ç½®");//åˆ›å»ºèœå•å¯¹è±¡
+		menyber.add(menu);//æ·»åŠ åˆ°èœå•æ 
+		JMenu gu =new JMenu("å…³äº");//åˆ›å»ºèœå•å¯¹è±¡
+		menyber.add(gu);//æ·»åŠ åˆ°èœå•æ 
+
+		JMenuItem menultem =new JMenuItem("é‡æ–°å¼€å§‹");//å­èœå•å¯¹è±¡
+		//æ·»åŠ ç›‘å¬
 		menultem.addActionListener(new ActionListener(){
 
-			@Override//ÖØĞÂ¿ªÊ¼
+			@Override//é‡æ–°å¼€å§‹
 			public void actionPerformed(ActionEvent e) {
 				JMenuItem menuItem = (JMenuItem)e.getSource();
-				
+
 				panel.Restart();
-				
+
 			}
-			
+
 		});
-		menu.add(menultem);//Ëï×Ó²Ëµ¥Ìí¼Ó
-		
-		JMenu menultem2 =new JMenu("ÄÑ¶ÈÉèÖÃ");//×Ó²Ëµ¥¶ÔÏó1
-		
-		menu.add(menultem2);//Ëï×Ó²Ëµ¥Ìí¼Ó
-		
-		JMenuItem menultem1 =new JMenuItem("ÓÎÏ·½áÊø");//×Ó²Ëµ¥¶ÔÏó1
+		menu.add(menultem);//å­™å­èœå•æ·»åŠ 
+
+		JMenu menultem2 =new JMenu("éš¾åº¦è®¾ç½®");//å­èœå•å¯¹è±¡1
+
+		menu.add(menultem2);//å­™å­èœå•æ·»åŠ 
+
+		JMenuItem menultem1 =new JMenuItem("æ¸¸æˆç»“æŸ");//å­èœå•å¯¹è±¡1
 		menultem1.addActionListener(new ActionListener() {
-			
-			@Override//½áÊøÓÎÏ·
+
+			@Override//ç»“æŸæ¸¸æˆ
 			public void actionPerformed(ActionEvent e) {
-				
+
 				JMenuItem menuItem = (JMenuItem)e.getSource();
-				 	System.exit(1);
-						
+				System.exit(1);
+
 			}
 		});
-		menu.add(menultem1);//Ëï×Ó²Ëµ¥Ìí¼Ó
-		
-		JMenuItem menultem3 =new JMenuItem("ÖÆ×÷ÍÅ¶Ó");//×Ó²Ëµ¥¶ÔÏó1
+		menu.add(menultem1);//å­™å­èœå•æ·»åŠ 
+
+		JMenuItem menultem3 =new JMenuItem("åˆ¶ä½œå›¢é˜Ÿ");//å­èœå•å¯¹è±¡1
 		menultem3.addActionListener(new ItemListenter());
-		gu.add(menultem3);//Ëï×Ó²Ëµ¥Ìí¼Ó
-		
-		
-		//´´½¨ÔøËï×Ó²Ëµ¥µ÷ÕûÄÑ¶È
-		JMenuItem suzMenyItem =new JMenuItem("ÄÑ¶È1");
-		JMenuItem suzMenyItem1 =new JMenuItem("ÄÑ¶È2");
-		JMenuItem suzMenyItem2 =new JMenuItem("ÄÑ¶È3");
-		
-		//ÄÑ¶Èµ÷ÕûÊó±ê²¶×½
+		gu.add(menultem3);//å­™å­èœå•æ·»åŠ 
+
+
+		//åˆ›å»ºæ›¾å­™å­èœå•è°ƒæ•´éš¾åº¦
+		JMenuItem suzMenyItem =new JMenuItem("éš¾åº¦1");
+		JMenuItem suzMenyItem1 =new JMenuItem("éš¾åº¦2");
+		JMenuItem suzMenyItem2 =new JMenuItem("éš¾åº¦3");
+
+		//éš¾åº¦è°ƒæ•´é¼ æ ‡æ•æ‰
 		suzMenyItem.addActionListener(new ActionListener(){
 
-			@Override//³õÊ¼ÄÑ¶È
+			@Override//åˆå§‹éš¾åº¦
 			public void actionPerformed(ActionEvent e) {
 				JMenuItem menuItem = (JMenuItem)e.getSource();
 				head = 0;
 			}
-			
+
 		});
 		suzMenyItem1.addActionListener(new ActionListener() {
-			
-			@Override//ÉèÖÃÄÑ¶È
+
+			@Override//è®¾ç½®éš¾åº¦
 			public void actionPerformed(ActionEvent e) {
 				JMenuItem menuItem = (JMenuItem)e.getSource();
 				head = 1;
 			}
 		});
 		suzMenyItem2.addActionListener(new ActionListener() {
-			
-			@Override//ÉèÖÃÄÑ¶È
+
+			@Override//è®¾ç½®éš¾åº¦
 			public void actionPerformed(ActionEvent e) {
 				JMenuItem menuItem = (JMenuItem)e.getSource();
-				head = 2;				
+				head = 2;
 			}
 		});
 		if(GamePanel.status == GamePanel.RUNNING){
 			super.toBack();
 		}
-		
-		//ÄÑ¶Èµ÷ÕûÌí¼Óµ½×Ó²Ëµ¥
-		
+
+		//éš¾åº¦è°ƒæ•´æ·»åŠ åˆ°å­èœå•
+
 		menultem2.add(suzMenyItem);
 		menultem2.add(suzMenyItem1);
 		menultem2.add(suzMenyItem2);
-            //»­²¼Ìí¼Óµ½´°Ìå  
-          
-        this.setVisible(true);
+		//ç”»å¸ƒæ·»åŠ åˆ°çª—ä½“
+
+		this.setVisible(true);
 		this.setVisible(true);
 		this.setResizable(false);
 
-		
 
-		
+
+
 	}
 
 	private  class ItemListenter implements ActionListener{
-		
-		JLabel I_code;//±ê¼Ç
-		
+
+		JLabel I_code;//æ ‡è®°
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//Êó±ê²¶×½
+			//é¼ æ ‡æ•æ‰
 //			JMenuItem menuItem = (JMenuItem)e.getSource();
 //			JFrame a= new JFrame();
 //			JPanel b =new JPanel();
-//			
+//
 //			b.setBackground(Color.pink);
 //			a.add(b);
-//			I_code=new JLabel("ÖÆ×÷ÈË£ºvip×éÈ«Ô±");
+//			I_code=new JLabel("åˆ¶ä½œäººï¼švipç»„å…¨å‘˜");
 //			a.setBounds(300,200,200,60);
-//			
+//
 //			I_code.setBounds(0, 0, 30, 30);
 //			a.setVisible(true);
 //			b.add(I_code);
-//			a.setResizable(false);		
-			
+//			a.setResizable(false);
+
 			JOptionPane guanyu =new JOptionPane();
-		
-			int a =guanyu.showOptionDialog(null, "ÊÇ·ñÍË³ö", "ÍË³ö£¿", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, null, null);
+
+			int a =guanyu.showOptionDialog(null, "æ˜¯å¦é€€å‡º", "é€€å‡ºï¼Ÿ", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, null, null);
 			switch (a) {
-			case 0:
-				System.exit(1);	
-				return;
-			case 1:
-					
-				break;
-				
-				
+				case 0:
+					System.exit(1);
+					return;
+				case 1:
+
+					break;
+
+
 			}
-			
+
 		}
 	}
 }

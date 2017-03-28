@@ -2,24 +2,24 @@ package game;
 
 
 /**
- * ÉßÍ·Àà£º
- * 
+ * è›‡å¤´ç±»ï¼š
+ *
  * @author soft01
  *
  */
 public class Head extends Joint {
-	private int score;
-    //ÉßÍ·×ø±ê
+    private int score;
+    //è›‡å¤´åæ ‡
     /* int headX =this.getX;
     int headY = this.y;
 */
-	public Head(){
-		this(0,0);
-	}
-	
+    public Head(){
+        this(0,0);
+    }
+
     public Head(int x, int y){
-    	this.score = 0;
-    	this.image = GamePanel.r_right;
+        this.score = 0;
+        this.image = GamePanel.r_right;
         this.getX = x;
         this.y = y;
         snakeDir = Direction.RIGHT;
@@ -43,20 +43,20 @@ public class Head extends Joint {
 
 
     }
-    
+
     public void move(){
 
         if(snakeDir ==Direction.LIFT){
-            getX--;//×óÒÆ
+            getX--;//å·¦ç§»
         }
         if(snakeDir ==Direction.RIGHT){
-            getX++;//ÓÒÒÆ
+            getX++;//å³ç§»
         }
         if(snakeDir ==Direction.UP){
-            y--;//ÉÏÒÆ
+            y--;//ä¸Šç§»
         }
         if(snakeDir ==Direction.DOWN){
-            y++;//ÏÂÒÆ
+            y++;//ä¸‹ç§»
         }
 
     }
