@@ -40,7 +40,7 @@ public class Tools {
             buffer.putString(str, ce);
         } catch (CharacterCodingException e) {
             e.printStackTrace();
-            System.out.println("字符串转换错误");
+            System.out.println("String encoder Exception");
         }
         buffer.flip();
         return buffer.remaining();

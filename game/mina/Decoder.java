@@ -36,39 +36,39 @@ public class Decoder extends CumulativeProtocolDecoder {
         if (ioBuffer.remaining() > 1 ){
             ioBuffer.mark();
             int len = ioBuffer.getInt();
-            System.out.println("长度是："+len);
+            System.out.println("length:"+len);
             if (len > ioBuffer.remaining()){
                 ioBuffer.reset();
-                System.out.println(ioBuffer.remaining()+"长度不够");
+                System.out.println(ioBuffer.remaining()+"length is not enough");
                 return false;
             }else{
                 char mode = ioBuffer.getChar();
 
                 if (mode == 'a') {
-                    System.out.println("解码蛇");
+                    System.out.println("decoder snake");
                     deCoderSnakes(ioBuffer,protocolDecoderOutput);
 
                 }
 
                 if (mode == 'b'){
-                    System.out.println("解码字符串");
+                    System.out.println("decoder string");
                     deCoderString(ioBuffer,protocolDecoderOutput,len-4-2);//减去报文头 等于字符串实际长度
                 }
 
                 if (mode == 'c'){
-                    System.out.println("解码ID");
+                    System.out.println("decoder ID");
                     deCoderID(ioBuffer,protocolDecoderOutput);
 
                 }
 
                 if(mode == 'd'){
-//                    System.out.println("解码蛇+ID");
+                    System.out.println("decoder snakeData");
                     deCoderSnakeData(ioBuffer,protocolDecoderOutput);
 
                 }
 
                 if (mode == 'e'){
-                    System.out.println("解码食物");
+                    System.out.println("decoder food");
                     deCoderFoodData(ioBuffer,protocolDecoderOutput);
                 }
 
@@ -142,7 +142,7 @@ public class Decoder extends CumulativeProtocolDecoder {
         try {
             name = ioBuffer.getString(len,cd);
         } catch (CharacterCodingException e) {
-            System.out.println("Sting解码异常");
+            System.out.println("Sting decoder exception");
         }
         protocolDecoderOutput.write(name);
     }
@@ -173,21 +173,25 @@ public class Decoder extends CumulativeProtocolDecoder {
         Money money;
 //        FoodObject foodObject = new FoodObject(ioBuffer.getInt(),ioBuffer.getInt());
         int mode = ioBuffer.getInt();
+        System.out.println("mode = "+mode);
+        int x = ioBuffer.getInt();
+        System.out.println("x = " + x);
+        int y = ioBuffer.getInt();
+        System.out.println("y = " + y);
         if (mode == FoodObject.MODE_FOOD){
-            System.out.println("是食物");
-            food = new Food(ioBuffer.getInt(),ioBuffer.getInt());
+            System.out.println("is food");
+            food = new Food(x,y);
             data.setObject(food);
         }
         if (mode == FoodObject.MODE_MONEY){
-            System.out.println("是金币" +
-                    "");
-            money = new Money(ioBuffer.getInt(),ioBuffer.getInt());
+            System.out.println("is money");
+            money = new Money(x,y);
             data.setObject(money);
         }
         data.setIndex(ioBuffer.getInt());
         data.setOperation(ioBuffer.getShort());
         protocolDecoderOutput.write(data);
-        System.out.println("解码食物成功");
+        System.out.println("decoder food succeed");
 
     }
 

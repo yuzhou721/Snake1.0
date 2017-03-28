@@ -20,8 +20,8 @@ import com.sun.rowset.internal.Row;
  *
  */
 public class Snake {
-	private  int x;
-	private  int y;
+//	private  int x;
+//	private  int y;
 	public int state;// ×´Ì¬
 	public static final int ACTIVE = 0;
 	public static final int DEAD = 1;
@@ -29,9 +29,7 @@ public class Snake {
 
 	public List<Joint> length;
 
-	public Snake() {
-		this((int) (Math.random() * 26 + 4), (int) (Math.random() * 26 + 4));
-	}
+	public Snake() {length = new ArrayList<>();}
 
 	public Snake(int x, int y) {
 		length = new ArrayList<>();
@@ -88,6 +86,14 @@ public class Snake {
 		}
 
 	}
+
+	@Override
+	public String toString() {
+		return "Snake{" +
+				"length=" + length +
+				'}';
+	}
+
 	/*
 	 * public void subractLife(){//¼õÃü life--; } public void addLife(){//Ôö¼ÓÃü
 	 * life++; } public int getLife(){//Ãü return life; }

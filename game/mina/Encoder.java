@@ -46,15 +46,10 @@ public class Encoder implements ProtocolEncoder {
         if(o instanceof String){
             name = (String)o;
             size += Tools.getStingByteNum(name,ce);
-//            System.out.println("字符串长度："+size);
             buffer = IoBuffer.allocate(size).setAutoExpand(true);
-            int r = buffer.remaining();
-//            System.out.println("创建的buffer长度:"+r);
             buffer.putInt(size);
             buffer.putChar('b');//如果是字符串 前面加一个b字符
             buffer.putString(name,ce);
-            r = buffer.remaining();
-//            System.out.println("剩余长度是："+r);
         }
 
         if (o instanceof Long){
@@ -90,7 +85,7 @@ public class Encoder implements ProtocolEncoder {
         }
 
         if (o instanceof FoodObjectData){
-            System.out.println("发送食物");
+            System.out.println("sendfood");
             FoodObjectData data = (FoodObjectData) o;
             size += Tools.getBytesNum(data.getObject().getMode());
             size += Tools.getBytesNum(data.getObject().getX());

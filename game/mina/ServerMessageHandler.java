@@ -62,7 +62,7 @@ public class ServerMessageHandler {
     public void created(){
         Long id = session.getId();
         session.write(id);
-        System.out.println("有客户端建立连接,ID:"+id);
+        System.out.println("client created,ID"+id);
     }
 
     private void opened(){
@@ -70,12 +70,12 @@ public class ServerMessageHandler {
         sessionMap = SnakeManager.getSessionMap();
         sessionMap.put(id,session);
         SnakeManager.setSessionMap(sessionMap);
-        System.out.println("有客户端接入");
+        System.out.println("client connect");
     }
 
     private void closed(){
         long id = session.getId();
-        System.out.println("客户端离开");
+        System.out.println("client closed");
         snakeMap.remove(id);
         sessionMap.remove(id);
         nameIdMap.remove(id);
@@ -93,17 +93,19 @@ public class ServerMessageHandler {
         if (message instanceof Snake){
             Snake snake = (Snake) message;
             storeSnake(session,snake);
-//            System.out.println("收到的："+snake);
+            System.out.println("receive Snake："+snake);
 //            System.out.println("蛇存入成功");
             sendSnakes(session);
         }
         if(message instanceof SnakeData){
             SnakeData data = (SnakeData)message;
-            receivedSnakeData(data.getId(),data.getSnake(),data.getOperation());
+            SnakeManager.snakeDatas.offer(data);
+//            receivedSnakeData(data.getId(),data.getSnake(),data.getOperation());
         }
         if (message instanceof FoodObjectData){
             FoodObjectData data = (FoodObjectData) message;
-            receivedFoodData(data.getObject(),data.getIndex(),data.getOperation());
+            SnakeManager.foodObjectDatas.offer(data);
+//            receivedFoodData(data.getObject(),data.getIndex(),data.getOperation());
 
         }
     }
@@ -147,6 +149,7 @@ public class ServerMessageHandler {
      */
     private void storeSnake(IoSession session , Snake snake){
         snakeMap = SnakeManager.getSnakeMap();
+        System.out.println("storeSnake:"+snake);
         snakeMap.put(session.getId(),snake);
         SnakeManager.setSnakeMap(snakeMap);
     }
@@ -163,43 +166,7 @@ public class ServerMessageHandler {
         Server.setNameIdMap(nameIdMap);
     }
 
-    private void receivedSnakeData(Long id,Object message,short operation){
-        Snake snake = (Snake)message;
-        Map<Long,Snake> snakes = SnakeManager.getSnakeMap();
-        if (operation == SnakeData.OPERATION_ADD_SNAKE){
-            snakes.put(id, snake);
-        }
 
-        if (operation == SnakeData.OPERATION_DEL_SNAKE){
-            snakes.remove(id);
-            int foodNum = SnakeManager.getFoodNum();
-            foodNum--;
-            SnakeManager.setFoodNum(foodNum);
-//            System.out.println("删除"+id+"号蛇成功");
-        }
 
-//        if (operation == SnakeData.OPERATION_REL_SNAKE){
-//            System.out.println("用于替换的id"+id);
-//            System.out.println("用于替换的snake:"+snake);
-//            snakes.replace(id,snake);
-//            if (id == GamePanel.id) {
-//                GamePanel.snake = snake;
-//            }else{
-//                System.out.println("ID不一样"+id+","+GamePanel.id);
-//            }
-//
-//        }
-    }
 
-    private void receivedFoodData(FoodObject food, int index, short operation){
-        ArrayList<FoodObject> foods = SnakeManager.getFoods();
-//        if (operation == FoodObjectData.OPERATION_ADD_FOOD){
-//            foods.add(food);
-//
-//        }
-        if (operation == FoodObjectData.OPERATION_DEL_FOOD){
-            foods.remove(index);
-            System.out.println("吃到了食物");
-        }
-    }
 }

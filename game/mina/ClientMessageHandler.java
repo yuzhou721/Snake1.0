@@ -49,7 +49,7 @@ public class ClientMessageHandler {
     }
 
     private void opened(){
-        sendSnake(session);
+        System.out.println("Is connect");
 
     }
     public void received(){
@@ -82,10 +82,10 @@ public class ClientMessageHandler {
      * 发送蛇的方法
      * @param session
      */
-    public static void sendSnake(IoSession session) {
-        Snake snake = GamePanel.snake;
-        session.write(snake);
-    }
+//    public static void sendSnake(IoSession session) {
+//        Snake snake = GamePanel.snake;
+//        session.write(snake);
+//    }
 
 
     /**

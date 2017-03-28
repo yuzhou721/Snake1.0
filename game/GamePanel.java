@@ -1,7 +1,6 @@
 package game;
 
-import game.mina.Client;
-import game.mina.Tools;
+import game.mina.*;
 import game.random.*;
 
 import java.awt.Color;
@@ -69,8 +68,6 @@ public class GamePanel extends JPanel {
 					.getResource("/images/r_right.png"));// 红色蛇头(右)
 			snake_food = ImageIO.read(GamePanel.class
 					.getResource("/images/snake_food.png"));// 食物
-			seatebackground = ImageIO.read(GamePanel.class
-					.getResource("/images/snake_food.png"));// 食物
 			T = ImageIO.read(GamePanel.class.getResource("/images/T.png"));// 金币
 			seatebackground = ImageIO.read(GamePanel.class
 					.getResource("/images/seatebackground.png"));
@@ -95,7 +92,7 @@ public class GamePanel extends JPanel {
 //	public static final int PAUSE = 2;//暂停状态
 	public static final int GAME_OVER = 3;
 //	public static final int ACTIVE = 0;
-	public static final int DEAD = 1;//死亡状态
+	public static final int DEAD = 2;//死亡状态
 //	public static final int REMOVE = 2;
 	public static int status;// 客户端运行状态
 	public static long id;//从服务器上分配的ID
@@ -149,7 +146,7 @@ public class GamePanel extends JPanel {
 	 * 画布构造方法 初始化数据
 	 */
 	public GamePanel() {
-		snake = new Snake();// 一条蛇
+		snake = new Snake(snakeCreateRange(),snakeCreateRange());// 一条蛇
 		Balla = new Ball_JP();// 一些随机
 		foodObjects = new ArrayList<FoodObject>();
 		snakes = new HashMap<>();
@@ -158,9 +155,7 @@ public class GamePanel extends JPanel {
         name = "1";
         snakes = new HashMap<>();
         client = new Client(name,"127.0.0.1",9999);
-        snake = new Snake(Tools.snakeCoord(),Tools.snakeCoord());
-//        food1 = new Food();
-//        foods = new ArrayList<>();
+        snake = new Snake(snakeCreateRange(),snakeCreateRange());
         client.start();
         Timer();
     }
@@ -179,7 +174,7 @@ public class GamePanel extends JPanel {
 			while (status == RUNNING) {
 				action();
 				try {
-					Thread.sleep(100);
+					Thread.sleep(300);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -216,7 +211,8 @@ public class GamePanel extends JPanel {
 		    while(status == DEAD || status == GAME_OVER){
 
                 System.out.println("线程监听");
-            }
+				System.out.println("运行状态是"+status);
+			}
             if (status == RUNNING){
 		        Restart();
             }
@@ -340,10 +336,15 @@ public class GamePanel extends JPanel {
     }
 
     private void snakeEat(Head head){
+		int i = 0;
 	    for (FoodObject food:
                 foodObjects){
 	        if (CrashObjects.SnakeBang(head,food)){
-	            addBody();
+				System.out.println("eat food");
+				addBody();
+				ClientUtil.sendSnakeData(id,snake, SnakeData.OPERATION_REL_SNAKE);
+				ClientUtil.sendFoodObject(i,food, FoodObjectData.OPERATION_DEL_FOOD);
+				i++;
             }
         }
     }
@@ -355,6 +356,7 @@ public class GamePanel extends JPanel {
     private void snakeCrashWall(Head head){
         if (CrashObjects.qiang(head)) {
             decLife("哈哈，小垃圾");
+//            status = DEAD;
         }
     }
 
@@ -372,7 +374,7 @@ public class GamePanel extends JPanel {
      */
     public void gameOverFrame(){
         if (life == 0) {
-            threadPool.execute(r4);
+//            threadPool.execute(r4);
 //            status = GAME_OVER;
             new GameFrameson().GameOver(life);
         }
@@ -386,7 +388,6 @@ public class GamePanel extends JPanel {
 		// 尾部坐标
 		int tailX = snake.length.get(snake.length.size() - 1).getX;
 		int tailY = snake.length.get(snake.length.size() - 1).y;
-
 		Direction tailDir = snake.length.get( snake.length.size() - 1).snakeDir;
 		switch (tailDir) {
 		case LIFT:
@@ -402,13 +403,14 @@ public class GamePanel extends JPanel {
 			snake.length.add(new Body(tailX, tailY - 1, tailDir));
 			break;
 		}
+//		System.out.println("add body");
 	}
 
     /**
      * 重新开始方法
      */
 	public void Restart(){
-		snake = new Snake();
+		snake = new Snake(snakeCreateRange(),snakeCreateRange());
 		score = 0;
 		tim = 0;
 		life = 3;
@@ -456,7 +458,7 @@ public class GamePanel extends JPanel {
      * 撞死后重生方法
      */
     public void rebirth(){
-	    snake = new Snake();
+	    snake = new Snake(snakeCreateRange(),snakeCreateRange());
         status = RUNNING;
     }
 
@@ -465,10 +467,13 @@ public class GamePanel extends JPanel {
      */
     public void sendSnake(){
         System.out.println("客户端发送的snake:"+ snake);
-        client.sendSnake(snake);
+		ClientUtil.sendSnake(snake);
 //           Server.sendSnakes();
     }
 
+    public int snakeCreateRange(){
+    	return (int)((Math.random()*26)+4);
+	}
 
 	public void paintDq(Graphics g) {
 		for (int i = 0; i < ROW; i++) {

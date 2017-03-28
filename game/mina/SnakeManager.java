@@ -9,6 +9,7 @@ import org.apache.mina.core.session.IoSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * 蛇的各种管理：碰撞，生成，随机事件
@@ -18,6 +19,8 @@ public class SnakeManager {
     private static Map<Long, Snake> snakeMap = null;
     private static Map<Long,IoSession> sessionMap=null;
     private static ArrayList<FoodObject> foods = null;
+    public static LinkedBlockingDeque<SnakeData> snakeDatas;
+    public static LinkedBlockingDeque<FoodObjectData> foodObjectDatas;
     private static int foodNum = 0 ;//食物出现次数
     private static int person = 0;
     private Thread t1;
@@ -26,6 +29,8 @@ public class SnakeManager {
         snakeMap = new HashMap<>();
         sessionMap = new HashMap<>();
         foods = new ArrayList<>();
+        snakeDatas = new LinkedBlockingDeque<>();
+        foodObjectDatas = new LinkedBlockingDeque<>();
         Timer();
 
     }
@@ -38,6 +43,7 @@ public class SnakeManager {
                 Strike();
 //                System.out.println(sessionMap);
 //                System.out.println(snakeMap);
+                System.out.println(foods);
 //                System.out.println(System.currentTimeMillis());
                 try {
                     Thread.sleep(50);
@@ -94,17 +100,21 @@ public class SnakeManager {
         }
 
         if (sessionMap.size() > person ){
+            addFood();
             sendFoodToNewClient();
             person++;
         }
 
         if (sessionMap.size() < person){
-
             person--;
         }
 
-        if (foods.size() < foodNum){
-            addFood();
+        if (!foodObjectDatas.isEmpty()){
+            operationFoodData(foodObjectDatas.poll());
+        }
+
+        if (!snakeDatas.isEmpty()){
+            operationSnakeData(snakeDatas.poll());
         }
     }
 
@@ -128,6 +138,67 @@ public class SnakeManager {
             return new Food();
         } else {
             return new Money();
+        }
+    }
+
+    /**
+     * 从蛇数据队列里取出数据处理
+     * @param data 队列里取出的数据
+     */
+    private void operationSnakeData(SnakeData data){
+        receivedSnakeData(data.getId(),data.getSnake(),data.getOperation());
+
+    }
+
+    /**
+     * 根据获取到的数据来操作队列
+     * @param id 蛇的ID
+     * @param message 蛇的对象
+     * @param operation 操作码
+     */
+    private void receivedSnakeData(Long id,Object message,short operation){
+        Snake snake = (Snake)message;
+        Map<Long,Snake> snakes = snakeMap;
+        if (operation == SnakeData.OPERATION_ADD_SNAKE){
+            snakes.put(id,snake);
+        }
+
+        if (operation == SnakeData.OPERATION_DEL_SNAKE){
+            snakes.remove(id);
+//            System.out.println("删除"+id+"号蛇成功");
+        }
+
+        if (operation == SnakeData.OPERATION_REL_SNAKE){
+            snakes.replace(id,snake);
+        }
+    }
+
+    /**
+     * 接收食物Data
+     * @param data 食物data
+     */
+    private void operationFoodData(FoodObjectData data){
+        receivedFoodData(data.getObject(),data.getIndex(),data.getOperation());
+
+
+    }
+
+    /**
+     * 操作食物集合
+     * @param food 食物
+     * @param index 下标
+     * @param operation 操作码
+     */
+    private void receivedFoodData(FoodObject food, int index, short operation){
+        if (operation == FoodObjectData.OPERATION_ADD_FOOD){
+            foods.add(food);
+        }
+        if (operation == FoodObjectData.OPERATION_DEL_FOOD){
+            foods.remove(index);
+            System.out.println("eat food");
+            sendFood(food,index,operation);//删除以后通知所有客户端删除
+            foodNum--;
+            addFood();
         }
     }
     /*

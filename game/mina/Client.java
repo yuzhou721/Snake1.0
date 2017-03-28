@@ -22,7 +22,7 @@ import java.util.Map;
 public class Client {
     private String serverAddress = null;
     private NioSocketConnector connector = null;
-    private static IoSession session = null;
+    public static IoSession session = null;
     private int port;
     private String name;
     private Map<Long, Snake> snakes = null;
@@ -99,8 +99,4 @@ public class Client {
         session = future.getSession();
     }
 
-    public void sendSnake(Snake snake) {
-        session.write(snake);
-
-    }
 }
