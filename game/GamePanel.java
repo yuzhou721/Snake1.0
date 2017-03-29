@@ -117,8 +117,7 @@ public class GamePanel extends JPanel {
 			System.out.println(listbaby);
 			//背景+食物+金币+角色背景（图）
 			List<BufferedImage> other = new ArrayList<BufferedImage>();
-			other.add(ImageIO.read(GamePanel.class
-					.getResource("/images/seatebackground.png")));//开始背景图
+			other.add(ImageIO.read(GamePanel.class.getResource("/images/seatebackground.png")));//开始背景图
 			other.add(ImageIO.read(GamePanel.class
 					.getResource("/images/background1.png")));//背景图
 			other.add(ImageIO.read(GamePanel.class
@@ -187,7 +186,7 @@ public class GamePanel extends JPanel {
 	/**
 	 * 名字
 	 */
-	private static String name;
+	public static String name;
 
 	/**
 	 * 自己的蛇
@@ -229,7 +228,6 @@ public class GamePanel extends JPanel {
             }).start();
 
 		}
-		name = "邓志宇";
 		snakes = new HashMap<>();
 		client = new Client(name,serverHost,9999);
 		snake = new Snake(snakeCreateRange(),snakeCreateRange());
@@ -250,8 +248,9 @@ public class GamePanel extends JPanel {
 		r1 = ()-> {
 			while (status == RUNNING) {
 				action();
-				System.out.println(nameIdMap);
+//				System.out.println(nameIdMap);
 				System.out.println(snakes);
+//				System.out.println(name);
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -574,8 +573,28 @@ public class GamePanel extends JPanel {
 	public void paintSnake(Graphics g) {
 		for (Snake snake :
 				snakes.values()) {
+//		    int i = -1;
 			for (Joint j : snake.length) {
-				g.drawImage(j.image, j.getX * CELL_SIZE, j.y * CELL_SIZE, null);
+			   /* i++;
+			    if (i == 0) {
+			        switch (j.snakeDir){
+                        case DOWN:
+                            g.drawImage(map.get(j.getType()).get(Head.DOWN), j.getX * CELL_SIZE, j.y * CELL_SIZE, null);
+                            break;
+                        case LIFT:
+                            g.drawImage(map.get(j.getType()).get(Head.LEFT), j.getX * CELL_SIZE, j.y * CELL_SIZE, null);
+                            break;
+                        case RIGHT:
+                            g.drawImage(map.get(j.getType()).get(Head.RIGHT), j.getX * CELL_SIZE, j.y * CELL_SIZE, null);
+                            break;
+                        case UP:
+                            g.drawImage(map.get(j.getType()).get(Head.UP), j.getX * CELL_SIZE, j.y * CELL_SIZE, null);
+
+                    }
+                    continue;
+                }*/
+//                g.drawImage(map.get(j.getType()).get(4),j.getX()*CELL_SIZE,j.getY()*CELL_SIZE,null);
+                g.drawImage(j.image,j.getX()*CELL_SIZE,j.getY()*CELL_SIZE,null);
 			}
 		}
 	}

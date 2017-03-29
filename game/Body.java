@@ -20,7 +20,7 @@ public class Body extends Joint {
 		this.image = GamePanel.map.get(type).get(4);
 	}
 
-	public Body(int x,int y,int snakeDir){
+	public Body(int x,int y,int snakeDir,int type){
 		this(x,y);
 		if (snakeDir ==1){
 			this.snakeDir = Direction.UP;
@@ -31,12 +31,13 @@ public class Body extends Joint {
 		}else if(snakeDir == 4){
 			this.snakeDir = Direction.RIGHT;
 		}
+		this.image = GamePanel.map.get(type).get(4);
 	}
 
-	public Body(int x , int y , int snakeDir,int type){
-		this(x,y,snakeDir);
-		this.type = type;
-	}
+//	public Body(int x , int y , int snakeDir,){
+//		this(x,y,snakeDir);
+//		this.type = type;
+//	}
 
 	public void move() {
 		if (snakeDir == Direction.LIFT) {

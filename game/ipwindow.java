@@ -43,6 +43,7 @@ public class ipwindow {
 		switch (jop) {
 		case 1:
 			new xuanze();
+			new idwindow();
 			GamePanel.serverHost = "localhost";
 			GamePanel.isServer = true;
 			break;
@@ -56,7 +57,8 @@ public class ipwindow {
 					break;
 			}
 			}
-            new xuanze();
+			new xuanze();
+			new idwindow();
 			GamePanel.serverHost = str;
 			GamePanel.isServer = false;
 			break;

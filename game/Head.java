@@ -29,7 +29,7 @@ public class Head extends Joint {
         snakeDir = Direction.RIGHT;
     }
 
-    public Head(int x,int y,int snakeDir){
+    public Head(int x,int y,int snakeDir,int type){
         this(x,y);
         if (snakeDir ==1){
             this.snakeDir = Direction.UP;
@@ -48,10 +48,10 @@ public class Head extends Joint {
 
     }
 
-    public Head(int x , int y , int snakeDir, int type){
-        this(x,y,snakeDir);
-        this.type = type;
-    }
+//    public Head(int x , int y , int snakeDir, int type){
+//        this(x,y,snakeDir);
+//        this.type = type;
+//    }
 
     public void move(){
 
