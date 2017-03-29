@@ -88,6 +88,7 @@ public class ServerMessageHandler {
         if (message instanceof String){
             String name =(String)message;
             storeName(name,session);
+            sendNameIdMap();
 //            System.out.println(name+"名字存入成功");
         }
         if (message instanceof Snake){
@@ -166,7 +167,14 @@ public class ServerMessageHandler {
         SnakeManager.setNameIdMap(nameIdMap);
     }
 
-
+    private void sendNameIdMap(){
+        nameIdMap = SnakeManager.getNameIdMap();
+        for (Map.Entry<Long,String> entry
+                :nameIdMap.entrySet()){
+            NameData data = new NameData(entry.getKey(),entry.getValue());
+            session.write(data);
+        }
+    }
 
 
 }

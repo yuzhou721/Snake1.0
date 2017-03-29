@@ -226,7 +226,7 @@ public class GamePanel extends JPanel {
 			server = Server.getInstance();
 			server.start();
 		}
-		name = "1";
+		name = "邓志宇";
 		snakes = new HashMap<>();
 		client = new Client(name,serverHost,9999);
 		snake = new Snake(snakeCreateRange(),snakeCreateRange());
@@ -248,6 +248,7 @@ public class GamePanel extends JPanel {
 			while (status == RUNNING) {
 				action();
 				System.out.println(nameIdMap);
+				System.out.println(snakes);
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -593,9 +594,10 @@ public class GamePanel extends JPanel {
 				nameIdMap.keySet()){
 			for (Long snakeid:
 					snakes.keySet()){
-				if (snakeid == nameid){
+				if (snakeid.equals(nameid)){
 					Joint snakeHead = snakes.get(snakeid).length.get(0);
-					g.drawString(nameIdMap.get(nameid),snakeHead.getX(),snakeHead.getY()-10);
+					g.drawString(nameIdMap.get(nameid),snakeHead.getX()*CELL_SIZE,snakeHead.getY()*CELL_SIZE-10);
+//					System.out.println(nameIdMap.get(nameid));
 				}
 			}
 		}
@@ -612,7 +614,7 @@ public class GamePanel extends JPanel {
 		paintSnake(g);// 蛇
 		paintFoodObject(g);
 		paintBall(g);
-		g.setColor(Color.white);
+//		g.setColor(Color.white);
 		paintName(g);
 	}
 }

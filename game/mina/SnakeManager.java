@@ -28,6 +28,7 @@ public class SnakeManager {
     public SnakeManager(){
         snakeMap = new HashMap<>();
         sessionMap = new HashMap<>();
+        nameIdMap = new HashMap<>();
         foods = new LinkedHashSet<>();
         snakeDatas = new LinkedBlockingDeque<>();
         foodObjectDatas = new LinkedBlockingDeque<>();
@@ -44,6 +45,7 @@ public class SnakeManager {
 //                System.out.println(sessionMap);
 //                System.out.println(snakeMap);
 //                System.out.println(foods);
+//                System.out.println(nameIdMap);
 //                System.out.println(System.currentTimeMillis());
                 try {
                     Thread.sleep(50);
