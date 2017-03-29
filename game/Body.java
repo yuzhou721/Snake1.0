@@ -8,7 +8,7 @@ package game;
 public class Body extends Joint {
 
 	public Body(int x, int y) {
-		this.image = GamePanel.body;
+		this.image = GamePanel.map.get(type).get(4);
 		this.getX = x;
 		this.y = y;
 		this.snakeDir = Direction.RIGHT;
@@ -17,7 +17,7 @@ public class Body extends Joint {
 		this.getX = x;
 		this.y = y;
 		this.snakeDir = snakeDir;
-		this.image = GamePanel.body;
+		this.image = GamePanel.map.get(type).get(4);
 	}
 
 	public Body(int x,int y,int snakeDir){

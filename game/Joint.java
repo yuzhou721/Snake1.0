@@ -25,11 +25,14 @@ public abstract class Joint {
     //	public int width;
 //	public int height;
     public BufferedImage image;
+    protected int type;
 
     protected Direction snakeDir = Direction.RIGHT;//蛇运动方向
 
 
-    public Joint(){}
+    public Joint(){
+        type=xuanze.snak;
+    }
 
     public Joint(int x, int y, BufferedImage image) {
         this.getX = x;

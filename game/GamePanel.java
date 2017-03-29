@@ -25,7 +25,7 @@ import static java.awt.event.KeyEvent.*;
  * 实现加载图片
  */
 public class GamePanel extends JPanel {
-	public static BufferedImage background; // 背景图
+	/*public static BufferedImage background; // 背景图
 	public static BufferedImage body; // 绿色蛇身
 	public static BufferedImage down; // 绿色蛇头(下)
 	public static BufferedImage up; // 绿色蛇头(上)
@@ -39,45 +39,114 @@ public class GamePanel extends JPanel {
 	public static BufferedImage snake_food;// 食物
 	public static BufferedImage T;
 	public static BufferedImage seatebackground;
-	public static BufferedImage xuanzebiejing;
+	public static BufferedImage xuanzebiejing;*/
+	public static final int UP = 1; // 上
+	public static final int DOWN = 2; // 下
+	public static final int RIGHT = 3; // 右
+	public static final int LEFT = 4;//左
 
+	public static Map<Integer, List<BufferedImage>> map = new HashMap<Integer,List<BufferedImage>>();
 	static {
 		try {
-			background = ImageIO.read(GamePanel.class
-					.getResource("/images/background1.png"));// 背景图
-			body = ImageIO
-					.read(GamePanel.class.getResource("/images/body.png"));// 绿色蛇身
-			down = ImageIO
-					.read(GamePanel.class.getResource("/images/down.png"));// 绿色蛇头(下)
-			up = ImageIO.read(GamePanel.class.getResource("/images/up.png"));// 绿色蛇头(上)
-			left = ImageIO
-					.read(GamePanel.class.getResource("/images/left.png"));// 绿色蛇头(左)
-			right = ImageIO.read(GamePanel.class
-					.getResource("/images/right.png"));// 绿色蛇头(右)
-			r_body = ImageIO.read(GamePanel.class
-					.getResource("/images/r_body.png")); // 红色蛇身
-			r_down = ImageIO.read(GamePanel.class
-					.getResource("/images/r_down.png"));// 红色蛇头(下)
-			r_up = ImageIO
-					.read(GamePanel.class.getResource("/images/r_up.png"));// 红色蛇头(上)
-			r_left = ImageIO.read(GamePanel.class
-					.getResource("/images/r_left.png"));// 红色蛇头(左)
-			r_right = ImageIO.read(GamePanel.class
-					.getResource("/images/r_right.png"));// 红色蛇头(右)
-			snake_food = ImageIO.read(GamePanel.class
-					.getResource("/images/snake_food.png"));// 食物
-			T = ImageIO.read(GamePanel.class.getResource("/images/T.png"));// 金币
-			seatebackground = ImageIO.read(GamePanel.class
-					.getResource("/images/seatebackground.png"));
-			xuanzebiejing = ImageIO.read(GamePanel.class
-					.getResource("/images/juese.png"));
+			//Map<String, List<BufferedImage>> map = new HashMap<String,List<BufferedImage>>();
+			List<BufferedImage> listhat = new ArrayList<BufferedImage>();
+			//帽子蛇
+			listhat.add(ImageIO.read(GamePanel.class.getResource("/images/hatHead_up.png")));
+			listhat.add(ImageIO.read(GamePanel.class.getResource("/images/hatHead_right.png")));
+			listhat.add(ImageIO.read(GamePanel.class.getResource("/images/hatHead_down.png")));
+			listhat.add(ImageIO.read(GamePanel.class.getResource("/images/hatHead_left.png")));
+			listhat.add(ImageIO.read(GamePanel.class.getResource("/images/hatBody.png")));
+			System.out.println(listhat);
+			//青蛙蛇
+			List<BufferedImage> listfrog = new ArrayList<BufferedImage>();
+			listfrog.add(ImageIO.read(GamePanel.class.getResource("/images/frogHead_up.png")));
+			listfrog.add(ImageIO.read(GamePanel.class.getResource("/images/frogHead_right.png")));
+			listfrog.add(ImageIO.read(GamePanel.class.getResource("/images/frogHead_down.png")));
+			listfrog.add(ImageIO.read(GamePanel.class.getResource("/images/frogHead_left.png")));
+			listfrog.add(ImageIO.read(GamePanel.class.getResource("/images/frogBody.png")));
+			System.out.println(listfrog);
+			//蓝头蛇
+			List<BufferedImage> listblue = new ArrayList<BufferedImage>();
+			listblue.add(ImageIO.read(GamePanel.class.getResource("/images/blueHead_up.png")));
+			listblue.add(ImageIO.read(GamePanel.class.getResource("/images/blueHead_right.png")));
+			listblue.add(ImageIO.read(GamePanel.class.getResource("/images/blueHead_down.png")));
+			listblue.add(ImageIO.read(GamePanel.class.getResource("/images/blueHead_left.png")));
+			listblue.add(ImageIO.read(GamePanel.class.getResource("/images/blueBody.png")));
+			System.out.println(listblue );
+			//黑头蛇
+			List<BufferedImage > listblack = new ArrayList<BufferedImage>();
+			listblack.add(ImageIO.read(GamePanel.class.getResource("/images/blackHead_up.png")));
+			listblack.add(ImageIO.read(GamePanel.class.getResource("/images/blackHead_right.png")));
+			listblack.add(ImageIO.read(GamePanel.class.getResource("/images/blackHead_down.png")));
+			listblack.add(ImageIO.read(GamePanel.class.getResource("/images/blackHead_left.png")));
+			listblack.add(ImageIO.read(GamePanel.class.getResource("/images/blackBody.png")));
+			System.out.println(listblack );
+			//4眼蛇
+			List<BufferedImage > list4eyes = new ArrayList<BufferedImage >();
+			list4eyes.add(ImageIO.read(GamePanel.class.getResource("/images/4eyesHead_up.png")));
+			list4eyes.add(ImageIO.read(GamePanel.class.getResource("/images/4eyesHead_right.png")));
+			list4eyes.add(ImageIO.read(GamePanel.class.getResource("/images/4eyesHead_down.png")));
+			list4eyes.add(ImageIO.read(GamePanel.class.getResource("/images/4eyesHead_left.png")));
+			list4eyes.add(ImageIO.read(GamePanel.class.getResource("/images/4eyesBody.png")));
+			System.out.println(list4eyes );
+			//红色蛇
+			List<BufferedImage> listred = new ArrayList<BufferedImage>();
+			listred.add(ImageIO.read(GamePanel.class.getResource("/images/redHead_up.png")));
+			listred.add(ImageIO.read(GamePanel.class.getResource("/images/redHead_right.png")));
+			listred.add(ImageIO.read(GamePanel.class.getResource("/images/redHead_down.png")));
+			listred.add(ImageIO.read(GamePanel.class.getResource("/images/redHead_left.png")));
+			listred.add(ImageIO.read(GamePanel.class.getResource("/images/redBody.png")));
+			System.out.println(listred);
+			//黄头蛇
+			List<BufferedImage> listyellow = new ArrayList<BufferedImage>();
+			listyellow.add(ImageIO.read(GamePanel.class.getResource("/images/yellowHead_up.png")));
+			listyellow.add(ImageIO.read(GamePanel.class.getResource("/images/yellowHead_right.png")));
+			listyellow.add(ImageIO.read(GamePanel.class.getResource("/images/yellowHead_down.png")));
+			listyellow.add(ImageIO.read(GamePanel.class.getResource("/images/yellowHead_left.png")));
+			listyellow.add(ImageIO.read(GamePanel.class.getResource("/images/yellowBody.png")));
+			System.out.println(listyellow);
+			//娃娃蛇
+			List<BufferedImage> listbaby = new ArrayList<BufferedImage>();
+			listbaby.add(ImageIO.read(GamePanel.class.getResource("/images/babyHead_up.png")));
+			listbaby.add(ImageIO.read(GamePanel.class.getResource("/images/babyHead_right.png")));
+			listbaby.add(ImageIO.read(GamePanel.class.getResource("/images/babyHead_down.png")));
+			listbaby.add(ImageIO.read(GamePanel.class.getResource("/images/babyHead_left.png")));
+			listbaby.add(ImageIO.read(GamePanel.class.getResource("/images/babyBody.png")));
+			System.out.println(listbaby);
+			//背景+食物+金币+角色背景（图）
+			List<BufferedImage> other = new ArrayList<BufferedImage>();
+			other.add(ImageIO.read(GamePanel.class
+					.getResource("/images/seatebackground.png")));//开始背景图
+			other.add(ImageIO.read(GamePanel.class
+					.getResource("/images/background1.png")));//背景图
+			other.add(ImageIO.read(GamePanel.class
+					.getResource("/images/select_role_background.png")));//选择角色背景
+			other.add(ImageIO.read(GamePanel.class
+					.getResource("/images/snake_food.png")));//蛇食物
+			other.add(ImageIO.read(GamePanel.class
+					.getResource("/images/snake_food.png")));//背景闪烁食物
+			other.add(ImageIO.read(GamePanel.class
+					.getResource("/images/T.png")));//金币
+			System.out.println(other);
+
+			//map集合
+			map.put(1,listhat);//"帽子蛇"
+			map.put(2,listfrog);//"青蛙蛇"
+			map.put(3,listblue);//"蓝头蛇"
+			map.put(4,listblack);//"黑头蛇"
+			map.put(5,list4eyes);//"4眼蛇"
+			map.put(6,listred);//"红色蛇"
+			map.put(7,listyellow);//"黄色蛇"
+			map.put(8,listbaby);//"娃娃蛇"
+			map.put(9, other);//"其他"
+			System.out.println(map);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public static final int backgroundwidth = background.getWidth();
-	public static final int backgroundhight = background.getHeight();
-	public static final int CELL_SIZE = (background.getWidth() / 30);// 代表每一个格子的长度
+	public static final int backgroundwidth = map.get(9).get(1).getWidth();
+	public static final int backgroundhight = map.get(9).get(1).getHeight();
+	public static final int CELL_SIZE = (map.get(9).get(1).getWidth() / 30);// 代表每一个格子的长度
 	public static final int ROW = 30;// 行
 	public static final int COL = 30;// 列
 	public static int score;// 分数
@@ -515,7 +584,7 @@ public class GamePanel extends JPanel {
 
 	// 画背景图,时间按,分数
 	public void paint(Graphics g) {
-		g.drawImage(background, 0, 0, null);// 画背景图
+		g.drawImage(map.get(9).get(1), 0, 0, null);// 画背景图
 		g.setColor(new Color(0xFFFFFF));
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		g.drawString("时间:" + tim, 10, 20);// 画时间

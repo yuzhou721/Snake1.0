@@ -22,7 +22,7 @@ public class xuanze {
 		JFrame jf = new JFrame("选择角色");
 
 		JPanel jp = new JPanel();
-		ImageIcon snake1head = new ImageIcon(GamePanel.xuanzebiejing);
+		ImageIcon snake1head = new ImageIcon(GamePanel.map.get(9).get(2));
 		jf.setBounds(250,50,snake1head.getIconWidth(), snake1head.getIconHeight());
 		jp.setLayout(null);
 

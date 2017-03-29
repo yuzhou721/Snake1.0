@@ -143,7 +143,7 @@ public class SnakeManager {
     private FoodObject nextFood() {
         int num;
         num = (int)(Math.random()*10);
-        if (num < 2) {
+        if (num < 1) {
             return new Food();
         } else {
             return new Money();

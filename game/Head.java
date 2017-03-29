@@ -9,6 +9,10 @@ package game;
  */
 public class Head extends Joint {
     private int score;
+    public static final int UP = 0; // 上
+    public static final int RIGHT = 1; // 右
+    public static final int DOWN = 2; // 下
+    public static final int LEFT = 3; // 左
     //蛇头坐标
     /* int headX =this.getX;
     int headY = this.y;
@@ -19,7 +23,7 @@ public class Head extends Joint {
 
     public Head(int x, int y){
         this.score = 0;
-        this.image = GamePanel.r_right;
+        this.image = GamePanel.map.get(type).get(RIGHT);
         this.getX = x;
         this.y = y;
         snakeDir = Direction.RIGHT;
@@ -29,16 +33,16 @@ public class Head extends Joint {
         this(x,y);
         if (snakeDir ==1){
             this.snakeDir = Direction.UP;
-            image = GamePanel.r_up;
+            image = GamePanel.map.get(type).get(UP);
         }else if(snakeDir == 2){
             this.snakeDir = Direction.DOWN;
-            image = GamePanel.r_down;
+            image = GamePanel.map.get(type).get(DOWN);
         }else if(snakeDir == 3){
             this.snakeDir = Direction.LIFT;
-            image = GamePanel.r_left;
+            image = GamePanel.map.get(type).get(LEFT);
         }else if(snakeDir == 4){
             this.snakeDir = Direction.RIGHT;
-            image = GamePanel.r_right;
+            image = GamePanel.map.get(type).get(RIGHT);
         }
 
 
@@ -63,24 +67,24 @@ public class Head extends Joint {
 
     public void moveRight(){
         snakeDir = Direction.RIGHT;
-        image = GamePanel.r_right;
+        image = GamePanel.map.get(type).get(RIGHT);
     }
 
     public void moveLeft(){
         snakeDir = Direction.LIFT;
-        image = GamePanel.r_left;
+        image = GamePanel.map.get(type).get(LEFT);
 
     }
 
     public void moveUp(){
         snakeDir = Direction.UP;
-        image = GamePanel.r_up;
+        image = GamePanel.map.get(type).get(UP);
 
     }
 
     public void moveDown(){
         snakeDir = Direction.DOWN;
-        image = GamePanel.r_down;
+        image = GamePanel.map.get(type).get(DOWN);
 
     }
 }
