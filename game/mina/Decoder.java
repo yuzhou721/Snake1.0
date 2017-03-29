@@ -72,6 +72,10 @@ public class Decoder extends CumulativeProtocolDecoder {
                     deCoderFoodData(ioBuffer,protocolDecoderOutput);
                 }
 
+                if(mode == 'f'){
+                    System.out.println("decoder name");
+                    deCoderNameData(ioBuffer,protocolDecoderOutput,len-2-4-8);//减去报头长度再减去LONG长度
+                }
                 if (ioBuffer.remaining()>0){
                     return true;
                 }
@@ -115,14 +119,16 @@ public class Decoder extends CumulativeProtocolDecoder {
                     int x = ioBuffer.getInt();
                     int y = ioBuffer.getInt();
                     int dir = ioBuffer.getInt();
-                    snake.length.add(new Head(x, y,dir));
+                    int type = ioBuffer.getInt();
+                    snake.length.add(new Head(x, y,dir,type));
                     continue;
                 }
 
         int x = ioBuffer.getInt();
         int y = ioBuffer.getInt();
         int dir = ioBuffer.getInt();
-        snake.length.add(new Body(x, y,dir));
+        int type = ioBuffer.getInt();
+        snake.length.add(new Body(x, y,dir,type));
         }
 
     }
@@ -195,6 +201,19 @@ public class Decoder extends CumulativeProtocolDecoder {
 
     }
 
-
+    public void deCoderNameData(IoBuffer ioBuffer,ProtocolDecoderOutput protocolDecoderOutput,int StringLen){
+        NameData data = new NameData();
+        CharsetDecoder cd = charset.newDecoder();
+        long id = ioBuffer.getLong();
+        String name = null;
+        try {
+            name = ioBuffer.getString(StringLen,cd);
+        } catch (CharacterCodingException e) {
+            e.printStackTrace();
+        }
+        data.setId(id);
+        data.setName(name);
+        protocolDecoderOutput.write(data);
+    }
 }
 

@@ -16,6 +16,8 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class SnakeManager {
     private static Map<Long, Snake> snakeMap = null;
     private static Map<Long,IoSession> sessionMap=null;
+    private static Map<Long,String> nameIdMap = null;
+
     private static LinkedHashSet<FoodObject> foods = null;
     public static LinkedBlockingDeque<SnakeData> snakeDatas;
     public static LinkedBlockingDeque<FoodObjectData> foodObjectDatas;
@@ -93,6 +95,7 @@ public class SnakeManager {
         if (!sessionMap.isEmpty()) {
             if (foodNum == 0) {
                 addFood();
+//                sendNameToAllClient();
                 person++;
             }
         }
@@ -100,6 +103,7 @@ public class SnakeManager {
         if (sessionMap.size() > person ){
             addFood();
             sendFoodToNewClient();
+            sendNameToAllClient();
             person++;
         }
 
@@ -208,6 +212,17 @@ public class SnakeManager {
             sendFood(food,index,operation);//删除以后通知所有客户端删除
             foodNum--;
             addFood();
+        }
+    }
+
+    private void sendNameToAllClient(){
+        for (IoSession session:
+                sessionMap.values()){
+            for (Map.Entry<Long,String> entry
+                    :nameIdMap.entrySet()){
+                NameData data = new NameData(entry.getKey(),entry.getValue());
+                session.write(data);
+            }
         }
     }
     /*
@@ -372,7 +387,13 @@ public class SnakeManager {
         return foods;
     }
 
+    public static Map<Long, String> getNameIdMap() {
+        return nameIdMap;
+    }
 
+    public static void setNameIdMap(Map<Long, String> nameIdMap) {
+        SnakeManager.nameIdMap = nameIdMap;
+    }
 
     public static int getFoodNum() {
         return foodNum;

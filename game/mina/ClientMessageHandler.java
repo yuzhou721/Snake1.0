@@ -77,6 +77,11 @@ public class ClientMessageHandler {
             FoodObjectData data = (FoodObjectData) message;
             receiveFood(data.getObject(),data.getIndex(),data.getOperation());
         }
+
+        if (message instanceof NameData){
+            NameData data = (NameData)message;
+            receiveName(data.getId(),data.getName());
+        }
     }
 
     /**
@@ -137,6 +142,11 @@ public class ClientMessageHandler {
             foods.remove(food);
             System.out.println("吃到了食物");
         }
+    }
+
+    private void receiveName(Long id,String name){
+        Map<Long,String> nameIdMap = GamePanel.nameIdMap;
+        nameIdMap.put(id,name);
     }
 
 }

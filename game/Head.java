@@ -48,6 +48,11 @@ public class Head extends Joint {
 
     }
 
+    public Head(int x , int y , int snakeDir, int type){
+        this(x,y,snakeDir);
+        this.type = type;
+    }
+
     public void move(){
 
         if(snakeDir ==Direction.LIFT){

@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.*;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -37,7 +39,18 @@ public class GameFrame extends JFrame{
 	}
 
 	public GameFrame(){
-			super("贪吃蛇");
+//			super("贪吃蛇");
+        InetAddress ia = null;
+        try {
+            ia = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        if (GamePanel.isServer) {
+			setTitle("贪吃蛇 服务器 IP地址："+ia.getHostAddress());
+		}else {
+			setTitle("贪吃蛇 客户端 服务器IP地址为"+GamePanel.serverHost);
+		}
 		  /*Ball_JP jp=new Ball_JP();
 	        jp.run_run();       //开始运行多线程
 	        this.add(jp); */

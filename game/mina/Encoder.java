@@ -102,6 +102,17 @@ public class Encoder implements ProtocolEncoder {
             buffer.putShort(data.getOperation());
         }
 
+        if (o instanceof NameData){
+            System.out.println("sendName");
+            NameData data = (NameData) o;
+            size += Tools.getBytesNum(data.getId());
+            size += Tools.getStingByteNum(data.getName(),ce);
+            buffer = IoBuffer.allocate(size).setAutoExpand(true);
+            buffer.putInt(size);
+            buffer.putChar('f');
+            buffer.putLong(data.getId());
+            buffer.putString(data.getName(),ce);
+        }
         buffer.flip();
         protocolEncoderOutput.write(buffer);
     }
@@ -127,6 +138,7 @@ public class Encoder implements ProtocolEncoder {
             }else if(j.getSnakeDir() == Direction.RIGHT){
                 buffer.putInt(4);
             }
+            buffer.putInt(j.getType());
         }
 
 
@@ -148,7 +160,7 @@ public class Encoder implements ProtocolEncoder {
             size += Tools.getBytesNum(j.getX());
             size += Tools.getBytesNum(j.getY());
             size += Tools.getBytesNum(j.getX());
-
+            size += Tools.getBytesNum(j.getType());
         }
         return size;
     }

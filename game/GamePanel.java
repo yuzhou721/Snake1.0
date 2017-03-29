@@ -45,7 +45,9 @@ public class GamePanel extends JPanel {
 	public static final int RIGHT = 3; // 右
 	public static final int LEFT = 4;//左
 
+
 	public static Map<Integer, List<BufferedImage>> map = new HashMap<Integer,List<BufferedImage>>();
+
 	static {
 		try {
 			//Map<String, List<BufferedImage>> map = new HashMap<String,List<BufferedImage>>();
@@ -144,6 +146,7 @@ public class GamePanel extends JPanel {
 			e.printStackTrace();
 		}
 	}
+
 	public static final int backgroundwidth = map.get(9).get(1).getWidth();
 	public static final int backgroundhight = map.get(9).get(1).getHeight();
 	public static final int CELL_SIZE = (map.get(9).get(1).getWidth() / 30);// 代表每一个格子的长度
@@ -165,6 +168,7 @@ public class GamePanel extends JPanel {
 	public static long id;//从服务器上分配的ID
 	public static boolean isServer;
 	private Server server;
+	public static Map<Long,String> nameIdMap;
 	/**
 	 * 存储所有的蛇
 	 */
@@ -216,6 +220,7 @@ public class GamePanel extends JPanel {
 		Balla = new Ball_JP();// 一些随机
 		foodObjects = new HashSet<FoodObject>();
 		snakes = new HashMap<>();
+		nameIdMap = new HashMap<>();
 		status = RUNNING;
 		if (isServer){
 			server = Server.getInstance();
@@ -242,6 +247,7 @@ public class GamePanel extends JPanel {
 		r1 = ()-> {
 			while (status == RUNNING) {
 				action();
+				System.out.println(nameIdMap);
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -582,6 +588,19 @@ public class GamePanel extends JPanel {
 		}
 	}
 
+	private void paintName(Graphics g){
+		for (Long nameid:
+				nameIdMap.keySet()){
+			for (Long snakeid:
+					snakes.keySet()){
+				if (snakeid == nameid){
+					Joint snakeHead = snakes.get(snakeid).length.get(0);
+					g.drawString(nameIdMap.get(nameid),snakeHead.getX(),snakeHead.getY()-10);
+				}
+			}
+		}
+	}
+
 	// 画背景图,时间按,分数
 	public void paint(Graphics g) {
 		g.drawImage(map.get(9).get(1), 0, 0, null);// 画背景图
@@ -593,5 +612,7 @@ public class GamePanel extends JPanel {
 		paintSnake(g);// 蛇
 		paintFoodObject(g);
 		paintBall(g);
+		g.setColor(Color.white);
+		paintName(g);
 	}
 }

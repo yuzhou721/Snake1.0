@@ -33,6 +33,11 @@ public class Body extends Joint {
 		}
 	}
 
+	public Body(int x , int y , int snakeDir,int type){
+		this(x,y,snakeDir);
+		this.type = type;
+	}
+
 	public void move() {
 		if (snakeDir == Direction.LIFT) {
 			getX--;//左移

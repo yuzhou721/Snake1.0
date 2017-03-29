@@ -17,11 +17,10 @@ import java.util.Map;
  */
 public class Server {
     private int port;//端口
-    private static Map<Long,String> nameIdMap = null;
 
     private Server(int port) {
         this.port = port;
-        nameIdMap = new HashMap<>();
+//        nameIdMap = new HashMap<>();
         SnakeManager menager1 = new SnakeManager();
     }
     private static Server s = new Server(9999);
@@ -48,13 +47,7 @@ public class Server {
 
     }
 
-    public static Map<Long, String> getNameIdMap() {
-        return nameIdMap;
-    }
 
-    public static void setNameIdMap(Map<Long, String> nameIdMap) {
-        Server.nameIdMap = nameIdMap;
-    }
 
     public static void main(String[] args) {
         Server server = new Server(9999);

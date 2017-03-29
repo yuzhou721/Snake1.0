@@ -26,7 +26,7 @@ public class ServerMessageHandler {
 
     private Map<Long, IoSession> sessionMap = SnakeManager.getSessionMap();
     private Map<Long, Snake> snakeMap = SnakeManager.getSnakeMap();
-    private Map<Long,String> nameIdMap = Server.getNameIdMap();
+    private Map<Long,String> nameIdMap = SnakeManager.getNameIdMap();
 
 
 
@@ -161,9 +161,9 @@ public class ServerMessageHandler {
      * @param session 当前的连接
      */
     private  void storeName(String name , IoSession session){
-        nameIdMap = Server.getNameIdMap();
+        nameIdMap = SnakeManager.getNameIdMap();
         nameIdMap.put(session.getId(),name);
-        Server.setNameIdMap(nameIdMap);
+        SnakeManager.setNameIdMap(nameIdMap);
     }
 
 

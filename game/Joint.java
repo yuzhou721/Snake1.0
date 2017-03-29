@@ -57,6 +57,7 @@ public abstract class Joint {
         return "Joint{" +
                 "getX=" + getX +
                 ", y=" + y +
+                ", type = "+type+
                 '}';
     }
 
@@ -64,5 +65,11 @@ public abstract class Joint {
         return snakeDir;
     }
 
+    public int getType() {
+        return type;
+    }
 
+    public void setType(int type) {
+        this.type = type;
+    }
 }

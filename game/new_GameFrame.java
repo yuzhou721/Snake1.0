@@ -30,9 +30,9 @@ public class new_GameFrame extends JFrame{
 		super("贪吃蛇");
 		String path = "/images/snake_logo_看图王.png";
 
-		this.setBounds(330,170,GamePanel.seatebackground.getWidth(),GamePanel.seatebackground.getHeight());
-
-		ImageIcon background = new ImageIcon(GamePanel.seatebackground);
+		this.setBounds(330,170,GamePanel.map.get(9).get(0).getWidth(),
+				GamePanel.map.get(9).get(0).getHeight());
+		ImageIcon background = new ImageIcon(GamePanel.map.get(9).get(0));
 		label = new JLabel(background);
 		bel = new JLabel();
 		start = new JButton("开始");
