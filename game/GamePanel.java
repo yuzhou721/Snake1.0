@@ -223,8 +223,11 @@ public class GamePanel extends JPanel {
 		nameIdMap = new HashMap<>();
 		status = RUNNING;
 		if (isServer){
-			server = Server.getInstance();
-			server.start();
+			new Thread(() -> {
+                server = Server.getInstance();
+                server.start();
+            }).start();
+
 		}
 		name = "邓志宇";
 		snakes = new HashMap<>();
@@ -513,6 +516,7 @@ public class GamePanel extends JPanel {
 	private void notice(String s){
 		status = DEAD;
 		ClientUtil.sendSnakeData(id,snake,SnakeData.OPERATION_DEL_SNAKE);
+		System.out.println("delete snake");
 		Date date = new Date(0);
 		SimpleDateFormat sb = new SimpleDateFormat();
 		String Str2 = sb.format(date);
