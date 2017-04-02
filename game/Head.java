@@ -21,16 +21,28 @@ public class Head extends Joint {
         this(0,0);
     }
 
+    /**
+     * 客户端新生成蛇的构造方法
+     * @param x
+     * @param y
+     */
     public Head(int x, int y){
         this.score = 0;
         this.image = GamePanel.map.get(type).get(RIGHT);
-        this.getX = x;
+        this.x = x;
         this.y = y;
         snakeDir = Direction.RIGHT;
     }
 
-    public Head(int x,int y,int snakeDir,int type){
+    /**
+     * 传送蛇数据时的拼接方法
+     * @param x 蛇头X
+     * @param y 蛇头Y
+     * @param snakeDir 蛇方向转换的INT
+     */
+    public Head(int x,int y,int snakeDir, int type){
         this(x,y);
+        this.type = type;
         if (snakeDir ==1){
             this.snakeDir = Direction.UP;
             image = GamePanel.map.get(type).get(UP);
@@ -44,22 +56,20 @@ public class Head extends Joint {
             this.snakeDir = Direction.RIGHT;
             image = GamePanel.map.get(type).get(RIGHT);
         }
-
-
     }
 
 //    public Head(int x , int y , int snakeDir, int type){
-//        this(x,y,snakeDir);
+//        this(x,y);
 //        this.type = type;
 //    }
 
     public void move(){
 
         if(snakeDir ==Direction.LIFT){
-            getX--;//左移
+            x--;//左移
         }
         if(snakeDir ==Direction.RIGHT){
-            getX++;//右移
+            x++;//右移
         }
         if(snakeDir ==Direction.UP){
             y--;//上移

@@ -252,7 +252,7 @@ public class GamePanel extends JPanel {
 				System.out.println(snakes);
 //				System.out.println(name);
 				try {
-					Thread.sleep(100);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -391,7 +391,7 @@ public class GamePanel extends JPanel {
 		}
 		*/
 
-		snakeCrashByOther(head);
+        snakeCrashOtherSnake(head);
 		snakeCrashWall(head);
 		snakeEat(head);
 	}
@@ -400,7 +400,7 @@ public class GamePanel extends JPanel {
 	 * 头和其他蛇的头和身体的碰撞判定
 	 * @param head 本机蛇头
 	 */
-	private void snakeCrashByOther(Head head){
+	private void snakeCrashOtherSnake(Head head){
 		for (long pid
 				:snakes.keySet()){
 			Snake allSnake = snakes.get(pid);
@@ -412,6 +412,24 @@ public class GamePanel extends JPanel {
 			}
 		}
 	}
+
+    /**
+     * 所有蛇的头和自己的蛇相撞,并发送给服务器
+     */
+	private void snakeBodyCrashByOtherSnakes(){
+        for (int i = 1; i < snake.length.size(); i++) {
+           Body body = (Body) snake.length.get(i);
+           for (Long id:
+                   snakes.keySet()){
+               Snake allSnake = snakes.get(id);
+               Head allhead =(Head)allSnake.length;
+               if (CrashObjects.SnakeBang(allhead,body)){
+                   ClientUtil.sendSnakeData(id,allSnake,SnakeData.OPERATION_DEL_SNAKE);
+               }
+           }
+        }
+    }
+
 
 	private void snakeEat(Head head){
 		int i = 0;
@@ -463,7 +481,7 @@ public class GamePanel extends JPanel {
 	 */
 	public void addBody() {// 身体吃食物++
 		// 尾部坐标
-		int tailX = snake.length.get(snake.length.size() - 1).getX;
+		int tailX = snake.length.get(snake.length.size() - 1).x;
 		int tailY = snake.length.get(snake.length.size() - 1).y;
 		Direction tailDir = snake.length.get( snake.length.size() - 1).snakeDir;
 		switch (tailDir) {
@@ -500,6 +518,7 @@ public class GamePanel extends JPanel {
 	 */
 	public void decLife(String s) {// 撞墙提示
 		life--;
+
 		if (life > 0) {
 			notice(s);
 		}
@@ -524,7 +543,6 @@ public class GamePanel extends JPanel {
 				JOptionPane.YES_NO_OPTION);
 		if (i == 0) {
 			rebirth();
-
 		} else {
 			JOptionPane.showMessageDialog(null, "退出游戏", "标题",
 					JOptionPane.WARNING_MESSAGE);

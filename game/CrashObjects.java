@@ -39,7 +39,7 @@ public static boolean State(Snake snake1){//蛇身碰撞方法
 }
 */
  public static boolean qiang(Head head){
-	if(head.getX <0||head.getX >ROW-1||head.y<0||head.y>COL-1){
+	if(head.x <0||head.x >ROW-1||head.y<0||head.y>COL-1){
 		return true;
 	}
 	return false;
@@ -76,5 +76,6 @@ public static boolean State(Snake snake1){//蛇身碰撞方法
 		}
 		return false;
 	}
+
 
 }

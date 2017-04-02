@@ -139,6 +139,7 @@ public class Encoder implements ProtocolEncoder {
                 buffer.putInt(4);
             }
             buffer.putInt(j.getType());
+            System.out.println("发送蛇的type"+j.getType());
         }
 
 

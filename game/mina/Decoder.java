@@ -120,6 +120,7 @@ public class Decoder extends CumulativeProtocolDecoder {
                     int y = ioBuffer.getInt();
                     int dir = ioBuffer.getInt();
                     int type = ioBuffer.getInt();
+                System.out.println("head type="+type);
                     snake.length.add(new Head(x, y,dir,type));
                     continue;
                 }
@@ -128,8 +129,10 @@ public class Decoder extends CumulativeProtocolDecoder {
         int y = ioBuffer.getInt();
         int dir = ioBuffer.getInt();
         int type = ioBuffer.getInt();
-        snake.length.add(new Body(x, y,dir,type));
+            System.out.println("body type="+type);
+            snake.length.add(new Body(x,y,dir,type));
         }
+        System.out.println("decoderSnake 完成"+snake);
 
     }
 

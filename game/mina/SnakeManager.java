@@ -8,35 +8,46 @@ import org.apache.mina.core.session.IoSession;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.PriorityBlockingQueue;
 
 /**
  * 蛇的各种管理：碰撞，生成，随机事件
  * Created by yuzhou721 on 2017/3/20.
  */
 public class SnakeManager {
-    private static Map<Long, Snake> snakeMap = null;
-    private static Map<Long,IoSession> sessionMap=null;
-    private static Map<Long,String> nameIdMap = null;
+    private static Map<Long, Snake> snakeMap = null;//蛇和客户端ID的MAP ID为KEY
+    private static Map<Long,IoSession> sessionMap=null;//连接和客户端ID的MAP ID为KEY
+    private static Map<Long,String> nameIdMap = null;//名字和客户端IP的MAP ID为KEY
 
     private static LinkedHashSet<FoodObject> foods = null;
-    public static LinkedBlockingDeque<SnakeData> snakeDatas;
-    public static LinkedBlockingDeque<FoodObjectData> foodObjectDatas;
+    static PriorityBlockingQueue<SnakeData> snakeDatas;//修改蛇MAP操作的双缓冲队列
+    static LinkedBlockingDeque<FoodObjectData> foodObjectDatas;//修改食物集合的双缓冲队列
     private static int foodNum = 0 ;//食物出现次数
     private static int person = 0;
     private Thread t1;
 
+    /**
+     * 初始化成员属性
+     */
     public SnakeManager(){
         snakeMap = new HashMap<>();
         sessionMap = new HashMap<>();
         nameIdMap = new HashMap<>();
         foods = new LinkedHashSet<>();
-        snakeDatas = new LinkedBlockingDeque<>();
+        snakeDatas = new PriorityBlockingQueue<SnakeData>(40, new Comparator<SnakeData>() {
+            @Override
+            public int compare(SnakeData o1, SnakeData o2) {
+                return (int)(o1.getId() - o2.getId());
+            }
+        });
         foodObjectDatas = new LinkedBlockingDeque<>();
         Timer();
 
     }
 
-
+    /**
+     * 服务器监听线程 判断各种值的变化 做出相应反应
+     */
     public void Timer(){
         t1 = new Thread(()->{
             while(true){
@@ -47,11 +58,6 @@ public class SnakeManager {
 //                System.out.println(foods);
 //                System.out.println(nameIdMap);
 //                System.out.println(System.currentTimeMillis());
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         });
         t1.start();
@@ -102,17 +108,21 @@ public class SnakeManager {
             }
         }
 
-        if (sessionMap.size() > person ){
+        if (sessionMap.size() > person && sessionMap.size() == nameIdMap.size()){
             addFood();
             sendFoodToNewClient();
             sendNameToAllClient();
             person++;
         }
 
-        if (sessionMap.size() < person){
+        if (sessionMap.size() < person ){
             person--;
             decFood();
 
+        }
+
+        if (person != nameIdMap.size()){
+            sendNameToAllClient();
         }
 
         if (!foodObjectDatas.isEmpty()){
@@ -124,6 +134,9 @@ public class SnakeManager {
         }
     }
 
+    /**
+     * 玩家减少后减少食物
+     */
     public void decFood(){
         Iterator<FoodObject> iterator = foods.iterator();
         if (iterator.hasNext()) {

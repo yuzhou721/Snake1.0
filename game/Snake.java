@@ -37,7 +37,7 @@ public class Snake {
 		length.add(new Body(x - 1, y));
 		length.add(new Body(x - 2, y));
 		length.add(new Body(x - 3, y));
-		System.out.println(length);
+//		System.out.println(length);
 	}
 
 	/**
@@ -93,6 +93,22 @@ public class Snake {
 				"length=" + length +
 				'}';
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Snake snake = (Snake) o;
+
+		return length.equals(snake.length);
+	}
+
+	@Override
+	public int hashCode() {
+		return length.hashCode();
+	}
+
 
 	/*
 	 * public void subractLife(){//减命 life--; } public void addLife(){//增加命
