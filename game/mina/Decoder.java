@@ -76,6 +76,11 @@ public class Decoder extends CumulativeProtocolDecoder {
                     System.out.println("decoder name");
                     deCoderNameData(ioBuffer,protocolDecoderOutput,len-2-4-8);//减去报头长度再减去LONG长度
                 }
+
+                if (mode == 'g'){
+                    System.out.println("decoder message");
+                    deCoderMessageData(ioBuffer,protocolDecoderOutput,len-2-4-8-2);//减去报头长度再减去LongID长度
+                }
                 if (ioBuffer.remaining()>0){
                     return true;
                 }
@@ -120,7 +125,7 @@ public class Decoder extends CumulativeProtocolDecoder {
                     int y = ioBuffer.getInt();
                     int dir = ioBuffer.getInt();
                     int type = ioBuffer.getInt();
-                System.out.println("head type="+type);
+//                System.out.println("head type="+type);
                     snake.length.add(new Head(x, y,dir,type));
                     continue;
                 }
@@ -129,10 +134,10 @@ public class Decoder extends CumulativeProtocolDecoder {
         int y = ioBuffer.getInt();
         int dir = ioBuffer.getInt();
         int type = ioBuffer.getInt();
-            System.out.println("body type="+type);
+//            System.out.println("body type="+type);
             snake.length.add(new Body(x,y,dir,type));
         }
-        System.out.println("decoderSnake 完成"+snake);
+//        System.out.println("decoderSnake 完成"+snake);
 
     }
 
@@ -167,12 +172,18 @@ public class Decoder extends CumulativeProtocolDecoder {
 //        System.out.println(ioBuffer.remaining());
         long id = ioBuffer.getLong();
         short operation = ioBuffer.getShort();
+        long killId = 0;
+        if (operation == SnakeData.OPERATION_DEL_SNAKE){
+            killId = ioBuffer.getLong();
+        }
         int length = ioBuffer.getInt();
         decoderSnake(ioBuffer, snake, length);
         data.setId(id);
         data.setSnake(snake);
         data.setOperation(operation);
-
+        if (operation == SnakeData.OPERATION_DEL_SNAKE){
+            data.setKillId(killId);
+        }
         protocolDecoderOutput.write(data);
     }
 
@@ -182,25 +193,25 @@ public class Decoder extends CumulativeProtocolDecoder {
         Money money;
 //        FoodObject foodObject = new FoodObject(ioBuffer.getInt(),ioBuffer.getInt());
         int mode = ioBuffer.getInt();
-        System.out.println("mode = "+mode);
+//        System.out.println("mode = "+mode);
         int x = ioBuffer.getInt();
-        System.out.println("x = " + x);
+//        System.out.println("x = " + x);
         int y = ioBuffer.getInt();
-        System.out.println("y = " + y);
+//        System.out.println("y = " + y);
         if (mode == FoodObject.MODE_FOOD){
-            System.out.println("is food");
+//            System.out.println("is food");
             food = new Food(x,y);
             data.setObject(food);
         }
         if (mode == FoodObject.MODE_MONEY){
-            System.out.println("is money");
+//            System.out.println("is money");
             money = new Money(x,y);
             data.setObject(money);
         }
         data.setIndex(ioBuffer.getInt());
         data.setOperation(ioBuffer.getShort());
         protocolDecoderOutput.write(data);
-        System.out.println("decoder food succeed");
+//        System.out.println("decoder food succeed");
 
     }
 
@@ -216,6 +227,20 @@ public class Decoder extends CumulativeProtocolDecoder {
         }
         data.setId(id);
         data.setName(name);
+        protocolDecoderOutput.write(data);
+    }
+
+    public void deCoderMessageData(IoBuffer ioBuffer, ProtocolDecoderOutput protocolDecoderOutput,int StringLen){
+        CharsetDecoder cd = charset.newDecoder();
+        short type = ioBuffer.getShort();
+        long id = ioBuffer.getLong();
+        String message = null;
+        try {
+            message = ioBuffer.getString(StringLen,cd);
+        } catch (CharacterCodingException e) {
+            e.printStackTrace();
+        }
+        MessageData data = new MessageData(message,id,type);
         protocolDecoderOutput.write(data);
     }
 }

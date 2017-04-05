@@ -94,7 +94,7 @@ public class ServerMessageHandler {
         if (message instanceof Snake){
             Snake snake = (Snake) message;
             storeSnake(session,snake);
-            System.out.println("receive Snake："+snake);
+//            System.out.println("receive Snake："+snake);
 //            System.out.println("蛇存入成功");
             sendSnakes(session);
         }
@@ -138,7 +138,7 @@ public class ServerMessageHandler {
     public void removeSnake(Long id , Collection<IoSession> sessions){
         for (IoSession session:
                 sessions){
-            SnakeData data = new SnakeData(id,SnakeData.OPERATION_DEL_SNAKE);
+            SnakeData data = new SnakeData(id,new Snake(),SnakeData.OPERATION_DEL_SNAKE,-1);
             session.write(data);
         }
     }
@@ -150,7 +150,7 @@ public class ServerMessageHandler {
      */
     private void storeSnake(IoSession session , Snake snake){
         snakeMap = SnakeManager.getSnakeMap();
-        System.out.println("storeSnake:"+snake);
+//        System.out.println("storeSnake:"+snake);
         snakeMap.put(session.getId(),snake);
         SnakeManager.setSnakeMap(snakeMap);
     }

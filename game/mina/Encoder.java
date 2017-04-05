@@ -71,6 +71,9 @@ public class Encoder implements ProtocolEncoder {
             size += snakeGetBytes(data.getSnake());
             size += Tools.getBytesNum(data.getId());
             size += Tools.getBytesNum(data.getOperation());
+            if(data.getOperation() == SnakeData.OPERATION_DEL_SNAKE){
+                size += Tools.getBytesNum(data.getKillId());
+            }
             buffer = IoBuffer.allocate(size).setAutoExpand(true);
             int r = buffer.remaining();
 //            System.out.println("创建的buffer长度:"+r);
@@ -79,6 +82,9 @@ public class Encoder implements ProtocolEncoder {
             buffer.putChar('d');
             buffer.putLong(data.getId());
             buffer.putShort(data.getOperation());
+            if (data.getOperation() == SnakeData.OPERATION_DEL_SNAKE){
+                buffer.putLong(data.getKillId());
+            }
             encodeSnake(data.getSnake(), buffer);
             r = buffer.remaining();
 //            System.out.println("剩余长度是："+r);
@@ -113,6 +119,21 @@ public class Encoder implements ProtocolEncoder {
             buffer.putLong(data.getId());
             buffer.putString(data.getName(),ce);
         }
+
+        if (o instanceof MessageData){
+            System.out.println("sendMessage");
+            MessageData data = (MessageData)o;
+            size += Tools.getBytesNum(data.getType());
+            size += Tools.getBytesNum(data.getId());
+            size += Tools.getStingByteNum(data.getMessage(),ce);
+            buffer = IoBuffer.allocate(size).setAutoExpand(true);
+            buffer.putInt(size);
+            buffer.putChar('g');
+            buffer.putShort(data.getType());
+            buffer.putLong(data.getId());
+            buffer.putString(data.getMessage(),ce);
+        }
+
         buffer.flip();
         protocolEncoderOutput.write(buffer);
     }
@@ -139,7 +160,7 @@ public class Encoder implements ProtocolEncoder {
                 buffer.putInt(4);
             }
             buffer.putInt(j.getType());
-            System.out.println("发送蛇的type"+j.getType());
+//            System.out.println("发送蛇的type"+j.getType());
         }
 
 

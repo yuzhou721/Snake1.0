@@ -16,12 +16,13 @@ import java.util.concurrent.PriorityBlockingQueue;
  */
 public class SnakeManager {
     private static Map<Long, Snake> snakeMap = null;//蛇和客户端ID的MAP ID为KEY
-    private static Map<Long,IoSession> sessionMap=null;//连接和客户端ID的MAP ID为KEY
-    private static Map<Long,String> nameIdMap = null;//名字和客户端IP的MAP ID为KEY
+    private static Map<Long, IoSession> sessionMap=null;//连接和客户端ID的MAP ID为KEY
+    private static Map<Long, String> nameIdMap = null;//名字和客户端IP的MAP ID为KEY
 
     private static LinkedHashSet<FoodObject> foods = null;
-    static PriorityBlockingQueue<SnakeData> snakeDatas;//修改蛇MAP操作的双缓冲队列
+    static LinkedBlockingDeque<SnakeData> snakeDatas;//修改蛇MAP操作的双缓冲队列
     static LinkedBlockingDeque<FoodObjectData> foodObjectDatas;//修改食物集合的双缓冲队列
+    private static Map<Long,Kill> killTimeMap = null;
     private static int foodNum = 0 ;//食物出现次数
     private static int person = 0;
     private Thread t1;
@@ -34,18 +35,14 @@ public class SnakeManager {
         sessionMap = new HashMap<>();
         nameIdMap = new HashMap<>();
         foods = new LinkedHashSet<>();
-        snakeDatas = new PriorityBlockingQueue<SnakeData>(40, new Comparator<SnakeData>() {
-            @Override
-            public int compare(SnakeData o1, SnakeData o2) {
-                return (int)(o1.getId() - o2.getId());
-            }
-        });
+        snakeDatas = new LinkedBlockingDeque<>();
         foodObjectDatas = new LinkedBlockingDeque<>();
+        killTimeMap = new HashMap<>();
         Timer();
-
     }
 
     /**
+     *
      * 服务器监听线程 判断各种值的变化 做出相应反应
      */
     public void Timer(){
@@ -53,6 +50,7 @@ public class SnakeManager {
             while(true){
 //                Action();
                 Strike();
+//                System.out.println(killTimeMap);
 //                System.out.println(sessionMap);
 //                System.out.println(snakeMap);
 //                System.out.println(foods);
@@ -79,10 +77,7 @@ public class SnakeManager {
             }
         }
     }
-    /**
-     * 头和物品碰撞
-     * @return 撞到为真，没撞到为假
-     */
+
 
     /**
      * 发送食物给新连接客户端
@@ -95,6 +90,7 @@ public class SnakeManager {
             i++;
         }
     }
+
 
     /**
      * 根据条件触发事件
@@ -175,9 +171,92 @@ public class SnakeManager {
      */
     private void operationSnakeData(SnakeData data){
         receivedSnakeData(data.getId(),data.getSnake(),data.getOperation());
-
+        if (data.getOperation() == SnakeData.OPERATION_DEL_SNAKE){
+            Long killId = data.getKillId();
+            if (killTimeMap.containsKey(killId)) {
+                System.out.println(killId+"已经有这个记录");
+                Kill snakeKiller = killTimeMap.get(killId);
+                if (snakeKiller.addNumber(System.currentTimeMillis())){
+                    int number = snakeKiller.getMultiKill();
+//                    killTimeMap.replace(killId,snakeKiller);
+                    System.out.println("number = "+number);
+                    sendKillMessage(number,killId);
+                }
+            }
+            if (!killTimeMap.containsKey(killId) && killId != -1){
+                killTimeMap.put(killId, new Kill(System.currentTimeMillis()));
+                System.out.println(killId + "放入新记录");
+            }
+//            System.out.println(killId+"一个孤家寡人");
+        }
     }
 
+    private void sendKillMessage(int number,Long id){
+        String message;
+        if (number > 4){
+            message = "五杀！";
+        }else if(number > 3){
+            message = "四杀";
+        }else if(number > 2){
+            message = "三杀";
+        }else if(number > 1){
+            message = "双杀";
+        }else{
+            message = "正在走向胜利";
+        }
+        for (IoSession session:
+                sessionMap.values()){
+            MessageData data = new MessageData(message,id,MessageData.TYPE_NOTICE);
+            session.write(data);
+        }
+    }
+
+    /**
+     * 记录杀人数的类
+     */
+    class Kill{
+        private int number ;
+        private int multiKill ;
+        private long newTime;
+        private long oldTime;
+        public Kill(long time){
+            newTime = time;
+            number = 0;
+            multiKill = 0;
+        }
+
+        public boolean addNumber(long time){
+            this.oldTime = this.newTime;
+            this.newTime = time;
+            if (newTime-oldTime < 60000){
+                number++;
+                System.out.println("number = " + number);
+                System.out.println("multiKill = " + multiKill);
+                multiKill++;
+                return true;
+            }else {
+                number++;
+                System.out.println("FALSE number = " + number);
+                System.out.println("FALSE multiKill = " + multiKill);
+                multiKill = 0;
+                return false;
+            }
+        }
+
+        public int getMultiKill(){
+            return multiKill;
+        }
+
+        @Override
+        public String toString() {
+            return "Kill{" +
+                    "number=" + number +
+                    ", newTime=" + newTime +
+                    ", oldTime=" + oldTime +
+                    ", multiKill = "+multiKill+
+                    '}';
+        }
+    }
     /**
      * 根据获取到的数据来操作队列
      * @param id 蛇的ID
@@ -193,6 +272,7 @@ public class SnakeManager {
 
         if (operation == SnakeData.OPERATION_DEL_SNAKE){
             snakes.remove(id);
+
 //            System.out.println("删除"+id+"号蛇成功");
         }
 

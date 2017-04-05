@@ -25,21 +25,6 @@ import static java.awt.event.KeyEvent.*;
  * 实现加载图片
  */
 public class GamePanel extends JPanel {
-	/*public static BufferedImage background; // 背景图
-	public static BufferedImage body; // 绿色蛇身
-	public static BufferedImage down; // 绿色蛇头(下)
-	public static BufferedImage up; // 绿色蛇头(上)
-	public static BufferedImage left; // 绿色蛇头(左)
-	public static BufferedImage right; // 绿色蛇头(右)
-	public static BufferedImage r_body; // 红色蛇身
-	public static BufferedImage r_down; // 红色蛇头(下)
-	public static BufferedImage r_up; // 红色蛇头(上)
-	public static BufferedImage r_left; // 红色蛇头(左)
-	public static BufferedImage r_right; // 红色蛇头(右)
-	public static BufferedImage snake_food;// 食物
-	public static BufferedImage T;
-	public static BufferedImage seatebackground;
-	public static BufferedImage xuanzebiejing;*/
 	public static final int UP = 1; // 上
 	public static final int DOWN = 2; // 下
 	public static final int RIGHT = 3; // 右
@@ -198,6 +183,11 @@ public class GamePanel extends JPanel {
 	 */
 	public static String serverHost;
 
+    /**
+     * 接收到的服务器公告
+     */
+	public static Map<Long,String> notice;
+
 
 	//get set方法 ---------------
 	public static Map<Long, Snake> getSnakes() {
@@ -229,6 +219,7 @@ public class GamePanel extends JPanel {
 
 		}
 		snakes = new HashMap<>();
+		notice = new HashMap<>();
 		client = new Client(name,serverHost,9999);
 		snake = new Snake(snakeCreateRange(),snakeCreateRange());
 		client.start();
@@ -249,7 +240,7 @@ public class GamePanel extends JPanel {
 			while (status == RUNNING) {
 				action();
 //				System.out.println(nameIdMap);
-				System.out.println(snakes);
+//				System.out.println(snakes);
 //				System.out.println(name);
 				try {
 					Thread.sleep(1000);
@@ -326,6 +317,7 @@ public class GamePanel extends JPanel {
 		crash();//启动碰撞监听
 		moveStep();//蛇的移动
 		sendSnake();//移动状态发送给服务器
+        noticeTimeout();//公告超时检测
 
 	}
 
@@ -407,7 +399,7 @@ public class GamePanel extends JPanel {
 			for (Joint joint
 					:allSnake.length) {
 				if (CrashObjects.SnakeBang(head,joint) && pid != id){
-					decLife("撞到了");
+					decLife(pid);
 				}
 			}
 		}
@@ -416,7 +408,7 @@ public class GamePanel extends JPanel {
     /**
      * 所有蛇的头和自己的蛇相撞,并发送给服务器
      */
-	private void snakeBodyCrashByOtherSnakes(){
+	/*private void snakeBodyCrashByOtherSnakes(){
         for (int i = 1; i < snake.length.size(); i++) {
            Body body = (Body) snake.length.get(i);
            for (Long id:
@@ -428,7 +420,8 @@ public class GamePanel extends JPanel {
                }
            }
         }
-    }
+    }*/
+
 
 
 	private void snakeEat(Head head){
@@ -436,7 +429,7 @@ public class GamePanel extends JPanel {
 		for (FoodObject food:
 				foodObjects){
 			if (CrashObjects.SnakeBang(head,food)){
-				System.out.println("eat food");
+//				System.out.println("eat food");
 				addBody();
 				ClientUtil.sendSnakeData(id,snake, SnakeData.OPERATION_REL_SNAKE);
 				ClientUtil.sendFoodObject(i,food, FoodObjectData.OPERATION_DEL_FOOD);
@@ -450,8 +443,9 @@ public class GamePanel extends JPanel {
 	 */
 	private void snakeCrashWall(Head head){
 		if (CrashObjects.qiang(head)) {
-			decLife("哈哈，小垃圾");
+//			decLife("哈哈，小垃圾");
 //            status = DEAD;
+            decLife(-1l);
 		}
 	}
 
@@ -468,11 +462,11 @@ public class GamePanel extends JPanel {
 	 * 显示游戏结束窗口
 	 */
 	public void gameOverFrame(){
-		if (life == 0) {
+//		if (life == 0) {
 //            threadPool.execute(r4);
 //            status = GAME_OVER;
 			new GameFrameson().GameOver(life);
-		}
+//		}
 	}
 
 
@@ -516,11 +510,13 @@ public class GamePanel extends JPanel {
 	 * 减血+弹窗方法
 	 *
 	 */
-	public void decLife(String s) {// 撞墙提示
+	public void decLife(Long killId) {// 撞墙提示
 		life--;
 
 		if (life > 0) {
-			notice(s);
+            status = DEAD;
+            ClientUtil.sendSnakeData(id,snake,SnakeData.OPERATION_DEL_SNAKE,killId);
+            rebirth();
 		}
 		if (life == 0 ){
 			gameOver();
@@ -532,23 +528,24 @@ public class GamePanel extends JPanel {
 	 * @param s 给玩家说的话
 	 */
 	private void notice(String s){
-		status = DEAD;
-		ClientUtil.sendSnakeData(id,snake,SnakeData.OPERATION_DEL_SNAKE);
-		System.out.println("delete snake");
-		Date date = new Date(0);
-		SimpleDateFormat sb = new SimpleDateFormat();
-		String Str2 = sb.format(date);
-		String str = s + "\n" + "游戏继续？" + life + "命";
-		int i = JOptionPane.showConfirmDialog(null, Str2 + "\n" + str, "游戏提示",
-				JOptionPane.YES_NO_OPTION);
-		if (i == 0) {
-			rebirth();
-		} else {
-			JOptionPane.showMessageDialog(null, "退出游戏", "标题",
-					JOptionPane.WARNING_MESSAGE);
-			System.exit(i);
-			return;
-		}
+//		status = DEAD;
+//		ClientUtil.sendSnakeData(id,snake,SnakeData.OPERATION_DEL_SNAKE);
+//		rebirth();
+//		System.out.println("delete snake");
+//		Date date = new Date(0);
+//		SimpleDateFormat sb = new SimpleDateFormat();
+//		String Str2 = sb.format(date);
+//		String str = s + "\n" + "游戏继续？" + life + "命";
+//		int i = JOptionPane.showConfirmDialog(null, Str2 + "\n" + str, "游戏提示",
+//				JOptionPane.YES_NO_OPTION);
+//		if (i == 0) {
+//			rebirth();
+//		} else {
+//			JOptionPane.showMessageDialog(null, "退出游戏", "标题",
+//					JOptionPane.WARNING_MESSAGE);
+//			System.exit(i);
+//			return;
+//		}
 	}
 
 	/**
@@ -644,6 +641,32 @@ public class GamePanel extends JPanel {
 		}
 	}
 
+	private void paintNotice(Graphics g){
+	    if (notice != null) {
+	        g.setColor(Color.RED);
+	        g.setFont(new Font("黑体",Font.BOLD,50));
+	        int i = 0;
+            for (String messages:
+                    notice.values()){
+                Long id = Long.parseLong(messages.split(",")[0]);
+                String message = messages.split(",")[1];
+                String name = nameIdMap.get(id);
+                g.drawString(name+" "+message,400,300+(i*50));
+                i++;
+            }
+        }
+    }
+
+    private void noticeTimeout(){
+        Iterator<Long> it = notice.keySet().iterator();
+        while (it.hasNext()){
+            Long time = it.next();
+            if (System.currentTimeMillis() - time > 5000){
+                it.remove();
+            }
+        }
+    }
+
 	// 画背景图,时间按,分数
 	public void paint(Graphics g) {
 		g.drawImage(map.get(9).get(1), 0, 0, null);// 画背景图
@@ -657,5 +680,6 @@ public class GamePanel extends JPanel {
 		paintBall(g);
 //		g.setColor(Color.white);
 		paintName(g);
+        paintNotice(g);
 	}
 }

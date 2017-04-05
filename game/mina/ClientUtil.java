@@ -46,6 +46,16 @@ public class ClientUtil {
            return false;
     }
 
+    public static boolean sendSnakeData(long id,Snake snake,short operation,Long killId){
+        SnakeData data = new SnakeData(id,snake,operation,killId);
+        WriteFuture future = session.write(data);
+        if (future.isWritten()){
+            return true;
+        }
+        return false;
+
+    }
+
     /**
      * 发送操作食物方法
      * @param index 下标

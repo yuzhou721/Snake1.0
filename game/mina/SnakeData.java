@@ -13,6 +13,7 @@ public class SnakeData {
     public final static short OPERATION_REL_SNAKE = 3;
     private Short operation;
     private Snake snake;
+    private Long killId;
 
     public SnakeData(){
 
@@ -28,6 +29,11 @@ public class SnakeData {
         this.id = id;
         this.snake = new Snake();
         this.operation = operation;
+    }
+
+    public SnakeData(long id,Snake snake , Short operation,long killId){
+        this(id,snake,operation);
+        this.killId = killId;
     }
 
     public long getId() {
@@ -52,5 +58,13 @@ public class SnakeData {
 
     public void setOperation(Short operation) {
         this.operation = operation;
+    }
+
+    public Long getKillId() {
+        return killId;
+    }
+
+    public void setKillId(Long killId) {
+        this.killId = killId;
     }
 }

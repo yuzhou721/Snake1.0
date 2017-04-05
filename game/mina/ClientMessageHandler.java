@@ -82,6 +82,11 @@ public class ClientMessageHandler {
             NameData data = (NameData)message;
             receiveName(data.getId(),data.getName());
         }
+
+        if (message instanceof MessageData){
+            MessageData data = (MessageData)message;
+            receiveMessage(data.getMessage(),data.getId(),data.getType());
+        }
     }
 
     /**
@@ -114,8 +119,8 @@ public class ClientMessageHandler {
         }
 
         if (operation == SnakeData.OPERATION_REL_SNAKE){
-            System.out.println("用于替换的id"+id);
-            System.out.println("用于替换的snake:"+snake);
+//            System.out.println("用于替换的id"+id);
+//            System.out.println("用于替换的snake:"+snake);
                snakes.replace(id,snake);
                 if (id == GamePanel.id) {
                     GamePanel.snake = snake;
@@ -147,6 +152,12 @@ public class ClientMessageHandler {
     private void receiveName(Long id,String name){
         Map<Long,String> nameIdMap = GamePanel.nameIdMap;
         nameIdMap.put(id,name);
+    }
+
+    private void receiveMessage(String message,Long id,short type){
+        if (type == MessageData.TYPE_NOTICE){
+            GamePanel.notice.put(System.currentTimeMillis(),id+","+message);
+        }
     }
 
 }
