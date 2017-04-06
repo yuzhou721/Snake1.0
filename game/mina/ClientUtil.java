@@ -70,7 +70,7 @@ public class ClientUtil {
         if (future.isWritten()){
             return true;
         }
-        new RuntimeIoException("");
+//        new RuntimeIoException("");
         return false;
     }
 }

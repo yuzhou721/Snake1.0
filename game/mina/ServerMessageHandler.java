@@ -1,6 +1,7 @@
 package game.mina;
 
 import game.Snake;
+import game.random.Ball;
 import game.random.FoodObject;
 import org.apache.mina.core.session.IoSession;
 
@@ -108,6 +109,11 @@ public class ServerMessageHandler {
             SnakeManager.foodObjectDatas.offer(data);
 //            receivedFoodData(data.getObject(),data.getIndex(),data.getOperation());
 
+        }
+
+        if (message instanceof Ball){
+            Ball ball = (Ball)message;
+            SnakeManager.ballsOperation.offer(ball);
         }
     }
 

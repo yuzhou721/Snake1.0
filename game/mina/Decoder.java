@@ -1,6 +1,7 @@
 package game.mina;
 
 import game.Body;
+import game.random.Ball;
 import game.random.FoodObject;
 import game.Head;
 import game.Snake;
@@ -11,6 +12,7 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
+import java.awt.*;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
@@ -80,6 +82,11 @@ public class Decoder extends CumulativeProtocolDecoder {
                 if (mode == 'g'){
                     System.out.println("decoder message");
                     deCoderMessageData(ioBuffer,protocolDecoderOutput,len-2-4-8-2);//减去报头长度再减去LongID长度
+                }
+
+                if (mode == 'h'){
+                    System.out.println("decoder ball");
+                    deCoderBall(ioBuffer,protocolDecoderOutput);
                 }
                 if (ioBuffer.remaining()>0){
                     return true;
@@ -205,7 +212,8 @@ public class Decoder extends CumulativeProtocolDecoder {
         }
         if (mode == FoodObject.MODE_MONEY){
 //            System.out.println("is money");
-            money = new Money(x,y);
+            int type = ioBuffer.getInt();
+            money = new Money(x,y,type);
             data.setObject(money);
         }
         data.setIndex(ioBuffer.getInt());
@@ -242,6 +250,21 @@ public class Decoder extends CumulativeProtocolDecoder {
         }
         MessageData data = new MessageData(message,id,type);
         protocolDecoderOutput.write(data);
+    }
+
+    private void deCoderBall(IoBuffer ioBuffer , ProtocolDecoderOutput protocolDecoderOutput){
+        int x = ioBuffer.getInt();
+        int y = ioBuffer.getInt();
+        int r = ioBuffer.getInt();
+        int g = ioBuffer.getInt();
+        int b = ioBuffer.getInt();
+        int d = ioBuffer.getInt();
+        int dir = ioBuffer.getInt();
+        int speed = ioBuffer.getInt();
+        Color color = new Color(r,g,b);
+        Ball ball = new Ball(x,y,dir,d,speed,color);
+        protocolDecoderOutput.write(ball);
+
     }
 }
 

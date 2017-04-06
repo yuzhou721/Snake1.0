@@ -3,6 +3,9 @@ package game.mina;
 import game.Direction;
 import game.Joint;
 import game.Snake;
+import game.random.Award;
+import game.random.Ball;
+import game.random.FoodObject;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoder;
@@ -97,6 +100,8 @@ public class Encoder implements ProtocolEncoder {
             size += Tools.getBytesNum(data.getObject().getX());
             size += Tools.getBytesNum(data.getObject().getY());
             size += Tools.getBytesNum(data.getIndex());
+            if (data.getObject() instanceof Award)
+                size += Tools.getBytesNum(((Award) data.getObject()).getAward());
             size += Tools.getBytesNum(data.getOperation());
             buffer = IoBuffer.allocate(size).setAutoExpand(true);
             buffer.putInt(size);
@@ -104,6 +109,8 @@ public class Encoder implements ProtocolEncoder {
             buffer.putInt(data.getObject().getMode());
             buffer.putInt(data.getObject().getX());
             buffer.putInt(data.getObject().getY());
+            if (data.getObject() instanceof Award)
+                buffer.putInt(((Award) data.getObject()).getAward());
             buffer.putInt(data.getIndex());
             buffer.putShort(data.getOperation());
         }
@@ -134,6 +141,29 @@ public class Encoder implements ProtocolEncoder {
             buffer.putString(data.getMessage(),ce);
         }
 
+        if (o instanceof Ball){
+            System.out.println("sendBall");
+            Ball b = (Ball)o;
+            size += Tools.getBytesNum(b.getX());
+            size += Tools.getBytesNum(b.getY());
+            size += Tools.getBytesNum(b.getCol().getRed());
+            size += Tools.getBytesNum(b.getCol().getGreen());
+            size += Tools.getBytesNum(b.getCol().getBlue());
+            size += Tools.getBytesNum(b.getD());
+            size += Tools.getBytesNum(b.getDir());
+            size += Tools.getBytesNum(b.getSpeed());
+            buffer = IoBuffer.allocate(size).setAutoExpand(true);
+            buffer.putInt(size);
+            buffer.putChar('h');
+            buffer.putInt(b.getX());
+            buffer.putInt(b.getY());
+            buffer.putInt(b.getCol().getRed());
+            buffer.putInt(b.getCol().getGreen());
+            buffer.putInt(b.getCol().getBlue());
+            buffer.putInt(b.getD());
+            buffer.putInt(b.getDir());
+            buffer.putInt(b.getSpeed());
+        }
         buffer.flip();
         protocolEncoderOutput.write(buffer);
     }

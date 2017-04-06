@@ -1,11 +1,9 @@
 package game.random;
 
 public interface Award {
-	int LIFE=0;//1����
-	int MAX=1;//���
-	int MIN=2;//��С
-	int RANDOMS=3;
-	int yuanshi=4;
-//	/**��ý�������*/
+	int ADD_LIFE = 0;//增加生命
+	int SNAKE_GOD=1;//无敌
+	int SNAKE_MIN=2;//变短
+	int BALL=3;//出现小球
 	int getAward();
 }

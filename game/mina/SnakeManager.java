@@ -1,9 +1,7 @@
 package game.mina;
 
 import game.*;
-import game.random.Food;
-import game.random.FoodObject;
-import game.random.Money;
+import game.random.*;
 import org.apache.mina.core.session.IoSession;
 
 import java.util.*;
@@ -22,6 +20,8 @@ public class SnakeManager {
     private static LinkedHashSet<FoodObject> foods = null;
     static LinkedBlockingDeque<SnakeData> snakeDatas;//修改蛇MAP操作的双缓冲队列
     static LinkedBlockingDeque<FoodObjectData> foodObjectDatas;//修改食物集合的双缓冲队列
+    static LinkedBlockingDeque<Ball> ballsOperation;
+    private static HashSet<Ball> balls;
     private static Map<Long,Kill> killTimeMap = null;
     private static int foodNum = 0 ;//食物出现次数
     private static int person = 0;
@@ -38,6 +38,8 @@ public class SnakeManager {
         snakeDatas = new LinkedBlockingDeque<>();
         foodObjectDatas = new LinkedBlockingDeque<>();
         killTimeMap = new HashMap<>();
+        balls = new HashSet<>();
+        ballsOperation = new LinkedBlockingDeque<>();
         Timer();
     }
 
@@ -127,6 +129,10 @@ public class SnakeManager {
 
         if (!snakeDatas.isEmpty()){
             operationSnakeData(snakeDatas.poll());
+        }
+
+        if (!ballsOperation.isEmpty()){
+
         }
     }
 
@@ -257,6 +263,7 @@ public class SnakeManager {
                     '}';
         }
     }
+
     /**
      * 根据获取到的数据来操作队列
      * @param id 蛇的ID
@@ -303,8 +310,16 @@ public class SnakeManager {
         }
         if (operation == FoodObjectData.OPERATION_DEL_FOOD){
             foods.remove(food);
+
             System.out.println("eat food");
             sendFood(food,index,operation);//删除以后通知所有客户端删除
+            if (food instanceof Award){
+                if (((Award) food).getAward() == Award.BALL){
+                    for (int i = 0; i < 30; i++) {
+                        Balls.addBall(balls);
+                    }
+                }
+            }
             foodNum--;
             addFood();
         }
@@ -320,6 +335,31 @@ public class SnakeManager {
             }
         }
     }
+
+    /**
+     * 小球的运动
+     */
+    public void ballaMove(){
+        for(Ball b :
+                balls){
+            b.move();
+        }
+    }
+
+    public void delBall(Ball ball){
+        balls.remove(ball);
+
+    }
+
+    public void sendBallToAllClient(String operation){
+        if ("ADD".equals(operation)){
+            for (IoSession session:
+                    sessionMap.values()){
+            }
+        }
+    }
+
+
     /*
     public boolean SnakeBang(Head head, Object o){
         if (o instanceof Body){

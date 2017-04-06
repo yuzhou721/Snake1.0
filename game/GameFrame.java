@@ -1,8 +1,5 @@
 package game;
 
-import game.random.Ball_JP;
-
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.*;
 import java.io.IOException;
@@ -16,7 +13,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 /**
  * 界面
@@ -51,7 +47,7 @@ public class GameFrame extends JFrame{
 		}else {
 			setTitle("贪吃蛇 客户端 服务器IP地址为"+GamePanel.serverHost);
 		}
-		  /*Ball_JP jp=new Ball_JP();
+		  /*Balls jp=new Balls();
 	        jp.run_run();       //开始运行多线程
 	        this.add(jp); */
 //		GameFrame frame = new GameFrame();

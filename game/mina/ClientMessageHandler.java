@@ -1,5 +1,6 @@
 package game.mina;
 
+import game.random.Ball;
 import game.random.FoodObject;
 import game.GamePanel;
 import game.Snake;
@@ -87,6 +88,11 @@ public class ClientMessageHandler {
             MessageData data = (MessageData)message;
             receiveMessage(data.getMessage(),data.getId(),data.getType());
         }
+
+        if (message instanceof Ball){
+            Ball ball = (Ball)message;
+            receiveBall(ball);
+        }
     }
 
     /**
@@ -156,8 +162,12 @@ public class ClientMessageHandler {
 
     private void receiveMessage(String message,Long id,short type){
         if (type == MessageData.TYPE_NOTICE){
-            GamePanel.notice.put(System.currentTimeMillis(),id+","+message);
+            GamePanel.notice.put(id,message);
         }
+    }
+
+    private void receiveBall(Ball ball){
+        GamePanel.balls.add(ball);
     }
 
 }
