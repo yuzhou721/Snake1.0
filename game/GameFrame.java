@@ -53,6 +53,7 @@ public class GameFrame extends JFrame{
 //		GameFrame frame = new GameFrame();
 		GamePanel panel =new GamePanel();
 		this.add(panel);
+		Gamemusic.backgroundpaly();
 //		GamePanel  jp1 = new GamePanel ();
 //		jp.setOpaque(false);
 //		this.add(jp1);

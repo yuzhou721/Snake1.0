@@ -166,6 +166,7 @@ public class ClientMessageHandler {
     private void receiveMessage(String message,Long id,short type){
         if (type == MessageData.TYPE_NOTICE){
             notice.put(id,message);
+        	GamePanel.noticeQueue.offer(message);
         }
     }
 

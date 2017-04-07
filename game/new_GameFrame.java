@@ -46,9 +46,9 @@ public class new_GameFrame extends JFrame{
 
 		label.setBounds(0, 0,this.getWidth(),this.getHeight());
 		bel.setBounds(0, 0,this.getWidth(),this.getHeight());
-		start.setBounds(270,140,270,65);
-		help.setBounds(270,220,270, 65);
-		exit.setBounds(270,380,350, 65);
+		start.setBounds(105,333,210,65);
+		help.setBounds(105,420,210,65);
+		exit.setBounds(105,500,210,65);
 		test.setSize(90,30);
 
 		start.setContentAreaFilled(false);

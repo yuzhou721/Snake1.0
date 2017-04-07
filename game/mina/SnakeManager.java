@@ -190,10 +190,10 @@ public class SnakeManager {
     private FoodObject nextFood() {
         int num;
         num = (int)(Math.random()*10);
-        if (num < 1) {
-            return new Food();
+        if (num < 2) {
+        	return new Money();
         } else {
-            return new Money();
+            return new Food();
         }
     }
 
@@ -214,11 +214,24 @@ public class SnakeManager {
                     System.out.println("number = "+number);
                     sendKillMessage(number,killId);
                 }
+
             }
             if (!killTimeMap.containsKey(killId) && killId != -1){
                 killTimeMap.put(killId, new Kill(System.currentTimeMillis()));
                 System.out.println(killId + "放入新记录");
             }
+
+            if (killTimeMap != null) {
+                for (Long kId :
+                        killTimeMap.keySet()) {
+                    if (data.getId() == kId) {
+                        killTimeMap.put(kId,new Kill(System.currentTimeMillis()));
+                    }
+                }
+            }
+
+
+
 //            System.out.println(killId+"一个孤家寡人");
         }
     }
@@ -226,7 +239,7 @@ public class SnakeManager {
     private void sendKillMessage(int number,Long id){
         String message;
         if (number > 4){
-            message = "五杀！";
+            message = "五杀!";
         }else if(number > 3){
             message = "四杀";
         }else if(number > 2){
@@ -254,7 +267,7 @@ public class SnakeManager {
         public Kill(long time){
             newTime = time;
             number = 0;
-            multiKill = 0;
+            multiKill = 1;
         }
 
         public boolean addNumber(long time){

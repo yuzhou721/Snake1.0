@@ -39,14 +39,15 @@ public class xuanze {
 
 
 		xzbj.setBounds(0,0,snake1head.getIconWidth(), snake1head.getIconHeight());
-		snake1.setBounds(57,38,149,265);
-		snake2.setBounds(296,38,149,265);
-		snake3.setBounds(543,38,149,265);
-		snake4.setBounds(788,38,149,265);
-		snake5.setBounds(54,389,149,265);
-		snake6.setBounds(296,389,149,265);
-		snake7.setBounds(543,389,149,265);
-		snake8.setBounds(788,389,149,265);
+		snake1.setBounds(73,48,149,248);
+		snake2.setBounds(325,48,149,248);
+		snake3.setBounds(588,48,149,248);
+		snake4.setBounds(850,48,149,248);
+		snake5.setBounds(73,430,149,248);
+		snake6.setBounds(325,430,149,248);
+		snake7.setBounds(588,430,149,248);
+		snake8.setBounds(850,430,149,248);
+
 
 		snake1.setFocusPainted(false);
 		snake2.setFocusPainted(false);

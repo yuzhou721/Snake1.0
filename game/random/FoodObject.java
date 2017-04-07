@@ -1,5 +1,7 @@
 package game.random;
 
+import game.GamePanel;
+
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -13,8 +15,8 @@ public class FoodObject {
 
 	public FoodObject() {
 		Random random = new Random();
-		x = random.nextInt(30);
-		y = random.nextInt(30);
+		x = random.nextInt(GamePanel.ROW);
+		y = random.nextInt(GamePanel.COL);
 	}
 
 	public FoodObject(int x, int y) {

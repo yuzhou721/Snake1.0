@@ -47,7 +47,7 @@ public class Tools {
     }
 
     public static int snakeCoord(){
-        return (int)(Math.random()*26+4);
+        return (int)(Math.random()*19+4);
     }
 }
 
