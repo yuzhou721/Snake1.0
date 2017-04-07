@@ -11,6 +11,7 @@ public class MessageData {
     private short type;
     public static final short TYPE_CHAT = 2;
     public static final short TYPE_NOTICE = 1;
+    public static final short TYPE_OPE = 3;
 
     public MessageData(String message, Long id , short type){
         this.message = message;

@@ -5,8 +5,7 @@ import game.random.*;
 import org.apache.mina.core.session.IoSession;
 
 import java.util.*;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.*;
 
 /**
  * 蛇的各种管理：碰撞，生成，随机事件
@@ -20,12 +19,16 @@ public class SnakeManager {
     private static LinkedHashSet<FoodObject> foods = null;
     static LinkedBlockingDeque<SnakeData> snakeDatas;//修改蛇MAP操作的双缓冲队列
     static LinkedBlockingDeque<FoodObjectData> foodObjectDatas;//修改食物集合的双缓冲队列
-    static LinkedBlockingDeque<Ball> ballsOperation;
+    static LinkedBlockingDeque<BallData> ballsOperation;
     private static HashSet<Ball> balls;
     private static Map<Long,Kill> killTimeMap = null;
     private static int foodNum = 0 ;//食物出现次数
     private static int person = 0;
-    private Thread t1;
+    private Runnable r1;
+    private Runnable r2;
+    private ExecutorService threadPool ;//线程池
+    public static final int BALLSNUM = 30;
+    private int ballGroups;
 
     /**
      * 初始化成员属性
@@ -40,6 +43,8 @@ public class SnakeManager {
         killTimeMap = new HashMap<>();
         balls = new HashSet<>();
         ballsOperation = new LinkedBlockingDeque<>();
+        threadPool = Executors.newFixedThreadPool(2);
+        ballGroups = 0;
         Timer();
     }
 
@@ -48,10 +53,11 @@ public class SnakeManager {
      * 服务器监听线程 判断各种值的变化 做出相应反应
      */
     public void Timer(){
-        t1 = new Thread(()->{
+        r1 = ()->{
             while(true){
 //                Action();
                 Strike();
+
 //                System.out.println(killTimeMap);
 //                System.out.println(sessionMap);
 //                System.out.println(snakeMap);
@@ -59,8 +65,28 @@ public class SnakeManager {
 //                System.out.println(nameIdMap);
 //                System.out.println(System.currentTimeMillis());
             }
-        });
-        t1.start();
+        };
+
+        r2 = ()->{
+            while(ballGroups > 0 && !balls.isEmpty()){
+                synchronized (balls) {
+                    for (Ball b
+                            : balls) {
+                        b.move();
+                        sendBallDataToAllClient(b, BallData.BALL_ADD);
+                    }
+                }
+
+//                System.out.println("发送小球");
+                try {
+                    Thread.sleep(30);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        threadPool.execute(r1);
     }
 
 
@@ -132,7 +158,7 @@ public class SnakeManager {
         }
 
         if (!ballsOperation.isEmpty()){
-
+            operationBallData(ballsOperation.poll());
         }
     }
 
@@ -315,9 +341,26 @@ public class SnakeManager {
             sendFood(food,index,operation);//删除以后通知所有客户端删除
             if (food instanceof Award){
                 if (((Award) food).getAward() == Award.BALL){
-                    for (int i = 0; i < 30; i++) {
-                        Balls.addBall(balls);
+                    HashSet<Ball> ballSet = new HashSet<>();
+                    ArrayList<Ball> oldBall = new ArrayList<>();
+                    for (int i = 0; i < BALLSNUM ; i++) {
+                        Balls.addBall(ballSet);
                     }
+                    balls.addAll(ballSet);
+                    ballGroups++;
+                    oldBall.addAll(ballSet);
+                    threadPool.execute(r2);
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+//                            Set<Ball> oldBalls = balls;
+                            for (Ball b :
+                                    oldBall){
+                                ballsOperation.offer(new BallData(b,BallData.BALL_DEL));
+                            }
+                            ballGroups--;
+                        }
+                    },8000);
                 }
             }
             foodNum--;
@@ -339,23 +382,38 @@ public class SnakeManager {
     /**
      * 小球的运动
      */
-    public void ballaMove(){
-        for(Ball b :
-                balls){
-            b.move();
+//    public void ballaMove(){
+//        for(Ball b :
+//                balls){
+//            b.move();
+//        }
+//    }
+
+    public void operationBallData(BallData data){
+        synchronized (balls) {
+            if (data.getOperation() == BallData.BALL_DEL) {
+                if (balls.remove(data.getBall())) {
+                    sendBallDataToAllClient(data.getBall(), BallData.BALL_DEL);
+                }
+            }
         }
     }
 
-    public void delBall(Ball ball){
-        balls.remove(ball);
+    public void sendBallDataToAllClient(Ball ball,short operation){
+        for (IoSession session:
+                sessionMap.values()) {
+            if (operation == BallData.BALL_ADD) {
 
-    }
-
-    public void sendBallToAllClient(String operation){
-        if ("ADD".equals(operation)){
-            for (IoSession session:
-                    sessionMap.values()){
+                BallData data = new BallData(ball,BallData.BALL_ADD);
+                session.write(data);
             }
+
+            if (operation == BallData.BALL_DEL){
+                BallData data = new BallData(ball,BallData.BALL_DEL);
+                session.write(data);
+            }
+
+
         }
     }
 

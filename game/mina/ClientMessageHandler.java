@@ -7,8 +7,11 @@ import game.Snake;
 import org.apache.mina.core.session.IoSession;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import static game.GamePanel.*;
 
 /**
  * 客户端信息处理
@@ -61,7 +64,7 @@ public class ClientMessageHandler {
 
         if (message instanceof Long ){
             ids = (Long)message;
-            GamePanel.id = ids;
+            id = ids;
 //            System.out.println(ids+"发来数据");
 
         }
@@ -89,9 +92,9 @@ public class ClientMessageHandler {
             receiveMessage(data.getMessage(),data.getId(),data.getType());
         }
 
-        if (message instanceof Ball){
-            Ball ball = (Ball)message;
-            receiveBall(ball);
+        if (message instanceof BallData){
+            BallData data = (BallData) message;
+            receiveBall(data.getBall(),data.getOperation());
         }
     }
 
@@ -113,10 +116,10 @@ public class ClientMessageHandler {
      */
     private void receiveSnake(Long id,Object message,short operation){
         Snake snake = (Snake)message;
-        snakes = GamePanel.getSnakes();
+        snakes = getSnakes();
         if (operation == SnakeData.OPERATION_ADD_SNAKE){
             snakes.put(id, snake);
-            GamePanel.setSnakes(snakes);
+            setSnakes(snakes);
         }
 
         if (operation == SnakeData.OPERATION_DEL_SNAKE){
@@ -144,7 +147,7 @@ public class ClientMessageHandler {
      * @param operation 操作码
      */
     private void receiveFood(FoodObject food, int index, short operation){
-        Set<FoodObject> foods = GamePanel.foodObjects;
+        Set<FoodObject> foods = foodObjects;
         if (operation == FoodObjectData.OPERATION_ADD_FOOD){
             System.out.println("收到食物");
            foods.add(food);
@@ -162,12 +165,32 @@ public class ClientMessageHandler {
 
     private void receiveMessage(String message,Long id,short type){
         if (type == MessageData.TYPE_NOTICE){
-            GamePanel.notice.put(id,message);
+            notice.put(id,message);
         }
     }
 
-    private void receiveBall(Ball ball){
-        GamePanel.balls.add(ball);
+    private void receiveBall(Ball ball,short operation){
+
+        if (operation == BallData.BALL_ADD) {
+            if (balls.contains(ball)) {
+                synchronized (balls) {
+                    balls.remove(ball);
+                }
+                balls.add(ball);
+            } else {
+                System.out.println("收到个球");
+                balls.add(ball);
+                oldBalls.add(ball);
+            }
+        }
+
+        if (operation == BallData.BALL_DEL){
+            if (balls.contains(ball)){
+                synchronized (balls){
+                    balls.remove(ball);
+                }
+            }
+        }
     }
 
 }

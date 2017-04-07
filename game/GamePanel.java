@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -159,6 +160,8 @@ public class GamePanel extends JPanel {
 	public static boolean isServer;
 	private Server server;
 	public static Map<Long,String> nameIdMap;
+	private int eatBallsNum;
+	private LinkedBlockingDeque removeBallQueue;
 	/**
 	 * 存储所有的蛇
 	 */
@@ -197,7 +200,9 @@ public class GamePanel extends JPanel {
 	/**
 	 * 接收到的小球
 	 */
-	public static HashSet<Ball> balls;
+	public static Set<Ball> balls;
+
+	public static ArrayList <Ball> oldBalls;
 
 
 	//get set方法 ---------------
@@ -217,10 +222,13 @@ public class GamePanel extends JPanel {
 	 */
 	public GamePanel() {
 		snake = new Snake(snakeCreateRange(),snakeCreateRange());// 一条蛇
-		balls = new HashSet<>();
+		balls = Collections.synchronizedSet(new HashSet<>());
+        oldBalls = new ArrayList<>();
+		eatBallsNum = 0;
 		foodObjects = new HashSet<FoodObject>();
 		snakes = new HashMap<>();
 		nameIdMap = new HashMap<>();
+		removeBallQueue = new LinkedBlockingDeque<>();
 		status = RUNNING;
 		if (isServer){
 			new Thread(() -> {
@@ -253,8 +261,11 @@ public class GamePanel extends JPanel {
 //				System.out.println(nameIdMap);
 //				System.out.println(snakes);
 //				System.out.println(name);
-				try {
-					Thread.sleep(1000);
+//                System.out.println(balls);
+//                System.out.println("oldBalls"+oldBalls);
+                System.out.println(eatBallsNum);
+                try {
+					Thread.sleep(200);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -279,6 +290,7 @@ public class GamePanel extends JPanel {
 			while (true){
 				repaint();
 //				ballaMove();
+//                removeBall();
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
@@ -389,6 +401,7 @@ public class GamePanel extends JPanel {
         snakeCrashOtherSnake(head);
 		snakeCrashWall(head);
 		snakeEat(head);
+		snakeEatBalls(head);
 	}
 
 	/**
@@ -428,8 +441,13 @@ public class GamePanel extends JPanel {
         }
     }*/
 
-
-
+//    private void removeBall(){
+//        if (!removeBallQueue.isEmpty()){
+//            synchronized (balls) {
+//                balls.remove(removeBallQueue.poll());
+//            }
+//        }
+//    }
 	private void snakeEat(Head head){
 		int i = 0;
 		for (FoodObject food:
@@ -438,7 +456,6 @@ public class GamePanel extends JPanel {
 //				System.out.println("eat food");
 				if (food instanceof Food) {
                     addBody();
-                    ClientUtil.sendSnakeData(id, snake, SnakeData.OPERATION_REL_SNAKE);
                 }
                 if(food instanceof Award){
 				    Award a = (Award)food;
@@ -454,11 +471,48 @@ public class GamePanel extends JPanel {
                             shortBody();
                             break;
                         case Award.BALL:
+                            System.out.println("出现小球");
+//                            new Timer().schedule(new TimerTask() {
+//                                @Override
+//                                public void run() {
+//                                    Iterator<Ball> it = oldBalls.iterator();
+//                                    int i = -1;
+//                                    while(it.hasNext()){
+//                                        Ball b = it.next();
+//                                        synchronized (balls) {
+//                                            if (i <= SnakeManager.BALLSNUM) {
+//                                                balls.remove(b);
+//                                                it.remove();
+//                                            }
+////                                            System.out.println("i = " + i);
+//                                            i++;
+//                                        }
+//
+//                                    }
+//                                }
+//                            },8300);
                             break;
                     }
 
                 }
                 ClientUtil.sendFoodObject(i, food, FoodObjectData.OPERATION_DEL_FOOD);
+            }
+		}
+	}
+
+	private void snakeEatBalls(Head head){
+		if (!balls.isEmpty()) {
+		    synchronized (balls) {
+                for (Ball b :
+                        balls) {
+                    if (CrashObjects.SnakeBang(head, b)) {
+                        eatBallsNum++;
+                        ClientUtil.sendDelBallData(b);
+                        if (eatBallsNum % 5 ==0){
+                            addBody();
+                        }
+                    }
+                }
             }
 		}
 	}
@@ -518,6 +572,7 @@ public class GamePanel extends JPanel {
 				snake.length.add(new Body(tailX, tailY - 1, tailDir));
 				break;
 		}
+        ClientUtil.sendSnakeData(id, snake, SnakeData.OPERATION_REL_SNAKE);
 //		System.out.println("add body");
 	}
 
@@ -551,6 +606,9 @@ public class GamePanel extends JPanel {
         },5000);
     }
 
+    /**
+     * 减一半方法
+     */
     private void shortBody(){
 	    int m = snake.length.size();
 	    int k = m/2;
@@ -613,7 +671,7 @@ public class GamePanel extends JPanel {
 	 * 发送蛇给服务器
 	 */
 	public void sendSnake(){
-		System.out.println("客户端发送的snake:"+ snake);
+//		System.out.println("客户端发送的snake:"+ snake);
 		if (status == RUNNING) {
 			ClientUtil.sendSnake(snake);
 //           Server.sendSnakes();
@@ -674,10 +732,12 @@ public class GamePanel extends JPanel {
 	}
 
 	private void paintBall(Graphics g) {
-	    if (balls != null) {
-            for (Ball b :
-                    balls) {
-                b.Draw(g);
+	    synchronized (balls) {
+            if (balls != null) {
+                for (Ball b :
+                        balls) {
+                    b.Draw(g);
+                }
             }
         }
 	}

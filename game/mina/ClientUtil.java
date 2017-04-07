@@ -1,6 +1,7 @@
 package game.mina;
 
 import game.Snake;
+import game.random.Ball;
 import game.random.FoodObject;
 import org.apache.mina.core.RuntimeIoException;
 import org.apache.mina.core.future.WriteFuture;
@@ -71,6 +72,15 @@ public class ClientUtil {
             return true;
         }
 //        new RuntimeIoException("");
+        return false;
+    }
+
+    public static boolean sendDelBallData(Ball ball){
+        BallData data = new BallData(ball,BallData.BALL_DEL);
+        WriteFuture future =session.write(data);
+        if (future.isWritten()){
+            return true;
+        }
         return false;
     }
 }

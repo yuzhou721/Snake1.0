@@ -38,10 +38,10 @@ public class Decoder extends CumulativeProtocolDecoder {
         if (ioBuffer.remaining() > 1 ){
             ioBuffer.mark();
             int len = ioBuffer.getInt();
-            System.out.println("length:"+len);
+//            System.out.println("length:"+len);
             if (len > ioBuffer.remaining()){
                 ioBuffer.reset();
-                System.out.println(ioBuffer.remaining()+"length is not enough");
+//                System.out.println(ioBuffer.remaining()+"length is not enough");
                 return false;
             }else{
                 char mode = ioBuffer.getChar();
@@ -85,8 +85,8 @@ public class Decoder extends CumulativeProtocolDecoder {
                 }
 
                 if (mode == 'h'){
-                    System.out.println("decoder ball");
-                    deCoderBall(ioBuffer,protocolDecoderOutput);
+//                    System.out.println("decoder ball");
+                    deCoderBallData(ioBuffer,protocolDecoderOutput);
                 }
                 if (ioBuffer.remaining()>0){
                     return true;
@@ -252,7 +252,8 @@ public class Decoder extends CumulativeProtocolDecoder {
         protocolDecoderOutput.write(data);
     }
 
-    private void deCoderBall(IoBuffer ioBuffer , ProtocolDecoderOutput protocolDecoderOutput){
+    private void deCoderBallData(IoBuffer ioBuffer , ProtocolDecoderOutput protocolDecoderOutput){
+        short operation = ioBuffer.getShort();
         int x = ioBuffer.getInt();
         int y = ioBuffer.getInt();
         int r = ioBuffer.getInt();
@@ -261,9 +262,12 @@ public class Decoder extends CumulativeProtocolDecoder {
         int d = ioBuffer.getInt();
         int dir = ioBuffer.getInt();
         int speed = ioBuffer.getInt();
+        int i = ioBuffer.getInt();
         Color color = new Color(r,g,b);
         Ball ball = new Ball(x,y,dir,d,speed,color);
-        protocolDecoderOutput.write(ball);
+        ball.setI(i);
+        BallData data = new BallData(ball,operation);
+        protocolDecoderOutput.write(data);
 
     }
 }

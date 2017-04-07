@@ -1,5 +1,6 @@
 package game;
 
+import game.random.Ball;
 import game.random.FoodObject;
 import game.random.Money;
 
@@ -73,6 +74,17 @@ public static boolean State(Snake snake1){//蛇身碰撞方法
 			if (head2.getX() == food.getX() && head2.getY() == food.getY()){
 				return true;
 			}
+		}
+
+		if (o instanceof Ball){
+			Ball b = (Ball)o;
+			Joint head2 = (Joint)head;
+			if (head2.getX()*GamePanel.CELL_SIZE<(b.getX()+b.getD()) &&
+					b.getX()<(head2.getX()*GamePanel.CELL_SIZE+head2.image.getWidth()) &&
+					head2.getY()*GamePanel.CELL_SIZE<(b.getY()+b.getD()) &&
+                    b.getY()<(head2.getY()*GamePanel.CELL_SIZE+head2.image.getHeight())){
+			    return true;
+            }
 		}
 		return false;
 	}

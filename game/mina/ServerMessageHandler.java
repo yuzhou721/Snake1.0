@@ -111,9 +111,9 @@ public class ServerMessageHandler {
 
         }
 
-        if (message instanceof Ball){
-            Ball ball = (Ball)message;
-            SnakeManager.ballsOperation.offer(ball);
+        if (message instanceof BallData){
+            BallData data = (BallData)message;
+            SnakeManager.ballsOperation.offer(data);
         }
     }
 

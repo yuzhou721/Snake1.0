@@ -141,28 +141,17 @@ public class Encoder implements ProtocolEncoder {
             buffer.putString(data.getMessage(),ce);
         }
 
-        if (o instanceof Ball){
-            System.out.println("sendBall");
-            Ball b = (Ball)o;
-            size += Tools.getBytesNum(b.getX());
-            size += Tools.getBytesNum(b.getY());
-            size += Tools.getBytesNum(b.getCol().getRed());
-            size += Tools.getBytesNum(b.getCol().getGreen());
-            size += Tools.getBytesNum(b.getCol().getBlue());
-            size += Tools.getBytesNum(b.getD());
-            size += Tools.getBytesNum(b.getDir());
-            size += Tools.getBytesNum(b.getSpeed());
+        if (o instanceof BallData){
+//            System.out.println("sendBall");
+            BallData data = (BallData)o;
+            size += ballGetBytes(data.getBall());
+            size += Tools.getBytesNum(data.getOperation());
             buffer = IoBuffer.allocate(size).setAutoExpand(true);
             buffer.putInt(size);
             buffer.putChar('h');
-            buffer.putInt(b.getX());
-            buffer.putInt(b.getY());
-            buffer.putInt(b.getCol().getRed());
-            buffer.putInt(b.getCol().getGreen());
-            buffer.putInt(b.getCol().getBlue());
-            buffer.putInt(b.getD());
-            buffer.putInt(b.getDir());
-            buffer.putInt(b.getSpeed());
+            buffer.putShort(data.getOperation());
+            encoderBall(data.getBall(),buffer);
+
         }
         buffer.flip();
         protocolEncoderOutput.write(buffer);
@@ -214,6 +203,32 @@ public class Encoder implements ProtocolEncoder {
             size += Tools.getBytesNum(j.getX());
             size += Tools.getBytesNum(j.getType());
         }
+        return size;
+    }
+
+    private void encoderBall(Ball b , IoBuffer buffer){
+        buffer.putInt(b.getX());
+        buffer.putInt(b.getY());
+        buffer.putInt(b.getCol().getRed());
+        buffer.putInt(b.getCol().getGreen());
+        buffer.putInt(b.getCol().getBlue());
+        buffer.putInt(b.getD());
+        buffer.putInt(b.getDir());
+        buffer.putInt(b.getSpeed());
+        buffer.putInt(b.getI());
+    }
+
+    private int ballGetBytes(Ball b){
+        int size = 0;
+        size += Tools.getBytesNum(b.getX());
+        size += Tools.getBytesNum(b.getY());
+        size += Tools.getBytesNum(b.getCol().getRed());
+        size += Tools.getBytesNum(b.getCol().getGreen());
+        size += Tools.getBytesNum(b.getCol().getBlue());
+        size += Tools.getBytesNum(b.getD());
+        size += Tools.getBytesNum(b.getDir());
+        size += Tools.getBytesNum(b.getSpeed());
+        size += Tools.getBytesNum(b.getI());
         return size;
     }
 
