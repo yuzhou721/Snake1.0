@@ -820,16 +820,16 @@ public class GamePanel extends JPanel {
 	// 画背景图,时间按,分数
 	public void paint(Graphics g) {
 		g.drawImage(map.get(9).get(1), 0, 0, null);// 画背景图
-		g.setColor(new Color(0xFFFFFF));
+		g.setColor(Color.black);
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 		g.drawString("时间:" + tim, 10, 20);// 画时间
 		g.drawString("分数:" + score, 10, 50);// 画分数
 		g.drawString("命：" + life, 10, 80);
 		paintSnake(g);// 蛇
 		paintFoodObject(g);
+		paintName(g);
 		paintBall(g);
 //		g.setColor(Color.white);
-		paintName(g);
         paintNotice(g);
 	}
 }

@@ -239,7 +239,7 @@ public class SnakeManager {
     private void sendKillMessage(int number,Long id){
         String message;
         if (number > 4){
-            message = "五杀!";
+            message = "五杀";
         }else if(number > 3){
             message = "四杀";
         }else if(number > 2){
