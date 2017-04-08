@@ -31,10 +31,10 @@ public class GameFrameson {
 		JPanel b =new JPanel();
 		b.setBackground(Color.GRAY);
 
-		Time = new JLabel("游戏时间:");//后面加上int Time
-		Scouce = new JLabel("得分：");//后面加上int Scouse
+		Time = new JLabel("游戏时间:"+GamePanel.tim);//后面加上int Time
+		Scouce = new JLabel("得分："+GamePanel.score);//后面加上int Scouse
 		overed = new JLabel("GAMEOVER");
-		snakelong = new JLabel("你的长度是"+""+"cm");//中间加上int Long
+		snakelong = new JLabel("你的长度是"+GamePanel.snake.length.size()+"cm");//中间加上int Long
 		newGame = new JButton("重新开始");
 		InterGame = new JButton("联机对战");
 		Gameout = new JButton("游戏结束");

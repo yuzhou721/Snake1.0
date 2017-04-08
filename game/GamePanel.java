@@ -473,11 +473,12 @@ public class GamePanel extends JPanel {
 				Gamemusic.palymusic(Gamemusic.foodmuisc);
 //				System.out.println("eat food");
 				if (food instanceof Food) {
-					
+					score+=10;
                     addBody();
                     
                 }
                 if(food instanceof Award){
+					score+=20;
 				    Award a = (Award)food;
 				    int type = a.getAward();
 				    switch (type){
@@ -527,6 +528,7 @@ public class GamePanel extends JPanel {
                 for (Ball b :
                         balls) {
                     if (CrashObjects.SnakeBang(head, b)) {
+                        score+=5;
                     	Gamemusic.palymusic(Gamemusic.foodmuisc);
                         eatBallsNum++;
                         ClientUtil.sendDelBallData(b);
@@ -687,6 +689,7 @@ public class GamePanel extends JPanel {
 	 */
 	public void rebirth(){
 		snake = new Snake(snakeCreateRange(),snakeCreateRange());
+		score = 0;
 		status = RUNNING;
 	}
 

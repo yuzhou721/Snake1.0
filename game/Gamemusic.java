@@ -21,8 +21,8 @@ public class Gamemusic {
 	public static final String  pentakill="musics/pentakill.wav";
 	public static void palymusic(String a){
 		try {
-			music = new FileInputStream(new File(a));
-			AudioStream as = new AudioStream(music);
+//			music = new FileInputStream(new File(GamePanel.class.getResourceAsStream(a)));
+			AudioStream as = new AudioStream(GamePanel.class.getClassLoader().getResourceAsStream(a));
 			AudioPlayer.player.start(as);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -35,8 +35,8 @@ public class Gamemusic {
 			public void run() {
 				while(true){
 					try {
-						music = new FileInputStream(new File(backgroundmuisc));
-						AudioStream as = new AudioStream(music);
+//						music = new FileInputStream(new File(backgroundmuisc));
+						AudioStream as = new AudioStream(GamePanel.class.getClassLoader().getResourceAsStream(backgroundmuisc));
 						AudioPlayer.player.start(as);
 						Thread.sleep(16000);
 					} catch (Exception e) {
